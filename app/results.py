@@ -34,9 +34,10 @@ class StageResults:
 
 
 def normalize_bib(text: str) -> str:
-    """A bib as every source agrees on it: no spaces, no leading zeros in a number."""
+    """A bib as every source agrees on it: no spaces, no leading zeros in a number, its
+    letters in capitals -- a phone may well type "a7" for "A7"."""
     bib = "".join(text.split())
-    return str(int(bib)) if bib.isdigit() else bib
+    return str(int(bib)) if bib.isdigit() else bib.upper()
 
 
 def parse_value(text: str) -> float | None:
