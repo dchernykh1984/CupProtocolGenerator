@@ -14,7 +14,7 @@ from typing import Any
 from app import document, protocol_reader, scoring, sheets
 from app.config import Config, Source, StageConfig
 from app.results import Athlete, StageResults
-from app.rules import STAGE_RULES, CupRule, StageRule, cup_rule, stage_rule
+from app.rules import CUP_RULES, STAGE_RULES, CupRule, StageRule, cup_rule, stage_rule
 from app.site_api import SiteApi, SiteApiError
 
 
@@ -97,9 +97,10 @@ def _stages(
                 f"{name}: the cup rule adds times up: score this stage by {timed}"
             )
         if rules[-1].scores_time and not cup.adds_times:
+            adders = " or ".join(f'"{r.label}"' for r in CUP_RULES if r.adds_times)
             raise PipelineError(
-                f'{name}: the stage counts by its time, but the cup rule "{cup.label}" '
-                "does not add times up"
+                f"{name}: the stage counts by its time, but the cup rule does not add "
+                f"times up: pick the cup rule {adders}"
             )
         try:
             results = _read_stage(site, config, stage)
