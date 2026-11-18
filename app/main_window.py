@@ -194,7 +194,7 @@ class MainWindow(QMainWindow):
         self.publish_section.setValue(config.publish_section)
         self.final.setChecked(config.final)
         while self.stages.count():
-            self.stages.removeTab(0)
+            self._drop_stage(0)
         for stage in config.stages or [StageConfig()]:
             self.add_stage(stage)
         self._invalidate()
@@ -233,8 +233,14 @@ class MainWindow(QMainWindow):
         if self.stages.count() <= 1:
             self.log.appendPlainText("A cup needs at least one stage.")
             return
-        self.stages.removeTab(self.stages.currentIndex())
+        self._drop_stage(self.stages.currentIndex())
         self._invalidate()
+
+    def _drop_stage(self, index: int) -> None:
+        """Take a stage's tab out and free it: removeTab alone keeps it alive."""
+        tab = self.stages.widget(index)
+        self.stages.removeTab(index)
+        tab.deleteLater()
 
     def _invalidate(self) -> None:
         """A changed setting makes the last build stale: build again to publish."""

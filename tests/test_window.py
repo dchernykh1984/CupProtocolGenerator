@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import pytest
+from PySide6.QtCore import QEvent
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QApplication
 
@@ -72,7 +73,12 @@ def test_a_new_stage_is_a_copy_of_the_current_one_to_its_left_or_right(window):
 
 def test_a_stage_is_deleted_but_never_the_last_one(window):
     window.stages.setCurrentIndex(0)
+    sprint = window.stage_tabs()[0]
+    destroyed: list[bool] = []
+    sprint.destroyed.connect(lambda: destroyed.append(True))
     window.delete_stage.click()
+    QApplication.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+    assert destroyed == [True]  # freed, not only taken off the screen
     assert _titles(window) == ["Jump"]
     window.delete_stage.click()
     assert _titles(window) == ["Jump"]
