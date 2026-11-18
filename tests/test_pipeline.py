@@ -122,7 +122,7 @@ def test_the_absolute_protocol_serves_when_a_section_has_no_group_one():
         (
             FakeSite(),
             _config(rule="sum_of_times"),
-            "Sprint: the cup rule adds times up: score this stage by its time",
+            'Sprint: the cup rule adds times up: score this stage by "Time, the lowest',
         ),
         (
             FakeSite(),
