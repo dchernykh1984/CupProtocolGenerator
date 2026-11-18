@@ -27,6 +27,8 @@ def test_anything_else_is_no_result(text):
     assert parse_value(text) is None
 
 
-@pytest.mark.parametrize(("text", "bib"), [("007", "7"), (" 1 2 ", "12"), ("A7", "A7")])
+@pytest.mark.parametrize(
+    ("text", "bib"), [("007", "7"), (" 1 2 ", "12"), ("A7", "A7"), ("a7", "A7")]
+)
 def test_a_bib_is_compared_without_spaces_and_leading_zeros(text, bib):
     assert normalize_bib(text) == bib
