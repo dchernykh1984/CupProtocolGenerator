@@ -43,7 +43,8 @@ jobs:
           # step by hand. Bail out loudly if that line ever stops parsing,
           # rather than quietly probing nothing.
           matrix=$(sed -n "s/^ *full='\(.*\)'$/\1/p" .github/workflows/build.yml)
-          count=$(jq '.include | length' <<<"$matrix")
+          # No line at all gives jq no input and no count; null counts as 0.
+          count=$(jq '.include | length' <<<"${matrix:-null}")
           if [ "$count" -lt 4 ]; then
             echo "::error::read $count platforms out of build.yml, expected the full matrix"
             exit 1
