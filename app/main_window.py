@@ -257,6 +257,9 @@ class MainWindow(QMainWindow):
         except (pipeline.PipelineError, SiteApiError) as exc:
             self.log.setPlainText(f"Not built: {exc}")
             return
+        except Exception as exc:  # a rule's own failure must not leave "Building..."
+            self.log.setPlainText(f"Not built, unexpected {type(exc).__name__}: {exc}")
+            return
         finally:
             QApplication.restoreOverrideCursor()
         self.log.setPlainText("\n".join(built.report))
@@ -272,6 +275,10 @@ class MainWindow(QMainWindow):
             refused = pipeline.publish(config, self._api(config), self._built)
         except SiteApiError as exc:
             self.log.appendPlainText(f"Not published: {exc}")
+            return
+        except Exception as exc:  # said in the log rather than lost on stderr
+            name = type(exc).__name__
+            self.log.appendPlainText(f"Not published, unexpected {name}: {exc}")
             return
         if refused:
             self.log.appendPlainText(f"The site did not take the protocol: {refused}")

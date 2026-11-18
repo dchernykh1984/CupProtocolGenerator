@@ -119,6 +119,23 @@ def test_a_build_that_fails_says_why_and_publishes_nothing(window):
     assert not window.publish_button.isEnabled()
 
 
+def test_an_unexpected_failure_is_said_in_the_log(window, monkeypatch):
+    def broken(*args, **kwargs):
+        raise ValueError("a rule broke")
+
+    monkeypatch.setattr("app.pipeline.build", broken)
+    window.on_build()
+    assert window.log.toPlainText() == "Not built, unexpected ValueError: a rule broke"
+    assert QApplication.overrideCursor() is None
+    monkeypatch.undo()
+    window.on_build()
+    monkeypatch.setattr("app.pipeline.publish", broken)
+    window.on_publish()
+    assert window.log.toPlainText().endswith(
+        "Not published, unexpected ValueError: a rule broke"
+    )
+
+
 def test_publishing_sends_the_built_protocol_and_says_where(window):
     window.publish_section.setValue(3)
     window.on_build()
