@@ -53,3 +53,19 @@ description: Branch, commit, open a pull request, and drive CI to green in this 
 - Every check must be SUCCESS. A red check is fixed by a commit on the same branch.
 - Then stop: never merge unless the maintainer asks for it in the message being
   answered. `main` takes rebase merges only.
+
+## Releases
+
+- A `feat` or `fix` on `main` makes release-please open its own pull request
+  (`release-please--branches--main`). github-actions opens it, so its runs wait for
+  approval (`action_required`). Approve them only on the maintainer's word:
+  `gh api -X POST repos/<owner>/<repo>/actions/runs/<id>/approve` for each run, or the
+  button on the pull request's page. That pull request builds every platform.
+- Merging it tags the release, and the same run builds every platform, uploads each
+  download and fails if one is missing (the `verify` job).
+- A missing download is rebuilt with `gh workflow run release-please.yml --ref main -f
+  tag=vX.Y.Z`. That run builds the tagged code with `main`'s workflows and uploads every
+  platform again.
+- A runner image GitHub switched off is cancelled with no steps and no error.
+  `runner-labels.yml` asks every image in `build.yml`'s release matrix weekly; when it
+  goes red, move that platform to the next image in `build.yml`.
