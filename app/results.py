@@ -37,7 +37,8 @@ def normalize_bib(text: str) -> str:
     """A bib as every source agrees on it: no spaces, no leading zeros in a number, its
     letters in capitals -- a phone may well type "a7" for "A7"."""
     bib = "".join(text.split())
-    return str(int(bib)) if bib.isdigit() else bib.upper()
+    # isdecimal, not isdigit: a superscript two is a digit that int() refuses.
+    return str(int(bib)) if bib.isdecimal() else bib.upper()
 
 
 def parse_value(text: str) -> float | None:
