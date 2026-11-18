@@ -1,0 +1,63 @@
+[project]
+name = "cup-protocol-generator"
+version = "0.1.0"
+description = "Add up a cup from its stages -- site protocols and Google Forms sheets -- and publish it"
+authors = [{ name = "Denis Chernykh", email = "education03@mail.ru" }]
+requires-python = ">=3.14,<3.15"
+dependencies = [
+    "PySide6>=6.8",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.16,<0.18",
+    "pre-commit>=4.6.1,<5",
+    "mypy>=2.1.0,<3",
+    "commitizen>=4.16.5,<5",
+    "pytest>=9.0.3,<10",
+    "pytest-xdist>=3.8.0,<4",
+    "pytest-cov>=7.1.0,<8",
+    "jsonschema>=4.23,<5",
+]
+
+[tool.uv]
+package = false
+default-groups = "all"
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "C90", # McCabe cyclomatic complexity
+    "UP",  # pyupgrade - modernise syntax for target Python version
+    "B",   # flake8-bugbear - common bugs and design issues
+    "S",   # flake8-bandit - security
+    "PTH", # flake8-use-pathlib - prefer pathlib over os.path
+    "RUF", # Ruff-specific rules
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "S105", "S106"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.coverage.run]
+parallel = true
+# The entry point only builds the Qt application; the window is covered by Qt-level
+# tests in tests/test_window.py, not by the coverage number.
+omit = ["app/main.py", "app/main_window.py"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-n auto --cov=app --cov-fail-under=90 --cov-report=term-missing"
