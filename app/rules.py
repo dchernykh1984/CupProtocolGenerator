@@ -115,6 +115,8 @@ STAGE_RULES: tuple[StageRule, ...] = (
         "equal results sharing a place. The place is the stage's points.",
         _place_as_points(Better.HIGHER),
     ),
+    # The maintainer, 2026-11-18: "the result of every stage is its time"
+    # (docs/regulations/sum-of-times/decisions.txt).
     StageRule(
         "time",
         "Time, the lowest first",
@@ -133,6 +135,8 @@ CUP_RULES: tuple[CupRule, ...] = (
         "a place. Somebody without a result in a stage is not ranked.",
         _sum_smallest_wins,
     ),
+    # The maintainer, 2026-11-18: "the cup's result is the sum of the stages' times"
+    # (docs/regulations/sum-of-times/decisions.txt).
     CupRule(
         "sum_of_times",
         "Sum of the stages' times, the smallest wins",
