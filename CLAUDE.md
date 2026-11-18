@@ -31,8 +31,9 @@ to the regulations.
 - Commit messages: one-line Conventional Commits, no body, no `Co-Authored-By` trailer
   and no co-author line, no mention of the agent. `cz check --rev-range origin/main..HEAD`
   runs on every PR, and release-please builds `CHANGELOG.md` from these subjects, so the
-  type matters (`fix` and `feat` are released; `chore`/`docs`/`test`/`style`/`refactor`
-  are not).
+  type matters: `feat`, `fix`, `perf`, `revert` and `docs` are released (with
+  `release-type: python` it lists `docs` under Documentation); `build`, `chore`, `ci`,
+  `refactor`, `style` and `test` are not, unless marked breaking with `!`.
 - ASCII only in tracked files (`uv.lock` and `CHANGELOG.md` are exempt; so are `.txt`
   and `.pdf` files, which is why regulations are kept as those). A pre-commit hook and
   the `.claude` PostToolUse guard both enforce it.

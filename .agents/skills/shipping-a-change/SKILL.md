@@ -17,8 +17,10 @@ description: Branch, commit, open a pull request, and drive CI to green in this 
 - One line, Conventional Commits: `git commit -m "type(scope): summary"`. No body, no
   `Co-Authored-By` trailer, no mention of the agent. `cz check --rev-range
   origin/main..HEAD` runs in CI, and release-please builds CHANGELOG from these
-  subjects, so the type matters (`feat`/`fix` are released; `chore`/`docs`/`test`/
-  `style`/`refactor` are not).
+  subjects, so the type matters: `feat`, `fix`, `perf`, `revert` and `docs` are
+  released (with `release-type: python` it lists `docs` under Documentation);
+  `build`, `chore`, `ci`, `refactor`, `style` and `test` are not, unless marked
+  breaking with `!`.
 - One logical change per commit; every accepted review finding is a commit of its own.
 
 ## Before pushing
@@ -56,8 +58,9 @@ description: Branch, commit, open a pull request, and drive CI to green in this 
 
 ## Releases
 
-- A `feat` or `fix` on `main` makes release-please open its own pull request
-  (`release-please--branches--main`). github-actions opens it, so its runs wait for
+- A commit of a released type (see Commit: `docs` is one) reaching `main` makes
+  release-please open its own pull request (`release-please--branches--main`), or
+  update the one already open. github-actions opens it, so its runs wait for
   approval (`action_required`). Approve them only on the maintainer's word:
   `gh api -X POST repos/<owner>/<repo>/actions/runs/<id>/approve` for each run, or the
   button on the pull request's page. That pull request builds every platform.
