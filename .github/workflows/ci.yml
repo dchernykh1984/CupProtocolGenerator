@@ -36,6 +36,10 @@ jobs:
           python-version: "3.14"
       - name: Install dependencies
         run: uv sync
+      # The pre-commit mypy hook has no PySide6, so every Qt type is Any there; this
+      # run has the project's dependencies and checks the window's types too.
+      - name: Type-check with the project's dependencies
+        run: uv run mypy app tests
       - name: Run tests
         run: uv run pytest
 

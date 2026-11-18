@@ -27,7 +27,7 @@ description: Branch, commit, open a pull request, and drive CI to green in this 
   `uv run ruff format --check .`, `uv run mypy app tests`. pre-commit runs ruff, the
   ASCII check and a mypy of its own on commit, but that mypy lives in an environment
   without PySide6, where every Qt type is `Any`: only `uv run mypy app tests` checks the
-  window's types.
+  window's types, and CI's tests job runs it too.
 - Every tracked file must be ASCII (the `no-non-ascii` hook covers markdown too). `uv run`
   may rewrite `uv.lock`; keep it out of feature commits with `git checkout uv.lock` unless
   the lock itself is the change.
