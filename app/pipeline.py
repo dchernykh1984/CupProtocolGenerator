@@ -15,7 +15,7 @@ from app import document, protocol_reader, scoring, sheets
 from app.config import Config, Source, StageConfig
 from app.results import Athlete, StageResults
 from app.rules import StageRule, cup_rule, stage_rule
-from app.site_api import SiteApi
+from app.site_api import SiteApi, SiteApiError
 
 
 class PipelineError(Exception):
@@ -92,7 +92,8 @@ def _stages(
             raise PipelineError(f"{name}: unknown rule {stage.rule!r}") from None
         try:
             results = _read_stage(site, config, stage)
-        except PipelineError as exc:
+        except (PipelineError, SiteApiError) as exc:
+            # Several stages read the same way: the message names the one that failed.
             raise PipelineError(f"{name}: {exc}") from None
         report += [f"{name}: {problem}" for problem in results.problems]
         report.append(f"{name}: {len(results.values)} results")
