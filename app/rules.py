@@ -47,6 +47,7 @@ class StageRule:
     label: str
     description: str
     score: StageScorer
+    scores_time: bool = False  # its points are the stage's time, in seconds
 
 
 @dataclass(frozen=True)
@@ -120,6 +121,7 @@ STAGE_RULES: tuple[StageRule, ...] = (
         "A place by the time, the lowest first, equal times sharing a place. The "
         "time itself, in seconds, is the stage's points: the cup can add it up.",
         _time_as_points,
+        scores_time=True,
     ),
 )
 

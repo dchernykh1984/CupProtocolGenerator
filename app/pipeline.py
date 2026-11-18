@@ -14,7 +14,7 @@ from typing import Any
 from app import document, protocol_reader, scoring, sheets
 from app.config import Config, Source, StageConfig
 from app.results import Athlete, StageResults
-from app.rules import StageRule, cup_rule, stage_rule
+from app.rules import CupRule, StageRule, cup_rule, stage_rule
 from app.site_api import SiteApi, SiteApiError
 
 
@@ -79,7 +79,7 @@ def _read_stage(site: _Site, config: Config, stage: StageConfig) -> StageResults
 
 
 def _stages(
-    site: _Site, config: Config, report: list[str]
+    site: _Site, config: Config, cup: CupRule, report: list[str]
 ) -> tuple[list[str], list[StageRule], list[StageResults]]:
     names: list[str] = []
     rules: list[StageRule] = []
@@ -90,6 +90,11 @@ def _stages(
             rules.append(stage_rule(stage.rule))
         except KeyError:
             raise PipelineError(f"{name}: unknown rule {stage.rule!r}") from None
+        if cup.adds_times and not rules[-1].scores_time:
+            # Places added up as seconds would make a total that looks like a time.
+            raise PipelineError(
+                f"{name}: the cup rule adds times up: score this stage by its time"
+            )
         try:
             results = _read_stage(site, config, stage)
         except (PipelineError, SiteApiError) as exc:
@@ -126,7 +131,7 @@ def build(config: Config, api: SiteApi) -> Built:
     site = _Site(api)
     _, event_title = site.event(config.token.strip())
     report: list[str] = []
-    names, rules, read = _stages(site, config, report)
+    names, rules, read = _stages(site, config, rule, report)
     athletes, categories = _athletes(read)
     if not athletes:
         raise PipelineError(
