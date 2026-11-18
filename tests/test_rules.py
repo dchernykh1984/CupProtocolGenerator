@@ -56,17 +56,16 @@ def test_the_stub_cup_rule_adds_up_points_and_ranks_only_complete_athletes():
     }
 
 
-def test_the_sum_of_times_ranks_equal_sums_together_in_whatever_order_added():
+def test_the_sum_of_times_ranks_equal_sums_together_float_noise_aside():
     rule = cup_rule("sum_of_times")
     stages = [
-        {"1": StageScore(1, 0.1), "2": StageScore(2, 0.3), "3": StageScore(3, 0.5)},
-        {"1": StageScore(1, 0.2), "2": StageScore(1, 0.2)},
-        {"1": StageScore(2, 0.3), "2": StageScore(1, 0.1), "3": StageScore(3, 0.4)},
+        {"1": StageScore(1, 10.1), "2": StageScore(2, 10.2), "3": StageScore(3, 10.5)},
+        {"1": StageScore(2, 20.2), "2": StageScore(1, 20.1)},
     ]
     assert rule.adds_times
     assert rule.combine(stages, ["1", "2", "3"]) == {
-        "1": CupScore(0.6, 1),  # 0.1 + 0.2 + 0.3 is 0.6000000000000001 unrounded
-        "2": CupScore(0.6, 1),
+        "1": CupScore(30.3, 1),  # 10.1 + 20.2 is 30.299999999999997 unrounded
+        "2": CupScore(30.3, 1),
         "3": CupScore(None, None),
     }
 
