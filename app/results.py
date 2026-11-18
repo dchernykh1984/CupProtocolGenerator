@@ -3,7 +3,8 @@
 A source is a connector: a protocol on the cycling site, a Google Forms response
 sheet. Whatever it reads, it fills a ``StageResults``: the athletes it names (a sheet
 names nobody, only bibs), every bib's result as a number to score and as it was
-written to show, the categories it knows, and what it could not read.
+written to show, the categories it knows, and what it could not read. A result is
+read here from its text, and a sum of times written back as a time.
 """
 
 from __future__ import annotations
