@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.2](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.1.1...v0.1.2) (2026-11-18)
+
+
+### Documentation
+
+* a pull request from the maintainer's account needs --admin only while nobody else approved it ([1c17154](https://github.com/dchernykh1984/CupProtocolGenerator/commit/1c171545e151b0f67738fdcd9fea0e1a7b3a1512))
+* carry the pipeline-repair exception into the shipping skill ([1e06f36](https://github.com/dchernykh1984/CupProtocolGenerator/commit/1e06f362afe8590178a4da0460145c728fdea825))
+* give merging a section of its own in the shipping skill ([f5ac595](https://github.com/dchernykh1984/CupProtocolGenerator/commit/f5ac595da8f4d81bd5f6b155dba5e6c3967a95d2))
+* how pull requests merge under main's ruleset ([42dee72](https://github.com/dchernykh1984/CupProtocolGenerator/commit/42dee7278a43cbedb411fce2476f637ffdee20a9))
+* name every commit type release-please releases, docs included ([5c95a4c](https://github.com/dchernykh1984/CupProtocolGenerator/commit/5c95a4c2698d1266ad76390958ab2cffe14b9d60))
+* name the Actions setting release-please's pull request needs ([abe8f92](https://github.com/dchernykh1984/CupProtocolGenerator/commit/abe8f92b13aa94cccd23200283809d34709dd914))
+* questions name a concrete gap, and an issue's claims are checked first ([ceb17a4](https://github.com/dchernykh1984/CupProtocolGenerator/commit/ceb17a40a1c3ca814be25dde682c997320af9057))
+* word the questions rule so it cannot be read the other way ([485aec5](https://github.com/dchernykh1984/CupProtocolGenerator/commit/485aec5b91a9474db33e105259def247e07d2686))
+
 ## [0.1.1](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.1.0...v0.1.1) (2026-11-18)
 
 
