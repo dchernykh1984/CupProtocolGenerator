@@ -45,7 +45,9 @@ to the regulations.
   green, each accepted finding its own commit, the table of findings in the PR body
   (the review-cycle skill).
 - **Never merge** a pull request unless the maintainer asks for it in the message being
-  answered. `main` takes rebase merges only (the repository's ruleset).
+  answered. `main` takes rebase merges only (the repository's ruleset). The maintainer's
+  one standing exception: a pull request that only fixes the red pipeline a merged pull
+  request left behind is driven green and merged: `gh pr merge <n> --rebase --admin`.
 
 ## How the pieces fit
 
