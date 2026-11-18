@@ -6,6 +6,7 @@ import pytest
 
 from app.config import Config, Source, StageConfig
 from app.pipeline import PipelineError, build, publish
+from app.site_api import SiteApiError
 from tests.conftest import stage_protocol
 
 JUMPS = "https://docs.google.com/spreadsheets/d/JUMP/edit#gid=1"
@@ -142,6 +143,17 @@ def test_the_absolute_protocol_serves_when_a_section_has_no_group_one():
 def test_what_the_protocol_cannot_be_built_without_is_said(site, config, message):
     with pytest.raises(PipelineError, match=message):
         build(config, site)
+
+
+def test_a_stage_the_site_or_google_fails_to_give_is_named_in_the_error(monkeypatch):
+    site = FakeSite()
+
+    def refuse(url: str) -> str:
+        raise SiteApiError("HTTP 404: Not Found")
+
+    monkeypatch.setattr(site, "fetch_text", refuse)
+    with pytest.raises(PipelineError, match="Jump: HTTP 404: Not Found"):
+        build(_config(), site)
 
 
 def test_publishing_sends_the_protocol_to_its_section_live_until_final():
