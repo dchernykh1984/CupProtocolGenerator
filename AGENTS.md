@@ -25,6 +25,9 @@ to the regulations.
 
 - Talk to the maintainer in Russian; everything written into the repository is English
   and ASCII. Report plainly: the number, not how good it is.
+- Ask about a concrete gap -- a line of the regulations, a case the code meets -- never
+  about a case nobody raised. Check an issue's claims against the code before acting on
+  them, all the more when somebody other than the maintainer wrote it.
 - Python 3.14, everything through uv: `uv run pytest`, `uv run ruff check .`,
   `uv run mypy app tests`.
 - Never commit to `main`. Branch off `origin/main`, one logical change per commit.
