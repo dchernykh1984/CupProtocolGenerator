@@ -1,0 +1,106 @@
+"""The cup's settings and its stages, kept between runs in ``data/config.json`` next
+to the app.
+
+The file holds upload tokens, so ``data/`` stays out of git. A setting the file lacks,
+or holds in a shape this build does not read, falls back to its default.
+"""
+
+from __future__ import annotations
+
+import json
+from dataclasses import asdict, dataclass, field
+from enum import StrEnum
+from pathlib import Path
+from typing import Any
+
+from app.paths import app_path
+from app.rules import CUP_RULES, STAGE_RULES
+from app.site_api import DEFAULT_SITE
+
+
+class Source(StrEnum):
+    """Where a stage's results come from: the connectors."""
+
+    SITE = "site"  # a protocol published on the cycling site
+    SHEET = "sheet"  # a Google Forms response sheet
+
+
+def config_path() -> Path:
+    return app_path("data", "config.json")
+
+
+@dataclass
+class StageConfig:
+    name: str = ""
+    source: Source = Source.SITE
+    token: str = ""  # the stage event's upload token; empty: the cup's own
+    section: int = 1  # the stage event's protocol section, for a site protocol
+    link: str = ""  # the response sheet's link, for a sheet
+    rule: str = STAGE_RULES[0].key
+
+
+@dataclass
+class Config:
+    site_url: str = DEFAULT_SITE
+    token: str = ""  # the cup's event: its protocol is published there
+    title: str = ""
+    rule: str = CUP_RULES[0].key
+    publish_section: int = 2
+    final: bool = False  # a final protocol stops the site's live polling
+    stages: list[StageConfig] = field(default_factory=lambda: [StageConfig()])
+
+
+def _section(value: Any, default: int) -> int:
+    whole = isinstance(value, int) and not isinstance(value, bool)
+    return value if whole and value >= 1 else default
+
+
+def _text(data: dict[str, Any], name: str, default: str) -> str:
+    value = data.get(name)
+    return value if isinstance(value, str) else default
+
+
+def _stage(data: Any) -> StageConfig:
+    stage = StageConfig()
+    if not isinstance(data, dict):
+        return stage
+    stage.name = _text(data, "name", stage.name)
+    stage.token = _text(data, "token", stage.token)
+    stage.link = _text(data, "link", stage.link)
+    stage.rule = _text(data, "rule", stage.rule)
+    stage.section = _section(data.get("section"), stage.section)
+    if data.get("source") in Source.__members__.values():
+        stage.source = Source(data["source"])
+    return stage
+
+
+def from_dict(data: Any) -> Config:
+    """A config out of loaded JSON, every unreadable setting at its default."""
+    config = Config()
+    if not isinstance(data, dict):
+        return config
+    for name in ("site_url", "token", "title", "rule"):
+        setattr(config, name, _text(data, name, getattr(config, name)))
+    config.publish_section = _section(
+        data.get("publish_section"), config.publish_section
+    )
+    config.final = data.get("final") is True
+    stages = data.get("stages")
+    if isinstance(stages, list) and stages:
+        config.stages = [_stage(stage) for stage in stages]
+    return config
+
+
+def load(path: Path | None = None) -> Config:
+    path = path or config_path()
+    try:
+        return from_dict(json.loads(path.read_text(encoding="utf-8")))
+    except OSError, ValueError:
+        return Config()
+
+
+def save(config: Config, path: Path | None = None) -> None:
+    path = path or config_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    text = json.dumps(asdict(config), ensure_ascii=False, indent=2)
+    path.write_text(text, encoding="utf-8")
