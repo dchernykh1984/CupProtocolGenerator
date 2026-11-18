@@ -90,10 +90,15 @@ def _stages(
             rules.append(stage_rule(stage.rule))
         except KeyError:
             raise PipelineError(f"{name}: unknown rule {stage.rule!r}") from None
+        # Seconds and places added up together make a total of neither.
         if cup.adds_times and not rules[-1].scores_time:
-            # Places added up as seconds would make a total that looks like a time.
             raise PipelineError(
                 f"{name}: the cup rule adds times up: score this stage by its time"
+            )
+        if rules[-1].scores_time and not cup.adds_times:
+            raise PipelineError(
+                f'{name}: the stage counts by its time, but the cup rule "{cup.label}" '
+                "does not add times up"
             )
         try:
             results = _read_stage(site, config, stage)
