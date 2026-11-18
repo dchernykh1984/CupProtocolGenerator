@@ -14,7 +14,7 @@ on:
   workflow_call:
     inputs:
       release_tag:
-        description: "Release tag to attach assets to; empty => Linux-only smoke build, no upload."
+        description: "Release tag to attach assets to; empty => no upload, and a Linux-only smoke build unless all_platforms is set."
         type: string
         default: ""
       all_platforms:
