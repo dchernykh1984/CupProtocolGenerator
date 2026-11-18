@@ -24,9 +24,14 @@ Both kinds live in `app/rules.py` and are picked from drop-downs:
   `combine(stages: list[dict[bib, StageScore]], bibs: list[str]) -> dict[bib,
   CupScore(total, place)]`, an entry for every bib in `bibs`; `place=None` for somebody
   the rule does not rank (they are listed after the ranked).
+- A stage rule whose points are the stage's time in seconds says so with
+  `scores_time=True`; a cup rule that adds times up says so with `adds_times=True`. The
+  pipeline then refuses a stage scored any other way, and the document writes the total
+  as a time, with as many decimals as the stage results are written with.
 - A rule's `key` is stored in the settings: never rename or reuse one once released.
 - The stubs (`place_lower_better`, `place_higher_better`, `sum_smallest_wins`) stay
-  until the maintainer says to drop them.
+  until the maintainer says to drop them. `time` and `sum_of_times` are the
+  maintainer's (`docs/regulations/sum-of-times/decisions.txt`).
 
 ## Writing one
 

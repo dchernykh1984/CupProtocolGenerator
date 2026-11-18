@@ -1,0 +1,16 @@
+Sum of times: the stage rule "time" and the cup rule "sum_of_times"
+=====================================================================
+
+2026-11-18, the maintainer: the result of every stage is its time; the cup's result is
+the sum of the stages' times. The cup's protocol shows every stage's result in a column
+of its own.
+
+Left open by that word, answered by the defaults the stub rules already had, to be
+confirmed by the maintainer:
+
+- Somebody without a time in a stage (not started, not finished, disqualified, missing
+  from a sheet) has no sum: listed after the ranked, without a place.
+- Equal sums share a place; the next place is skipped (1, 2, 2, 4). The shared place
+  keeps the order the athletes are listed in. No tie-break.
+- The total is written as a time: h:mm:ss from an hour on, m:ss below it, with as many
+  decimals as the most precise of the athlete's stage results is written with.
