@@ -184,7 +184,8 @@ class MainWindow(QMainWindow):
         return tab
 
     def stage_tabs(self) -> list[StageTab]:
-        return [self.stages.widget(i) for i in range(self.stages.count())]  # type: ignore[misc]
+        widgets = (self.stages.widget(i) for i in range(self.stages.count()))
+        return [tab for tab in widgets if isinstance(tab, StageTab)]
 
     def apply(self, config: Config) -> None:
         self.site_url.setText(config.site_url)
@@ -240,7 +241,8 @@ class MainWindow(QMainWindow):
         """Take a stage's tab out and free it: removeTab alone keeps it alive."""
         tab = self.stages.widget(index)
         self.stages.removeTab(index)
-        tab.deleteLater()
+        if tab is not None:
+            tab.deleteLater()
 
     def _invalidate(self) -> None:
         """A changed setting makes the last build stale: build again to publish."""
