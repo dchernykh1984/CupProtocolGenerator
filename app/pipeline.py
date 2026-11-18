@@ -14,7 +14,7 @@ from typing import Any
 from app import document, protocol_reader, scoring, sheets
 from app.config import Config, Source, StageConfig
 from app.results import Athlete, StageResults
-from app.rules import CupRule, StageRule, cup_rule, stage_rule
+from app.rules import STAGE_RULES, CupRule, StageRule, cup_rule, stage_rule
 from app.site_api import SiteApi, SiteApiError
 
 
@@ -92,8 +92,9 @@ def _stages(
             raise PipelineError(f"{name}: unknown rule {stage.rule!r}") from None
         # Seconds and places added up together make a total of neither.
         if cup.adds_times and not rules[-1].scores_time:
+            timed = " or ".join(f'"{r.label}"' for r in STAGE_RULES if r.scores_time)
             raise PipelineError(
-                f"{name}: the cup rule adds times up: score this stage by its time"
+                f"{name}: the cup rule adds times up: score this stage by {timed}"
             )
         if rules[-1].scores_time and not cup.adds_times:
             raise PipelineError(
