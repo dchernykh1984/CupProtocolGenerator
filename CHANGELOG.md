@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.2.0](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.1.2...v0.2.0) (2026-11-18)
+
+
+### Features
+
+* **pipeline:** refuse a stage not scored by its time when the cup adds times up ([9961120](https://github.com/dchernykh1984/CupProtocolGenerator/commit/99611203a610ea7a80831838bd4381e3e3647ffa))
+* **rules:** add the stages' times up as the cup's total, written as a time ([76dc65f](https://github.com/dchernykh1984/CupProtocolGenerator/commit/76dc65f074b43203b0854b61d5f0440e17fad454))
+* **rules:** score a stage by its time, kept as the stage's points ([e2ad36a](https://github.com/dchernykh1984/CupProtocolGenerator/commit/e2ad36a62a9ca40557b336506e1fdc1ed84b63e4))
+
+
+### Bug Fixes
+
+* **pipeline:** name the cup rule to pick for a stage counted by its time ([672c5a6](https://github.com/dchernykh1984/CupProtocolGenerator/commit/672c5a66646022410a711f4eb57365bff9e012e8))
+* **pipeline:** name the stage rule to pick when the cup rule adds times up ([390a333](https://github.com/dchernykh1984/CupProtocolGenerator/commit/390a33392d66441aa820ae35ae558bf3185fd429))
+* **pipeline:** refuse a stage counted by its time when the cup rule adds places up ([5dbfaed](https://github.com/dchernykh1984/CupProtocolGenerator/commit/5dbfaedec951fe6051e04904a20ac6b304c76d7b))
+
+
+### Documentation
+
+* name the cup rule in the README as its drop-down does ([55c775a](https://github.com/dchernykh1984/CupProtocolGenerator/commit/55c775a89edd63bb6f3480743d709cc00a6977a9))
+* **results:** say the module writes a sum of times back as a time ([b318721](https://github.com/dchernykh1984/CupProtocolGenerator/commit/b31872142de6e699603b2ae62db1bc4894d02658))
+* **rules:** say which float noise the sum of times is rounded against ([65ce0f8](https://github.com/dchernykh1984/CupProtocolGenerator/commit/65ce0f89c36347b3624ba06431085414c391aaa1))
+* **rules:** say whose word the time rules come from ([e74ca2c](https://github.com/dchernykh1984/CupProtocolGenerator/commit/e74ca2cdcfb6d2aa19b5d04aff856dc8cde863cc))
+* say how a cup of summed times is counted and shown ([3b91c97](https://github.com/dchernykh1984/CupProtocolGenerator/commit/3b91c979d9faed438ab05923ed380794082345b0))
+
 ## [0.1.2](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.1.1...v0.1.2) (2026-11-18)
 
 
