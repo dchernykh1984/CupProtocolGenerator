@@ -54,7 +54,8 @@ description: Branch, commit, open a pull request, and drive CI to green in this 
 
 - Every check must be SUCCESS. A red check is fixed by a commit on the same branch.
 - Then stop: never merge unless the maintainer asks for it in the message being
-  answered. `main` takes rebase merges only.
+  answered, or the pull request only fixes the red pipeline a merged one left behind
+  (CLAUDE.md). `main` takes rebase merges only.
 
 ## Merging
 
