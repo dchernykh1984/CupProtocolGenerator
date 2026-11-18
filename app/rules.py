@@ -55,6 +55,7 @@ class CupRule:
     label: str
     description: str
     combine: CupScorer
+    adds_times: bool = False  # the total is a sum of times, and shown as a time
 
 
 def rank(values: dict[str, float], better: Better) -> dict[str, int]:
@@ -88,8 +89,9 @@ def _time_as_points(values: dict[str, float]) -> dict[str, StageScore]:
 def _sum_smallest_wins(
     stages: list[dict[str, StageScore]], bibs: list[str]
 ) -> dict[str, CupScore]:
+    # Rounded: the order times are added in must not split equal sums by a 1e-16.
     totals = {
-        bib: sum(stage[bib].points for stage in stages)
+        bib: round(sum(stage[bib].points for stage in stages), 6)
         for bib in bibs
         if all(bib in stage for stage in stages)
     }
@@ -128,6 +130,15 @@ CUP_RULES: tuple[CupRule, ...] = (
         "The points of every stage added up; the smallest sum wins, equal sums share "
         "a place. Somebody without a result in a stage is not ranked.",
         _sum_smallest_wins,
+    ),
+    CupRule(
+        "sum_of_times",
+        "Sum of the stages' times, the smallest wins",
+        "Every stage's time added up; the smallest sum wins, equal sums share a "
+        "place. Somebody without a time in a stage is not ranked. Score every stage "
+        "by its time.",
+        _sum_smallest_wins,
+        adds_times=True,
     ),
 )
 

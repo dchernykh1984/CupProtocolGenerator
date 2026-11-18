@@ -56,6 +56,21 @@ def test_the_stub_cup_rule_adds_up_points_and_ranks_only_complete_athletes():
     }
 
 
+def test_the_sum_of_times_ranks_equal_sums_together_in_whatever_order_added():
+    rule = cup_rule("sum_of_times")
+    stages = [
+        {"1": StageScore(1, 0.1), "2": StageScore(2, 0.3), "3": StageScore(3, 0.5)},
+        {"1": StageScore(1, 0.2), "2": StageScore(1, 0.2)},
+        {"1": StageScore(2, 0.3), "2": StageScore(1, 0.1), "3": StageScore(3, 0.4)},
+    ]
+    assert rule.adds_times
+    assert rule.combine(stages, ["1", "2", "3"]) == {
+        "1": CupScore(0.6, 1),  # 0.1 + 0.2 + 0.3 is 0.6000000000000001 unrounded
+        "2": CupScore(0.6, 1),
+        "3": CupScore(None, None),
+    }
+
+
 @pytest.mark.parametrize("lookup", [stage_rule, cup_rule])
 def test_an_unknown_key_is_refused(lookup):
     with pytest.raises(KeyError):

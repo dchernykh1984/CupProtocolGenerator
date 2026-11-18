@@ -1,7 +1,8 @@
 """The cup's protocol as the cycling site's structured document, schema 1.
 
 One table per category: place, bib, name, team when anybody has one, a column per stage
-(the result as its source wrote it, the stage place under it) and the cup's total. The
+(the result as its source wrote it, the stage place under it) and the cup's total, a
+time when the cup adds times up, as precise as the stage results are written. The
 site draws it in its own look; ``tests/fixtures/protocol-document-v1.json`` is the
 site's schema.
 """
@@ -10,6 +11,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from app.results import format_time, fraction_digits
 from app.scoring import CupRow
 
 SCHEMA_VERSION = 1
@@ -42,7 +44,18 @@ def _columns(stages: list[str], with_team: bool) -> list[dict[str, Any]]:
     return columns
 
 
-def _row(row: CupRow, texts: list[dict[str, str]], with_team: bool) -> dict[str, Any]:
+def _total(row: CupRow, texts: list[dict[str, str]], is_time: bool) -> str:
+    if row.total is None:
+        return ""
+    if not is_time:
+        return format_number(row.total)
+    digits = (fraction_digits(stage.get(row.athlete.bib, "")) for stage in texts)
+    return format_time(row.total, max(digits, default=0))
+
+
+def _row(
+    row: CupRow, texts: list[dict[str, str]], with_team: bool, total_is_time: bool
+) -> dict[str, Any]:
     athlete = row.athlete
     cells: dict[str, Any] = {
         "place": "" if row.place is None else str(row.place),
@@ -57,7 +70,7 @@ def _row(row: CupRow, texts: list[dict[str, str]], with_team: bool) -> dict[str,
             continue
         written = texts[index].get(athlete.bib) or format_number(score.points)
         cells[stage_column(index)] = {"text": written, "sub": [f"{score.place} pl."]}
-    cells["total"] = "" if row.total is None else format_number(row.total)
+    cells["total"] = _total(row, texts, total_is_time)
     return {"cells": cells}
 
 
@@ -67,10 +80,12 @@ def build(
     table: dict[str, list[CupRow]],
     categories: dict[str, str],
     texts: list[dict[str, str]],
+    total_is_time: bool = False,
 ) -> dict[str, Any]:
     """The document for ``table`` (category -> standing). ``stages`` names the stages
-    in order, ``texts`` keeps each stage's results as their source wrote them, and
-    ``categories`` names the categories (group id -> label)."""
+    in order, ``texts`` keeps each stage's results as their source wrote them,
+    ``categories`` names the categories (group id -> label), and ``total_is_time``
+    says the totals are seconds to write as times."""
     with_team = any(row.athlete.team for rows in table.values() for row in rows)
     columns = _columns(stages, with_team)
     sections: list[dict[str, Any]] = []
@@ -78,7 +93,7 @@ def build(
     for category, rows in table.items():
         section: dict[str, Any] = {
             "columns": columns,
-            "rows": [_row(row, texts, with_team) for row in rows],
+            "rows": [_row(row, texts, with_team, total_is_time) for row in rows],
         }
         if category:
             label = categories.get(category, category)

@@ -1,6 +1,6 @@
 import pytest
 
-from app.results import normalize_bib, parse_value
+from app.results import format_time, fraction_digits, normalize_bib, parse_value
 
 
 @pytest.mark.parametrize(
@@ -33,3 +33,25 @@ def test_anything_else_is_no_result(text):
 )
 def test_a_bib_is_compared_without_spaces_and_leading_zeros(text, bib):
     assert normalize_bib(text) == bib
+
+
+@pytest.mark.parametrize(
+    ("seconds", "decimals", "text"),
+    [
+        (17.299999999999997, 2, "0:17.30"),
+        (125, 0, "2:05"),
+        (59.96, 1, "1:00.0"),
+        (3753.4, 1, "1:02:33.4"),
+        (36000, 3, "10:00:00.000"),
+    ],
+)
+def test_seconds_are_written_as_the_timing_tools_write_a_time(seconds, decimals, text):
+    assert format_time(seconds, decimals) == text
+
+
+@pytest.mark.parametrize(
+    ("text", "digits"),
+    [("8.40", 2), ("2,35", 2), ("1:02:33", 0), (" 1:02:33.4 ", 1), ("", 0)],
+)
+def test_a_result_says_how_many_digits_follow_its_dot(text, digits):
+    assert fraction_digits(text) == digits

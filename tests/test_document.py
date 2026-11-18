@@ -98,6 +98,23 @@ def test_athletes_without_a_category_make_one_untitled_table():
     jsonschema.validate(document, SCHEMA)
 
 
+def test_a_sum_of_times_is_written_as_a_time_as_precise_as_its_stages():
+    times = [stage_rule("time")] * 2
+    athletes = [Athlete("7", "Ivanov"), Athlete("12", "Petrov"), Athlete("3", "Orlov")]
+    values = [{"7": 8.4, "12": 3600.0, "3": 9.0}, {"7": 62.5, "12": 0.5}]
+    table = standings(athletes, values, times, cup_rule("sum_of_times"))
+    texts = [{"7": "8.40", "12": "1:00:00", "3": "9.00"}, {"7": "1:02.5", "12": "0.5"}]
+    document = build("", ["Sprint", "Run"], table, {}, texts, total_is_time=True)
+    jsonschema.validate(document, SCHEMA)
+    rows = [row["cells"] for row in document["sections"][0]["rows"]]
+    assert [(r["bib"], r["place"], r["total"]) for r in rows] == [
+        ("7", "1", "1:10.90"),
+        ("12", "2", "1:00:00.5"),
+        ("3", "", ""),
+    ]
+    assert rows[0]["stage_2"] == {"text": "1:02.5", "sub": ["2 pl."]}
+
+
 @pytest.mark.parametrize(
     ("value", "text"), [(12.0, "12"), (150.5, "150.5"), (2.35, "2.35")]
 )
