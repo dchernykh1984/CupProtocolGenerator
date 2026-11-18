@@ -119,6 +119,11 @@ def test_the_absolute_protocol_serves_when_a_section_has_no_group_one():
             _config(stages=[StageConfig("Run", rule="laps")]),
             "Run: unknown rule 'laps'",
         ),
+        (
+            FakeSite(),
+            _config(rule="sum_of_times"),
+            "Sprint: the cup rule adds times up: score this stage by its time",
+        ),
         (FakeSite(protocols={249: []}), _config(), "Sprint: no protocol in section 1"),
         (FakeSite(document={}), _config(), "Sprint: protocol 4 has no data, only HTML"),
         (
