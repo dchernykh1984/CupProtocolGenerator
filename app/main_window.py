@@ -214,15 +214,19 @@ class MainWindow(QMainWindow):
     def add_stage(self, stage: StageConfig, index: int | None = None) -> StageTab:
         tab = StageTab(stage, self._invalidate)
         at = self.stages.count() if index is None else index
-        self.stages.insertTab(at, tab, stage.name or f"Stage {at + 1}")
-        tab.name.textChanged.connect(lambda text: self._rename(tab, text))
+        self.stages.insertTab(at, tab, "")
+        tab.name.textChanged.connect(self._retitle)
         self.stages.setCurrentIndex(at)
+        self._retitle()
         self._invalidate()
         return tab
 
-    def _rename(self, tab: StageTab, text: str) -> None:
-        index = self.stages.indexOf(tab)
-        self.stages.setTabText(index, text.strip() or f"Stage {index + 1}")
+    def _retitle(self) -> None:
+        """Every tab titled by its stage's name, an unnamed one by its place, as the
+        protocol's column will call it: a stage moved along keeps the two agreeing."""
+        for index, tab in enumerate(self.stage_tabs()):
+            name = tab.name.text().strip()
+            self.stages.setTabText(index, name or f"Stage {index + 1}")
 
     def add_stage_copy(self, offset: int) -> StageTab:
         """A copy of the current stage beside it: offset 0 to its left, 1 right."""
@@ -235,6 +239,7 @@ class MainWindow(QMainWindow):
             self.log.appendPlainText("A cup needs at least one stage.")
             return
         self._drop_stage(self.stages.currentIndex())
+        self._retitle()
         self._invalidate()
 
     def _drop_stage(self, index: int) -> None:
