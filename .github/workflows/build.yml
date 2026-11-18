@@ -69,6 +69,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          # A release builds the tagged code. A manual backfill runs on main,
+          # which may have moved on since the tag; an empty ref (a pull
+          # request) checks out the commit that triggered the run.
+          ref: ${{ inputs.release_tag }}
 
       - uses: astral-sh/setup-uv@v7
         with:
