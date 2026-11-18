@@ -90,7 +90,7 @@ def _time_as_points(values: dict[str, float]) -> dict[str, StageScore]:
 def _sum_smallest_wins(
     stages: list[dict[str, StageScore]], bibs: list[str]
 ) -> dict[str, CupScore]:
-    # Rounded: the order times are added in must not split equal sums by a 1e-16.
+    # Rounded: 10.1 + 20.2 and 10.2 + 20.1 differ by float noise, not in a place.
     totals = {
         bib: round(sum(stage[bib].points for stage in stages), 6)
         for bib in bibs
