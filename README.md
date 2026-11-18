@@ -51,6 +51,6 @@ Pull requests run the hooks, the tests, a dependency audit and a smoke build for
 release-please's own pull request builds every platform. A release builds the portable
 app for Linux, Windows and macOS and attaches it to the GitHub release, and the run fails
 if a platform's download is missing. Every week `runner-labels.yml` checks that GitHub
-still runs each runner image the release builds on. `CLAUDE.md` (and its copy `AGENTS.md`) and the skills
-in `.claude/skills` (copied to `.agents/skills`) tell a coding agent how this repository
-works.
+still runs each runner image the release builds on. `CLAUDE.md` (and its copy
+`AGENTS.md`) and the skills in `.claude/skills` (copied to `.agents/skills`) tell a
+coding agent how this repository works.
