@@ -78,6 +78,13 @@ def _place_as_points(better: Better) -> StageScorer:
     return score
 
 
+def _time_as_points(values: dict[str, float]) -> dict[str, StageScore]:
+    return {
+        bib: StageScore(place, values[bib])
+        for bib, place in rank(values, Better.LOWER).items()
+    }
+
+
 def _sum_smallest_wins(
     stages: list[dict[str, StageScore]], bibs: list[str]
 ) -> dict[str, CupScore]:
@@ -104,6 +111,13 @@ STAGE_RULES: tuple[StageRule, ...] = (
         "A place by the result, a count or a length for one: the highest first, "
         "equal results sharing a place. The place is the stage's points.",
         _place_as_points(Better.HIGHER),
+    ),
+    StageRule(
+        "time",
+        "Time, the lowest first",
+        "A place by the time, the lowest first, equal times sharing a place. The "
+        "time itself, in seconds, is the stage's points: the cup can add it up.",
+        _time_as_points,
     ),
 )
 

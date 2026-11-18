@@ -36,6 +36,14 @@ def test_the_stub_stage_rules_score_a_place_as_its_points():
     assert counts == {"12": StageScore(1, 1.0), "7": StageScore(2, 2.0)}
 
 
+def test_the_time_rule_places_the_lowest_first_and_keeps_the_time_as_points():
+    assert stage_rule("time").score({"7": 8.4, "12": 8.9, "3": 8.4}) == {
+        "7": StageScore(1, 8.4),
+        "3": StageScore(1, 8.4),
+        "12": StageScore(3, 8.9),
+    }
+
+
 def test_the_stub_cup_rule_adds_up_points_and_ranks_only_complete_athletes():
     stages = [
         {"1": StageScore(1, 1), "2": StageScore(2, 2), "3": StageScore(3, 3)},
