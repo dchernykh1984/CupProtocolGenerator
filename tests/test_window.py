@@ -82,6 +82,7 @@ def test_a_stage_is_deleted_but_never_the_last_one(window):
 def test_renaming_a_stage_renames_its_tab(window):
     jump = window.stage_tabs()[1]
     jump.name.setText("Standing jump")
+    assert _titles(window)[1] == "Standing jump"
     jump.name.setText("")
     assert _titles(window)[1] == "Stage 2"
 
