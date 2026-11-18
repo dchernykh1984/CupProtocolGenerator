@@ -55,3 +55,20 @@ def parse_value(text: str) -> float | None:
     if float(seconds) >= 60 or (hours is not None and int(minutes) >= 60):
         return None
     return int(hours or 0) * 3600 + int(minutes) * 60 + float(seconds)
+
+
+def fraction_digits(text: str) -> int:
+    """How many digits a result is written with after its dot or comma."""
+    _, dot, fraction = text.strip().replace(",", ".").rpartition(".")
+    return len(fraction) if dot else 0
+
+
+def format_time(seconds: float, decimals: int = 0) -> str:
+    """Seconds as the timing tools write a time: ``h:mm:ss`` from an hour on, ``m:ss``
+    below it, ``decimals`` digits after the dot."""
+    factor = 10**decimals
+    whole, fraction = divmod(round(seconds * factor), factor)
+    hours, rest = divmod(whole, 3600)
+    minutes, secs = divmod(rest, 60)
+    text = f"{hours}:{minutes:02d}:{secs:02d}" if hours else f"{minutes}:{secs:02d}"
+    return f"{text}.{fraction:0{decimals}d}" if decimals else text

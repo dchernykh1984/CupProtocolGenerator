@@ -140,7 +140,8 @@ def build(config: Config, api: SiteApi) -> Built:
     table = scoring.standings(athletes, [r.values for r in read], rules, rule)
     title = config.title.strip() or event_title
     texts = [r.texts for r in read]
-    return Built(document.build(title, names, table, categories, texts), report)
+    built = document.build(title, names, table, categories, texts, rule.adds_times)
+    return Built(built, report)
 
 
 def publish(config: Config, api: SiteApi, built: Built) -> str:

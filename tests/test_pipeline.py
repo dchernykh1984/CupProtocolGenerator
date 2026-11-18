@@ -11,8 +11,11 @@ from tests.conftest import stage_protocol
 
 JUMPS = "https://docs.google.com/spreadsheets/d/JUMP/edit#gid=1"
 JUMPS_CSV = "https://docs.google.com/spreadsheets/d/JUMP/export?format=csv&gid=1"
+RUNS = "https://docs.google.com/spreadsheets/d/RUN/edit"
+RUNS_CSV = "https://docs.google.com/spreadsheets/d/RUN/export?format=csv"
 SHEETS = {
-    JUMPS_CSV: "Timestamp,Bib,Result\n1,7,180\n1,12,190\n1,21,150\n1,99,3\n1,13,x\n"
+    JUMPS_CSV: "Timestamp,Bib,Result\n1,7,180\n1,12,190\n1,21,150\n1,99,3\n1,13,x\n",
+    RUNS_CSV: "Timestamp,Bib,Result\n1,7,1:02.5\n1,12,1:01.0\n1,21,59.9\n",
 }
 
 
@@ -154,6 +157,22 @@ def test_a_stage_the_site_or_google_fails_to_give_is_named_in_the_error(monkeypa
     monkeypatch.setattr(site, "fetch_text", refuse)
     with pytest.raises(PipelineError, match="Jump: HTTP 404: Not Found"):
         build(_config(), site)
+
+
+def test_a_cup_of_summed_times_shows_every_stage_and_the_total_as_a_time():
+    stages = [
+        StageConfig("Sprint", Source.SITE, rule="time"),
+        StageConfig("Run", Source.SHEET, link=RUNS, rule="time"),
+    ]
+    built = build(_config(rule="sum_of_times", stages=stages), FakeSite())
+    boys, girls = (
+        [(r["cells"]["bib"], r["cells"]["place"], r["cells"]["total"]) for r in rows]
+        for rows in (section["rows"] for section in built.document["sections"])
+    )
+    assert boys == [("12", "1", "1:09.90"), ("7", "2", "1:10.90"), ("13", "", "")]
+    assert girls == [("21", "1", "1:09.00"), ("22", "", "")]
+    first = built.document["sections"][0]["rows"][0]["cells"]
+    assert (first["stage_1"]["text"], first["stage_2"]["text"]) == ("8,90", "1:01.0")
 
 
 def test_publishing_sends_the_protocol_to_its_section_live_until_final():
