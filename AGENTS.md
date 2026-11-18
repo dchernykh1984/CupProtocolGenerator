@@ -35,8 +35,8 @@ to the regulations.
   `release-type: python` it lists `docs` under Documentation); `build`, `chore`, `ci`,
   `refactor`, `style` and `test` are not, unless marked breaking with `!`.
 - ASCII only in tracked files (`uv.lock` and `CHANGELOG.md` are exempt; so are `.txt`
-  and `.pdf` files, which is why regulations are kept as those). A pre-commit hook and
-  the `.claude` PostToolUse guard both enforce it.
+  and `.pdf` files, which is why regulations are kept as those). A pre-commit hook
+  enforces it, and so do the PostToolUse guards of `.claude` and `.codex` on every edit.
 - Before committing run the full gate: `uv run pytest` (coverage gate 90%),
   `uv run ruff check .`, `uv run ruff format --check .`, `uv run mypy app tests`.
   `uv run` may rewrite `uv.lock`; keep it out of feature commits with
