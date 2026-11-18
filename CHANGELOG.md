@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.1](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.1.0...v0.1.1) (2026-11-18)
+
+
+### Documentation
+
+* say how a release is built, checked and rebuilt ([c8a7a57](https://github.com/dchernykh1984/CupProtocolGenerator/commit/c8a7a57b982ab39d965b2007161d767334483ef0))
+* wrap the README's paragraph on the pipeline as the rest is wrapped ([e2fefb7](https://github.com/dchernykh1984/CupProtocolGenerator/commit/e2fefb734629fa041da994ca8e8e6594b8820fcf))
+
 ## 0.1.0 (2026-11-18)
 
 
