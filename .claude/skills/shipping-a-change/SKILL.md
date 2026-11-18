@@ -55,6 +55,14 @@ description: Branch, commit, open a pull request, and drive CI to green in this 
 - Every check must be SUCCESS. A red check is fixed by a commit on the same branch.
 - Then stop: never merge unless the maintainer asks for it in the message being
   answered. `main` takes rebase merges only.
+- `main`'s ruleset wants one approving review, and GitHub does not let an author approve
+  their own pull request. One opened from the maintainer's account (the `gh` an agent
+  runs here is signed in as them) is therefore merged with
+  `gh pr merge <n> --rebase --admin`; release-please's, opened by github-actions, takes
+  the maintainer's approval and a plain `--rebase`.
+- GitHub refuses to rebase-merge more than 100 commits, saying the branch "cannot be
+  rebased due to conflicts". Squash neighbouring commits on the maintainer's word, or
+  split the pull request.
 
 ## Releases
 
