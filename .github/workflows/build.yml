@@ -2,7 +2,9 @@ name: build
 
 # Reusable build. With an empty release_tag it runs a fast Linux x64 smoke build
 # (used on pull requests). With a release_tag it builds the full platform matrix
-# and uploads each portable app to that GitHub Release.
+# and uploads each portable app to that GitHub Release. With all_platforms it
+# builds the whole matrix and uploads nothing, which is how the release pull
+# request proves every platform still builds before the tag exists.
 #
 # It is called in the SAME run as release-please (see release-please.yml) so the
 # assets actually attach: a release created by GITHUB_TOKEN does not, by design,
@@ -15,6 +17,10 @@ on:
         description: "Release tag to attach assets to; empty => Linux-only smoke build, no upload."
         type: string
         default: ""
+      all_platforms:
+        description: "Build every platform without uploading (used on the release pull request)."
+        type: boolean
+        default: false
 
 env:
   # File name: the artifacts and the frozen executable. Kept ASCII and
@@ -47,7 +53,8 @@ jobs:
           # and no error, so the release just ends up without its macOS asset.
           full='{"include":[{"os":"ubuntu-22.04","name":"linux-x86_64"},{"os":"ubuntu-24.04-arm","name":"linux-aarch64"},{"os":"windows-latest","name":"windows-x64"},{"os":"windows-11-arm","name":"windows-arm64"},{"os":"macos-15","name":"macos-arm64"}]}'
           smoke='{"include":[{"os":"ubuntu-22.04","name":"linux-x86_64"}]}'
-          if [ -n "${{ inputs.release_tag }}" ]; then
+          if [ -n "${{ inputs.release_tag }}" ] \
+            || [ "${{ inputs.all_platforms }}" = "true" ]; then
             echo "matrix=$full" >> "$GITHUB_OUTPUT"
           else
             echo "matrix=$smoke" >> "$GITHUB_OUTPUT"
