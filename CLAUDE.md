@@ -21,6 +21,10 @@ into `docs/regulations/` (see its README) and become entries in `STAGE_RULES` an
 tie-break: when the regulations leave something open, ask, and record the answer next
 to the regulations.
 
+One pair is real, by the maintainer's word: the stage rule `time` (a stage counts by
+its time) and the cup rule `sum_of_times` (the cup by the sum of the stages' times,
+written as a time). Its decisions are in `docs/regulations/sum-of-times/decisions.txt`.
+
 ## Conventions
 
 - Talk to the maintainer in Russian; everything written into the repository is English
@@ -63,7 +67,8 @@ to the regulations.
   response sheet read as bib -> result (columns by position: timestamp, bib, result; the
   last answer for a bib wins), and a sign-in page told apart from the results.
 - `app/results.py` - what every connector hands over (`StageResults`, `Athlete`), and the
-  parsing of bibs and results (numbers and times).
+  parsing of bibs and results (numbers and times), and a sum of times written back as
+  a time.
 - `app/rules.py` - the stage rules and the cup rules, the referee's drop-downs.
 - `app/scoring.py` - every category's cup standing, by those rules.
 - `app/document.py` - the cup's protocol document, schema 1 of the cycling site
