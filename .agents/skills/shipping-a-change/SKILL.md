@@ -72,6 +72,9 @@ description: Branch, commit, open a pull request, and drive CI to green in this 
   approval (`action_required`). Approve them only on the maintainer's word:
   `gh api -X POST repos/<owner>/<repo>/actions/runs/<id>/approve` for each run, or the
   button on the pull request's page. That pull request builds every platform.
+- release-please opens that pull request with the workflow's own token, which works only
+  while the repository's Settings > Actions > General keeps "Allow GitHub Actions to
+  create and approve pull requests" ticked.
 - Merging it tags the release, and the same run builds every platform, uploads each
   download and fails if one is missing (the `verify` job).
 - A missing download is rebuilt with `gh workflow run release-please.yml --ref main -f
