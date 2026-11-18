@@ -93,6 +93,17 @@ def test_renaming_a_stage_renames_its_tab(window):
     assert _titles(window)[1] == "Stage 2"
 
 
+def test_an_unnamed_stage_is_titled_by_its_place_as_the_protocol_names_it(window):
+    window.apply(Config(token="cup", stages=[StageConfig("Sprint"), StageConfig()]))
+    assert _titles(window) == ["Sprint", "Stage 2"]
+    window.stages.setCurrentIndex(0)
+    window.add_left.click()  # a copy of Sprint goes first: the unnamed one is third now
+    assert _titles(window) == ["Sprint", "Sprint", "Stage 3"]
+    window.stages.setCurrentIndex(0)
+    window.delete_stage.click()
+    assert _titles(window) == ["Sprint", "Stage 2"]
+
+
 def test_a_rule_this_build_does_not_know_falls_back_to_the_first(window):
     window.apply(Config(rule="best_three", stages=[StageConfig(rule="laps")]))
     assert window.config().rule == "sum_smallest_wins"
