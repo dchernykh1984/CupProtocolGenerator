@@ -40,7 +40,8 @@ StravaProtocolGenerator.
 A cup of summed times: score every stage by "Time, the lowest first" and pick the cup
 rule "Sum of the stages' times, the smallest wins". The protocol shows every stage's
 time, with the stage place under it, in a column of its own, and the total time;
-somebody without a time in a stage is listed last, without a place. The other rules are
+somebody without a time in a stage is listed after the ranked without a place, who
+missed fewer stages first -- unless Place everybody is ticked. The other rules are
 stubs for now (a place per stage, the smallest sum of places wins): the cup's
 regulations replace them. The settings, upload tokens included, are kept in
 `data/config.json` next to the app: keep it to yourself.
