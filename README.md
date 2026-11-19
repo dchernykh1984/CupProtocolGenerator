@@ -26,8 +26,10 @@ StravaProtocolGenerator.
 ## In the window
 
 - **Cup tab** - the site, the cup event's upload token, the protocol's title (the
-  event's title when left empty), the cup rule, the section to publish to, and Final
-  for the last upload (the site then stops checking for updates). **Build** reads every
+  event's title when left empty), the cup rule, the section to publish to, Final for
+  the last upload (the site then stops checking for updates), and Place everybody for
+  a broadcast (who missed a stage is placed too: after everybody with every stage, and
+  the more stages missed, the lower). **Build** reads every
   stage again and lists what it could not read; **Publish** sends what was just built,
   and asks for a new build after any change.
 - **Stages tab** - a tab per stage: its name, where its results come from (a protocol on

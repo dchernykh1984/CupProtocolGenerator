@@ -21,9 +21,11 @@ Both kinds live in `app/rules.py` and are picked from drop-downs:
   `score(values: dict[bib, result]) -> dict[bib, StageScore(place, points)]`. A bib
   with no result is absent from `values` and must be absent from the answer.
 - A **cup rule** (`CupRule`) adds the stages up within one category:
-  `combine(stages: list[dict[bib, StageScore]], bibs: list[str]) -> dict[bib,
-  CupScore(total, place)]`, an entry for every bib in `bibs`; `place=None` for somebody
-  the rule does not rank (they are listed after the ranked).
+  `combine(stages: list[dict[bib, StageScore]], bibs: list[str], place_everybody:
+  bool) -> dict[bib, CupScore(total, place)]`, an entry for every bib in `bibs`;
+  `place=None` for somebody the rule does not rank (they are listed after the ranked,
+  who missed fewer stages first). `place_everybody` is the Cup tab's broadcast
+  checkbox: then everybody gets a place, who missed more stages lower.
 - A stage rule whose points are the stage's time in seconds says so with
   `scores_time=True`; a cup rule that adds times up says so with `adds_times=True`. The
   pipeline refuses a stage whose rule does not match its cup rule either way, and the
