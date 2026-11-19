@@ -8,7 +8,7 @@ work end to end. The cup's regulations replace them: a new rule is one more entr
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from enum import StrEnum
 
@@ -30,15 +30,18 @@ class StageScore:
 
 @dataclass(frozen=True)
 class CupScore:
-    total: float | None  # None: this rule does not rank the athlete
-    place: int | None
+    total: float | None  # None: nothing to show, no stage counted or no place
+    place: int | None  # None: this rule does not rank the athlete
 
 
 # One category's results of one stage (bib -> result) -> every scored bib's score.
 StageScorer = Callable[[dict[str, float]], dict[str, StageScore]]
-# Every stage's scores within one category, in stage order, and the category's bibs in
-# the order they are listed -> every bib's cup score.
-CupScorer = Callable[[list[dict[str, StageScore]], list[str]], dict[str, CupScore]]
+# Every stage's scores within one category, in stage order, the category's bibs in the
+# order they are listed, and whether to place everybody, those who missed stages too
+# (a broadcast) -> every bib's cup score.
+CupScorer = Callable[
+    [list[dict[str, StageScore]], list[str], bool], dict[str, CupScore]
+]
 
 
 @dataclass(frozen=True)
@@ -62,10 +65,15 @@ class CupRule:
 def rank(values: dict[str, float], better: Better) -> dict[str, int]:
     """Places 1, 2, 2, 4...: equal results share a place, and the next one skips it."""
     sign = 1 if better is Better.LOWER else -1
+    return _places({key: (sign * value,) for key, value in values.items()})
+
+
+def _places(order: Mapping[str, tuple[float, ...]]) -> dict[str, int]:
+    """Places by ``order``, the smallest first, equal ones sharing a place."""
     places: dict[str, int] = {}
     place, last = 0, None
     for index, (key, value) in enumerate(
-        sorted(values.items(), key=lambda item: sign * item[1]), start=1
+        sorted(order.items(), key=lambda item: item[1]), start=1
     ):
         if value != last:
             place, last = index, value
@@ -88,16 +96,28 @@ def _time_as_points(values: dict[str, float]) -> dict[str, StageScore]:
 
 
 def _sum_smallest_wins(
-    stages: list[dict[str, StageScore]], bibs: list[str]
+    stages: list[dict[str, StageScore]], bibs: list[str], place_everybody: bool
 ) -> dict[str, CupScore]:
+    """The smallest sum first. Somebody who missed a stage is placed only when
+    everybody is: after everybody who missed fewer, by the sum of the stages they have.
+    """
+    missed = {bib: sum(bib not in stage for stage in stages) for bib in bibs}
     # Rounded: 10.1 + 20.2 and 10.2 + 20.1 differ by float noise, not in a place.
     totals = {
-        bib: round(sum(stage[bib].points for stage in stages), 6)
+        bib: round(sum(stage[bib].points for stage in stages if bib in stage), 6)
         for bib in bibs
-        if all(bib in stage for stage in stages)
+        if missed[bib] < len(stages)
     }
-    places = rank(totals, Better.LOWER)
-    return {bib: CupScore(totals.get(bib), places.get(bib)) for bib in bibs}
+    placed = {
+        bib: (missed[bib], totals.get(bib, 0.0))
+        for bib in bibs
+        if place_everybody or not missed[bib]
+    }
+    places = _places(placed)
+    return {
+        bib: CupScore(totals.get(bib) if bib in placed else None, places.get(bib))
+        for bib in bibs
+    }
 
 
 STAGE_RULES: tuple[StageRule, ...] = (
@@ -132,7 +152,8 @@ CUP_RULES: tuple[CupRule, ...] = (
         "sum_smallest_wins",
         "Sum of the stages' points, the smallest wins (stub)",
         "The points of every stage added up; the smallest sum wins, equal sums share "
-        "a place. Somebody without a result in a stage is not ranked.",
+        "a place. Somebody without a result in a stage is not ranked, unless "
+        "everybody is placed.",
         _sum_smallest_wins,
     ),
     # The maintainer, 2026-11-18: "the cup's result is the sum of the stages' times"
@@ -141,8 +162,8 @@ CUP_RULES: tuple[CupRule, ...] = (
         "sum_of_times",
         "Sum of the stages' times, the smallest wins",
         "Every stage's time added up; the smallest sum wins, equal sums share a "
-        "place. Somebody without a time in a stage is not ranked. Score every stage "
-        "by its time.",
+        "place. Somebody without a time in a stage is not ranked, unless everybody "
+        "is placed. Score every stage by its time.",
         _sum_smallest_wins,
         adds_times=True,
     ),

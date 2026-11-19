@@ -58,3 +58,15 @@ def test_the_unranked_are_listed_by_how_many_stages_they_missed():
         ("9", None),
         ("5", None),
     ]
+
+
+def test_placing_everybody_lists_who_missed_more_stages_lower():
+    athletes = [Athlete("5", "None"), Athlete("9", "One missed"), Athlete("1", "Both")]
+    table = standings(
+        athletes, [{"9": 7.0, "1": 8.0}, {"1": 150}], [LOWER, HIGHER], SUM, True
+    )
+    assert [(r.athlete.bib, r.place, r.total) for r in table[""]] == [
+        ("1", 1, 3.0),
+        ("9", 2, 1.0),
+        ("5", 3, None),
+    ]
