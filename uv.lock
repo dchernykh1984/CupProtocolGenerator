@@ -231,7 +231,7 @@ wheels = [
 
 [[package]]
 name = "cup-protocol-generator"
-version = "0.2.0"
+version = "0.3.0"
 source = { virtual = "." }
 default-groups = "all"
 dependencies = [
