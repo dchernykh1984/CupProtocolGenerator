@@ -136,6 +136,9 @@ def test_placing_everybody_is_kept_and_asks_for_a_new_build(window):
     boys = window._built.document["sections"][0]["rows"]
     assert [row["cells"]["place"] for row in boys] == ["1", "1", "3"]
     assert settings.load(window._config_path).place_everybody
+    window.place_everybody.setChecked(False)
+    window.apply(Config(place_everybody=True))
+    assert window.place_everybody.isChecked()  # a saved broadcast comes back
 
 
 def test_a_build_that_fails_says_why_and_publishes_nothing(window):
