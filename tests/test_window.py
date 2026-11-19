@@ -128,6 +128,16 @@ def test_a_changed_setting_asks_for_a_new_build_before_publishing(window):
     assert window.site.uploads == []
 
 
+def test_placing_everybody_is_kept_and_asks_for_a_new_build(window):
+    window.on_build()
+    window.place_everybody.setChecked(True)
+    assert not window.publish_button.isEnabled()
+    window.on_build()
+    boys = window._built.document["sections"][0]["rows"]
+    assert [row["cells"]["place"] for row in boys] == ["1", "1", "3"]
+    assert settings.load(window._config_path).place_everybody
+
+
 def test_a_build_that_fails_says_why_and_publishes_nothing(window):
     window.token.setText("")
     window.on_build()

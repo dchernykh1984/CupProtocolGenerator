@@ -136,6 +136,9 @@ class MainWindow(QMainWindow):
         self.rule = _rule_box(CUP_RULES, CUP_RULES[0].key)
         self.publish_section = _section_box(2)
         self.final = QCheckBox("Final (the site stops checking for updates)")
+        self.place_everybody = QCheckBox(
+            "Place everybody, who missed stages after the rest (for a broadcast)"
+        )
         form = QFormLayout()
         form.addRow("Site", self.site_url)
         form.addRow("Cup event's upload token", self.token)
@@ -143,6 +146,7 @@ class MainWindow(QMainWindow):
         form.addRow("Cup rule", self.rule)
         form.addRow("Publish to section", self.publish_section)
         form.addRow("", self.final)
+        form.addRow("", self.place_everybody)
         self.build_button = QPushButton("Build")
         self.publish_button = QPushButton("Publish")
         self.publish_button.setEnabled(False)
@@ -163,6 +167,7 @@ class MainWindow(QMainWindow):
         self.rule.currentIndexChanged.connect(self._invalidate)
         self.publish_section.valueChanged.connect(self._invalidate)
         self.final.toggled.connect(self._invalidate)
+        self.place_everybody.toggled.connect(self._invalidate)
         return tab
 
     def _stages_tab(self) -> QWidget:
@@ -194,6 +199,7 @@ class MainWindow(QMainWindow):
         self.rule.setCurrentIndex(max(self.rule.findData(config.rule), 0))
         self.publish_section.setValue(config.publish_section)
         self.final.setChecked(config.final)
+        self.place_everybody.setChecked(config.place_everybody)
         while self.stages.count():
             self._drop_stage(0)
         for stage in config.stages or [StageConfig()]:
@@ -208,6 +214,7 @@ class MainWindow(QMainWindow):
             rule=str(self.rule.currentData()),
             publish_section=self.publish_section.value(),
             final=self.final.isChecked(),
+            place_everybody=self.place_everybody.isChecked(),
             stages=[tab.stage() for tab in self.stage_tabs()],
         )
 
