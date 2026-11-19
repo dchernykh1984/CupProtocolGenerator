@@ -5,8 +5,8 @@ Sum of times: the stage rule "time" and the cup rule "sum_of_times"
 the sum of the stages' times. The cup's protocol shows every stage's result in a column
 of its own.
 
-Left open by that word, answered by the defaults the stub rules already had, to be
-confirmed by the maintainer:
+Left open by that word, answered by the defaults the stub rules already had, and
+confirmed by the maintainer on 2026-11-19:
 
 - Somebody without a time in a stage (not started, not finished, disqualified, missing
   from a sheet) has no sum: listed after the ranked, without a place.
