@@ -46,3 +46,15 @@ def test_somebody_the_cup_rule_does_not_rank_comes_last_without_a_place():
         ("9", None, None),
     ]
     assert rows[1].stages == [StageScore(1, 1), None]
+
+
+def test_the_unranked_are_listed_by_how_many_stages_they_missed():
+    athletes = [Athlete("5", "None"), Athlete("9", "One missed"), Athlete("1", "Both")]
+    table = standings(
+        athletes, [{"9": 7.0, "1": 8.0}, {"1": 150}], [LOWER, HIGHER], SUM
+    )
+    assert [(r.athlete.bib, r.place) for r in table[""]] == [
+        ("1", 1),
+        ("9", None),
+        ("5", None),
+    ]
