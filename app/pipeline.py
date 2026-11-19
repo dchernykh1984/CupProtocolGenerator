@@ -149,7 +149,8 @@ def build(config: Config, api: SiteApi) -> Built:
         strangers = sorted(set(results.values) - known)
         if strangers:
             report.append(f"{name}: bibs no protocol names: {', '.join(strangers)}")
-    table = scoring.standings(athletes, [r.values for r in read], rules, rule)
+    values = [r.values for r in read]
+    table = scoring.standings(athletes, values, rules, rule, config.place_everybody)
     title = config.title.strip() or event_title
     texts = [r.texts for r in read]
     built = document.build(
