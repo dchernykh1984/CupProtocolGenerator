@@ -137,7 +137,7 @@ class MainWindow(QMainWindow):
         self.publish_section = _section_box(2)
         self.final = QCheckBox("Final (the site stops checking for updates)")
         self.place_everybody = QCheckBox(
-            "Place everybody, who missed stages after the rest (for a broadcast)"
+            "Place everybody, for a broadcast: who missed stages comes after the rest"
         )
         form = QFormLayout()
         form.addRow("Site", self.site_url)
