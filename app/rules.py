@@ -101,6 +101,9 @@ def _sum_smallest_wins(
     """The smallest sum first. Somebody who missed a stage is placed only when
     everybody is: after everybody who missed fewer, by the sum of the stages they have.
     """
+    # The maintainer, 2026-11-19: for a broadcast "everybody is shown with a place: who
+    # missed a stage ranks on par with the others who did, two missed after them"
+    # (docs/regulations/sum-of-times/decisions.txt).
     missed = {bib: sum(bib not in stage for stage in stages) for bib in bibs}
     # Rounded: 10.1 + 20.2 and 10.2 + 20.1 differ by float noise, not in a place.
     totals = {
