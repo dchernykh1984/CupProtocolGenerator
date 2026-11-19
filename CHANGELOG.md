@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.3.0](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.2.0...v0.3.0) (2026-11-19)
+
+
+### Features
+
+* **config:** keep whether a build places everybody, for a broadcast ([32df0c3](https://github.com/dchernykh1984/CupProtocolGenerator/commit/32df0c3e8768fa7f2ef1d341042c24a7041758f1))
+* **rules:** place everybody on request, who missed more stages lower ([b7e7837](https://github.com/dchernykh1984/CupProtocolGenerator/commit/b7e7837f9fd1e7103a9104d25dacccee51fb9d9e))
+* **scoring:** list the unranked by how many stages they missed, fewer first ([4e22a08](https://github.com/dchernykh1984/CupProtocolGenerator/commit/4e22a088275f9eae66847bd8d8d7867acd27c344))
+* **window:** a checkbox to place everybody, for a broadcast ([df43731](https://github.com/dchernykh1984/CupProtocolGenerator/commit/df43731edb91b0a658a198ae4266d41f8d375bf9))
+
+
+### Bug Fixes
+
+* **window:** word the broadcast checkbox so it reads one way ([cc1b955](https://github.com/dchernykh1984/CupProtocolGenerator/commit/cc1b955390c90666587f15b32d4a1c4ce8858b8c))
+
+
+### Documentation
+
+* record the maintainer's confirmation of the sum-of-times decisions ([879fd7d](https://github.com/dchernykh1984/CupProtocolGenerator/commit/879fd7d9ea6ad9845e6591abba0778c7de38d21a))
+* **rules:** quote the broadcast word as it was said ([689e82c](https://github.com/dchernykh1984/CupProtocolGenerator/commit/689e82c1525c444cffa00d18ac4e710711744a91))
+* **rules:** say whose word places everybody for a broadcast ([2a579c1](https://github.com/dchernykh1984/CupProtocolGenerator/commit/2a579c14f0a3b3790d3a7e52c11754da6536ee52))
+* say how a broadcast places everybody who missed stages ([d992f8b](https://github.com/dchernykh1984/CupProtocolGenerator/commit/d992f8b80ed1457f7a269d0308537c02ad344c68))
+* say in the README where the unranked go and that a broadcast places them ([1afd0ea](https://github.com/dchernykh1984/CupProtocolGenerator/commit/1afd0eae37cff221bef87cd51db083921cfa5d8e))
+
 ## [0.2.0](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.1.2...v0.2.0) (2026-11-18)
 
 
