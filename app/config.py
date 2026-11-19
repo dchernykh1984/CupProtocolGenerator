@@ -47,6 +47,8 @@ class Config:
     rule: str = CUP_RULES[0].key
     publish_section: int = 2
     final: bool = False  # a final protocol stops the site's live polling
+    # A broadcast: those who missed stages are placed too, after those who missed fewer.
+    place_everybody: bool = False
     stages: list[StageConfig] = field(default_factory=lambda: [StageConfig()])
 
 
@@ -85,6 +87,7 @@ def from_dict(data: Any) -> Config:
         data.get("publish_section"), config.publish_section
     )
     config.final = data.get("final") is True
+    config.place_everybody = data.get("place_everybody") is True
     stages = data.get("stages")
     if isinstance(stages, list) and stages:
         config.stages = [_stage(stage) for stage in stages]

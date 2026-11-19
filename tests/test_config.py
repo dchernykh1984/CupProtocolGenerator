@@ -12,6 +12,7 @@ def test_the_settings_survive_a_restart(tmp_path):
         title="Cup",
         publish_section=4,
         final=True,
+        place_everybody=True,
         stages=[
             StageConfig("Sprint", Source.SITE, token="stage", section=3),
             StageConfig("Jump", Source.SHEET, link="https://docs.test/1", rule="x"),
@@ -46,6 +47,7 @@ def test_a_setting_of_the_wrong_shape_falls_back_to_its_default():
             "token": 7,
             "publish_section": True,
             "final": "yes",
+            "place_everybody": 1,
             "stages": [
                 {"name": "A", "source": "ftp", "section": 0, "link": 5},
                 "not a stage",
@@ -53,6 +55,7 @@ def test_a_setting_of_the_wrong_shape_falls_back_to_its_default():
         }
     )
     assert (config.token, config.publish_section, config.final) == ("", 2, False)
+    assert config.place_everybody is False
     assert config.stages == [StageConfig(name="A"), StageConfig()]
 
 

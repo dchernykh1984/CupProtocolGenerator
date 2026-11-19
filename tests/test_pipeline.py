@@ -186,6 +186,16 @@ def test_a_cup_of_summed_times_shows_every_stage_and_the_total_as_a_time():
     assert (first["stage_1"]["text"], first["stage_2"]["text"]) == ("8,90", "1:01.0")
 
 
+def test_a_broadcast_places_everybody_who_missed_stages_after_the_rest():
+    def boys(config):
+        rows = build(config, FakeSite()).document["sections"][0]["rows"]
+        return [(row["cells"]["bib"], row["cells"]["place"]) for row in rows]
+
+    # 13 has no sprint time and an unreadable jump: no stage at all.
+    assert boys(_config()) == [("7", "1"), ("12", "1"), ("13", "")]
+    assert boys(_config(place_everybody=True)) == [("7", "1"), ("12", "1"), ("13", "3")]
+
+
 def test_publishing_sends_the_protocol_to_its_section_live_until_final():
     site = FakeSite()
     built = build(_config(), site)
