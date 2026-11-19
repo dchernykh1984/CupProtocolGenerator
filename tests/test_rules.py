@@ -49,7 +49,7 @@ def test_the_stub_cup_rule_adds_up_points_and_ranks_only_complete_athletes():
         {"1": StageScore(1, 1), "2": StageScore(2, 2), "3": StageScore(3, 3)},
         {"1": StageScore(3, 3), "2": StageScore(1, 1)},
     ]
-    assert cup_rule("sum_smallest_wins").combine(stages, ["1", "2", "3"]) == {
+    assert cup_rule("sum_smallest_wins").combine(stages, ["1", "2", "3"], False) == {
         "1": CupScore(4, 2),
         "2": CupScore(3, 1),
         "3": CupScore(None, None),
@@ -63,11 +63,49 @@ def test_the_sum_of_times_ranks_equal_sums_together_float_noise_aside():
         {"1": StageScore(2, 20.2), "2": StageScore(1, 20.1)},
     ]
     assert rule.adds_times
-    assert rule.combine(stages, ["1", "2", "3"]) == {
+    assert rule.combine(stages, ["1", "2", "3"], False) == {
         "1": CupScore(30.3, 1),  # 10.1 + 20.2 is 30.299999999999997 unrounded
         "2": CupScore(30.3, 1),
         "3": CupScore(None, None),
     }
+
+
+# Six athletes over three stages: two have every stage, two missed one, one missed two,
+# one missed all three.
+MISSING = [
+    {
+        "1": StageScore(1, 10),
+        "2": StageScore(2, 11),
+        "3": StageScore(3, 5),
+        "4": StageScore(4, 5),
+        "5": StageScore(5, 1),
+    },
+    {"1": StageScore(1, 20), "2": StageScore(2, 21), "3": StageScore(3, 5)},
+    {"1": StageScore(1, 30), "2": StageScore(2, 31), "4": StageScore(3, 5)},
+]
+SIX = ["6", "5", "4", "3", "2", "1"]
+
+
+@pytest.mark.parametrize("key", ["sum_smallest_wins", "sum_of_times"])
+def test_placing_everybody_puts_who_missed_more_stages_lower(key):
+    assert cup_rule(key).combine(MISSING, SIX, True) == {
+        "1": CupScore(60, 1),
+        "2": CupScore(63, 2),
+        "3": CupScore(10, 3),  # a smaller sum than 1's, but a stage missed
+        "4": CupScore(10, 3),
+        "5": CupScore(1, 5),
+        "6": CupScore(None, 6),  # nothing to add up, the last place still
+    }
+
+
+@pytest.mark.parametrize("key", ["sum_smallest_wins", "sum_of_times"])
+def test_without_placing_everybody_who_missed_a_stage_has_no_place(key):
+    scores = cup_rule(key).combine(MISSING, SIX, False)
+    assert {bib: score for bib, score in scores.items() if score.place} == {
+        "1": CupScore(60, 1),
+        "2": CupScore(63, 2),
+    }
+    assert {scores[bib] for bib in "3456"} == {CupScore(None, None)}
 
 
 @pytest.mark.parametrize("lookup", [stage_rule, cup_rule])

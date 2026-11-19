@@ -22,11 +22,13 @@ def standings(
     stage_values: list[dict[str, float]],
     stage_rules: list[StageRule],
     rule: CupRule,
+    place_everybody: bool = False,
 ) -> dict[str, list[CupRow]]:
     """Every category's standing, the categories in the order the athletes come in.
 
     ``stage_values`` holds, for each stage in order, the result of every bib that has
-    one; ``stage_rules`` the rule each stage is scored by. Places are given within a
+    one; ``stage_rules`` the rule each stage is scored by; ``place_everybody`` asks the
+    cup rule to place those who missed stages too. Places are given within a
     category. The ranked come first, by place -- a shared place keeping the order the
     athletes are listed in -- then everybody the cup rule did not rank, who missed
     fewer stages first.
@@ -41,7 +43,7 @@ def standings(
             stage.score({bib: values[bib] for bib in bibs if bib in values})
             for values, stage in zip(stage_values, stage_rules, strict=True)
         ]
-        cup = rule.combine(scores, bibs)
+        cup = rule.combine(scores, bibs, place_everybody)
         rows = [
             CupRow(
                 member,
