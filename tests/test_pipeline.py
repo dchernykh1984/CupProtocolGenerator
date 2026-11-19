@@ -189,11 +189,13 @@ def test_a_cup_of_summed_times_shows_every_stage_and_the_total_as_a_time():
 def test_a_broadcast_places_everybody_who_missed_stages_after_the_rest():
     def boys(config):
         rows = build(config, FakeSite()).document["sections"][0]["rows"]
-        return [(row["cells"]["bib"], row["cells"]["place"]) for row in rows]
+        cells = [row["cells"] for row in rows]
+        return [(cell["bib"], cell["place"], cell["total"]) for cell in cells]
 
-    # 13 has no sprint time and an unreadable jump: no stage at all.
-    assert boys(_config()) == [("7", "1"), ("12", "1"), ("13", "")]
-    assert boys(_config(place_everybody=True)) == [("7", "1"), ("12", "1"), ("13", "3")]
+    # 13 has no sprint time and an unreadable jump: no stage at all, so no total.
+    ranked = [("7", "1", "3"), ("12", "1", "3")]
+    assert boys(_config()) == [*ranked, ("13", "", "")]
+    assert boys(_config(place_everybody=True)) == [*ranked, ("13", "3", "")]
 
 
 def test_publishing_sends_the_protocol_to_its_section_live_until_final():
