@@ -28,7 +28,8 @@ def standings(
     ``stage_values`` holds, for each stage in order, the result of every bib that has
     one; ``stage_rules`` the rule each stage is scored by. Places are given within a
     category. The ranked come first, by place -- a shared place keeping the order the
-    athletes are listed in -- then everybody the cup rule did not rank.
+    athletes are listed in -- then everybody the cup rule did not rank, who missed
+    fewer stages first.
     """
     categories: dict[str, list[Athlete]] = {}
     for athlete in athletes:
@@ -51,9 +52,14 @@ def standings(
             for member in members
         ]
         ranked = sorted((row for row in rows if row.place is not None), key=_place)
-        table[category] = ranked + [row for row in rows if row.place is None]
+        unranked = sorted((row for row in rows if row.place is None), key=_missed)
+        table[category] = ranked + unranked
     return table
 
 
 def _place(row: CupRow) -> int:
     return row.place or 0
+
+
+def _missed(row: CupRow) -> int:
+    return row.stages.count(None)
