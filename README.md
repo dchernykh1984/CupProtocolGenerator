@@ -18,9 +18,10 @@ StravaProtocolGenerator.
 2. **Stages from Google Forms** (an exercise of an all-round event, a result taken at
    the venue): one form per stage, two questions in this order -- the bib, then the
    result (a number). Link the form to a response sheet and share the sheet as "Anyone
-   with the link: Viewer". Do not collect e-mail addresses: anyone with the link sees
-   the sheet. The first answer for a bib counts; a later one is not taken but named in
-   the log as an error, so a mark given twice is seen. Correct a mistake in the sheet.
+   with the link: Viewer", or publish it to the web and give its published link. Do not
+   collect e-mail addresses: anyone with the link sees the sheet. The first answer for a
+   bib counts; a later one is not taken but named in the log as an error, so a mark
+   given twice is seen. Correct a mistake in the sheet.
 3. **A section for the cup's protocol**: add it on the cup event's "Protocol sections"
    page on the site; the tool publishes into it by its number.
 

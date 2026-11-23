@@ -63,7 +63,8 @@ so has a result that is not a number or a time.
 
 The form asks two questions, in this order: the bib, then the result. The sheet's link
 is turned into its CSV export, its tab (`gid`) kept; a link without a tab exports the
-first one. The columns are read by position -- the timestamp Google adds, the bib, the
+first one. A link of a sheet published to the web (`/d/e/<id>/...`) is turned into its
+published CSV, its tab kept too. The columns are read by position -- the timestamp Google adds, the bib, the
 result -- so the questions may be worded in any language. Rows are read in the sheet's
 order; a blank row is skipped.
 

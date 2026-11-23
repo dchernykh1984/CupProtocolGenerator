@@ -4,6 +4,7 @@ from app.sheets import export_url, looks_like_a_page, read
 
 SHEET = "https://docs.google.com/spreadsheets/d/1AbC_d-9"
 EXPORT = f"{SHEET}/export?format=csv"
+PUBLISHED = "https://docs.google.com/spreadsheets/d/e/2PACX-1vAb_c-9"
 
 
 @pytest.mark.parametrize(
@@ -14,6 +15,12 @@ EXPORT = f"{SHEET}/export?format=csv"
         (f" {SHEET}/edit ", EXPORT),
         (f"{EXPORT}&gid=7", f"{EXPORT}&gid=7"),
         ("https://example.com/results.csv", "https://example.com/results.csv"),
+        # Published to the web: its own id after "/d/e/", never "e" taken for the id.
+        (f"{PUBLISHED}/pubhtml", f"{PUBLISHED}/pub?output=csv"),
+        (
+            f"{PUBLISHED}/pub?gid=45&single=true&output=csv",
+            f"{PUBLISHED}/pub?output=csv&gid=45&single=true",
+        ),
     ],
 )
 def test_a_sheet_link_becomes_its_csv_export(link, url):
