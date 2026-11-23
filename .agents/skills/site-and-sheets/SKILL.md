@@ -43,7 +43,8 @@ time or a place. Columns say what they hold by `role` (`place`, `bib`, `name`, `
   position. The first readable answer for a bib counts; a later one is reported as an
   error and never taken, so a second mark is seen (the maintainer, 2026-11-23).
 - The sheet is shared as "Anyone with the link: Viewer"; the tool reads its CSV export
-  (`/export?format=csv&gid=<tab>`, the first tab without a `gid`). An unshared sheet
+  (`/export?format=csv&gid=<tab>`, the first tab without a `gid`); a sheet published to
+  the web is read by its published link (`/d/e/<id>/pub?output=csv`). An unshared sheet
   answers HTTP 401, which the build reports as it is; a sign-in page in its place, as
   Google used to send, is recognised and reported. Forms must not collect e-mail
   addresses.
