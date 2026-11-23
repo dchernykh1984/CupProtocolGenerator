@@ -66,7 +66,9 @@ def fraction_digits(text: str) -> int:
 
 def format_time(seconds: float, decimals: int = 0) -> str:
     """Seconds as the timing tools write a time: ``h:mm:ss`` from an hour on, ``m:ss``
-    below it, ``decimals`` digits after the dot."""
+    below it, ``decimals`` digits after the dot, a minus before a negative one."""
+    if seconds < 0:
+        return "-" + format_time(-seconds, decimals)
     factor = 10**decimals
     whole, fraction = divmod(round(seconds * factor), factor)
     hours, rest = divmod(whole, 3600)
