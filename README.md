@@ -19,7 +19,8 @@ StravaProtocolGenerator.
    the venue): one form per stage, two questions in this order -- the bib, then the
    result (a number). Link the form to a response sheet and share the sheet as "Anyone
    with the link: Viewer". Do not collect e-mail addresses: anyone with the link sees
-   the sheet. A coach who made a mistake answers again: the last answer for a bib wins.
+   the sheet. The first answer for a bib counts; a later one is not taken but named in
+   the log as an error, so a mark given twice is seen. Correct a mistake in the sheet.
 3. **A section for the cup's protocol**: add it on the cup event's "Protocol sections"
    page on the site; the tool publishes into it by its number.
 
@@ -29,9 +30,10 @@ StravaProtocolGenerator.
   event's title when left empty), the cup rule, the section to publish to, Final for
   the last upload (the site then stops checking for updates), and Place everybody for
   a broadcast (who missed a stage is placed too: after everybody with every stage, and
-  the more stages missed, the lower). **Build** reads every
-  stage again and lists what it could not read; **Publish** sends what was just built,
-  and asks for a new build after any change.
+  the more stages missed, the lower). **Build** reads every stage again and lists what
+  it could not read, each such line marked `ERROR:`, in the **Log** tab, the Cup tab's
+  status line saying how many there were; **Publish** sends what was just built, and
+  asks for a new build after any change.
 - **Stages tab** - a tab per stage: its name, where its results come from (a protocol on
   the site, by the stage event's upload token -- the cup event's when left empty -- and
   its section; or a Google Forms sheet, by its link) and the stage rule. Add a copy of
