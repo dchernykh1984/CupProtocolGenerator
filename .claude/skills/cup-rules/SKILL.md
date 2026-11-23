@@ -35,6 +35,8 @@ Both kinds live in `app/rules.py` and are picked from drop-downs:
 - The stubs (`place_lower_better`, `place_higher_better`, `sum_smallest_wins`) stay
   until the maintainer says to drop them. `time` and `sum_of_times` are the
   maintainer's (`docs/regulations/sum-of-times/decisions.txt`).
+  `minus_second_per_repetition_test` is made up, for testing all-round events (the
+  maintainer, 2026-11-23): it is no regulation, and may be deleted.
 
 ## Writing one
 
