@@ -24,6 +24,8 @@ to the regulations.
 One pair is real, by the maintainer's word: the stage rule `time` (a stage counts by
 its time) and the cup rule `sum_of_times` (the cup by the sum of the stages' times,
 written as a time). Its decisions are in `docs/regulations/sum-of-times/decisions.txt`.
+The stage rule `minus_second_per_repetition_test` is made up, for testing all-round
+events (the maintainer, 2026-11-23); it is not a regulation and may be deleted.
 
 ## Conventions
 

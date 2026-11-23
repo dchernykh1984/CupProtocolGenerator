@@ -103,6 +103,7 @@ Rules are picked from drop-downs; a rule's key is what the settings keep.
 | `place_lower_better` (stub) | a place by the result, the lowest first; the place is the points |
 | `place_higher_better` (stub) | a place by the result, the highest first; the place is the points |
 | `time` | a place by the time, the lowest first; the time in seconds is the points |
+| `minus_second_per_repetition_test` (test) | a place by the count, the highest first; the count as minus seconds is the points, a second off the cup's sum of times per repetition |
 
 | Cup rule | What it does |
 | --- | --- |
@@ -122,6 +123,8 @@ Rules are picked from drop-downs; a rule's key is what the settings keep.
 - `time` and `sum_of_times` are the maintainer's
   ([`docs/regulations/sum-of-times/decisions.txt`](../../docs/regulations/sum-of-times/decisions.txt));
   the stubs stand in until a cup's regulations replace them.
+  `minus_second_per_repetition_test` is made up for testing all-round events, by the
+  maintainer's word of 2026-11-23 (no all-round regulations yet), and may be deleted.
 
 ## The standing (`app/scoring.py`)
 
@@ -145,8 +148,8 @@ in `groups`; athletes without a category make one untitled table.
 | Total | `result` | the total: a number, or a time when the cup adds times up |
 
 A total that is a time is written as the timing tools write one -- `m:ss` below an hour,
-`h:mm:ss` from one on -- with as many decimals as the most precise of the athlete's stage
-results is written with. The title is the `title` setting, else the cup event's title.
+`h:mm:ss` from one on, a minus before a negative one -- with as many decimals as the most
+precise of the athlete's stage results is written with. The title is the `title` setting, else the cup event's title.
 
 ## Publishing
 

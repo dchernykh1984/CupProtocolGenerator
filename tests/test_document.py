@@ -115,6 +115,21 @@ def test_a_sum_of_times_is_written_as_a_time_as_precise_as_its_stages():
     assert rows[0]["stage_2"] == {"text": "1:02.5", "sub": ["2 pl."]}
 
 
+def test_a_time_less_the_repetitions_is_the_total_of_an_all_round_test():
+    rules = [stage_rule("time"), stage_rule("minus_second_per_repetition_test")]
+    athletes = [Athlete("7", "Ivanov"), Athlete("12", "Petrov")]
+    values = [{"7": 62.5, "12": 61.0}, {"7": 23, "12": 5}]
+    table = standings(athletes, values, rules, cup_rule("sum_of_times"))
+    texts = [{"7": "1:02.5", "12": "1:01.0"}, {"7": "23", "12": "5"}]
+    document = build("", ["Run", "Pull-ups"], table, {}, texts, total_is_time=True)
+    rows = [row["cells"] for row in document["sections"][0]["rows"]]
+    assert [(r["bib"], r["place"], r["total"]) for r in rows] == [
+        ("7", "1", "0:39.5"),  # 62.5 s less 23 pull-ups
+        ("12", "2", "0:56.0"),
+    ]
+    assert rows[0]["stage_2"] == {"text": "23", "sub": ["1 pl."]}
+
+
 @pytest.mark.parametrize(
     ("value", "text"), [(12.0, "12"), (150.5, "150.5"), (2.35, "2.35")]
 )

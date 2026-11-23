@@ -44,6 +44,16 @@ def test_the_time_rule_places_the_lowest_first_and_keeps_the_time_as_points():
     }
 
 
+def test_the_test_rule_places_the_most_repetitions_first_a_second_off_each():
+    rule = stage_rule("minus_second_per_repetition_test")
+    assert rule.scores_time  # the cup's sum of times takes it
+    assert rule.score({"7": 23, "12": 28, "3": 23}) == {
+        "12": StageScore(1, -28),
+        "7": StageScore(2, -23),
+        "3": StageScore(2, -23),
+    }
+
+
 def test_the_stub_cup_rule_adds_up_points_and_ranks_only_complete_athletes():
     stages = [
         {"1": StageScore(1, 1), "2": StageScore(2, 2), "3": StageScore(3, 3)},

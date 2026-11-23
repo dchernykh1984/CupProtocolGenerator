@@ -43,6 +43,7 @@ def test_a_bib_is_compared_without_spaces_and_leading_zeros(text, bib):
         (59.96, 1, "1:00.0"),
         (3753.4, 1, "1:02:33.4"),
         (36000, 3, "10:00:00.000"),
+        (-75.5, 1, "-1:15.5"),
     ],
 )
 def test_seconds_are_written_as_the_timing_tools_write_a_time(seconds, decimals, text):

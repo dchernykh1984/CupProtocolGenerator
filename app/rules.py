@@ -95,6 +95,13 @@ def _time_as_points(values: dict[str, float]) -> dict[str, StageScore]:
     }
 
 
+def _minus_second_per_repetition(values: dict[str, float]) -> dict[str, StageScore]:
+    return {
+        bib: StageScore(place, -values[bib])
+        for bib, place in rank(values, Better.HIGHER).items()
+    }
+
+
 def _sum_smallest_wins(
     stages: list[dict[str, StageScore]], bibs: list[str], place_everybody: bool
 ) -> dict[str, CupScore]:
@@ -146,6 +153,16 @@ STAGE_RULES: tuple[StageRule, ...] = (
         "A place by the time, the lowest first, equal times sharing a place. The "
         "time itself, in seconds, is the stage's points: the cup can add it up.",
         _time_as_points,
+        scores_time=True,
+    ),
+    # Made up for testing (the maintainer, 2026-11-23: no all-round regulations yet, any
+    # formula will do and may be deleted later).
+    StageRule(
+        "minus_second_per_repetition_test",
+        "Minus a second per repetition (test)",
+        "For testing only: a place by the count, the highest first; every repetition "
+        "is a second off the cup's sum of times.",
+        _minus_second_per_repetition,
         scores_time=True,
     ),
 )
