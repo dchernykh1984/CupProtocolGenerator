@@ -1,5 +1,6 @@
 """The window, laid out as StravaProtocolGenerator's: a Cup tab with the cup's settings,
-the build and publish buttons and the log, and a Stages tab with a tab per stage.
+the build and publish buttons and a status line, and a Stages tab with a tab per stage;
+and a Log tab, as FinishProtocolGenerator keeps one, with all a build or a publish said.
 
 A build reads everything fresh; any change to a setting asks for a new build before the
 protocol may be published, so what goes to the site is what the log just showed.
@@ -18,6 +19,7 @@ from PySide6.QtWidgets import (
     QComboBox,
     QFormLayout,
     QHBoxLayout,
+    QLabel,
     QLineEdit,
     QMainWindow,
     QPlainTextEdit,
@@ -124,6 +126,7 @@ class MainWindow(QMainWindow):
         self.tabs = QTabWidget()
         self.tabs.addTab(self._cup_tab(), "Cup")
         self.tabs.addTab(self._stages_tab(), "Stages")
+        self.tabs.addTab(self._log_tab(), "Log")
         self.setCentralWidget(self.tabs)
         self.apply(settings.load(self._config_path))
 
@@ -150,8 +153,8 @@ class MainWindow(QMainWindow):
         self.build_button = QPushButton("Build")
         self.publish_button = QPushButton("Publish")
         self.publish_button.setEnabled(False)
-        self.log = QPlainTextEdit()
-        self.log.setReadOnly(True)
+        self.status = QLabel()
+        self.status.setWordWrap(True)
         buttons = QHBoxLayout()
         buttons.addWidget(self.build_button)
         buttons.addWidget(self.publish_button)
@@ -159,7 +162,8 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout(tab)
         layout.addLayout(form)
         layout.addLayout(buttons)
-        layout.addWidget(self.log, stretch=1)
+        layout.addWidget(self.status)
+        layout.addStretch(1)
         self.build_button.clicked.connect(self.on_build)
         self.publish_button.clicked.connect(self.on_publish)
         for line in (self.site_url, self.token, self.title):
@@ -187,6 +191,22 @@ class MainWindow(QMainWindow):
         self.add_right.clicked.connect(lambda: self.add_stage_copy(1))
         self.delete_stage.clicked.connect(self.on_delete_stage)
         return tab
+
+    def _log_tab(self) -> QWidget:
+        self.log = QPlainTextEdit()
+        self.log.setReadOnly(True)
+        tab = QWidget()
+        QVBoxLayout(tab).addWidget(self.log)
+        return tab
+
+    def _say(self, text: str, *, fresh: bool = False) -> None:
+        """``text`` in the log -- in place of what it held when ``fresh`` -- and on the
+        Cup tab's status line, so a build or a publish answers where it was asked."""
+        if fresh:
+            self.log.setPlainText(text)
+        else:
+            self.log.appendPlainText(text)
+        self.status.setText(text)
 
     def stage_tabs(self) -> list[StageTab]:
         widgets = (self.stages.widget(i) for i in range(self.stages.count()))
@@ -243,7 +263,7 @@ class MainWindow(QMainWindow):
 
     def on_delete_stage(self) -> None:
         if self.stages.count() <= 1:
-            self.log.appendPlainText("A cup needs at least one stage.")
+            self._say("A cup needs at least one stage.")
             return
         self._drop_stage(self.stages.currentIndex())
         self._retitle()
@@ -269,21 +289,25 @@ class MainWindow(QMainWindow):
         settings.save(config, self._config_path)
         # The site and every sheet are read here, in the window's own thread: say so
         # before it goes quiet for the seconds that takes.
-        self.log.setPlainText("Building...")
+        self._say("Building...", fresh=True)
         QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         QApplication.processEvents()
         try:
             built = pipeline.build(config, self._api(config))
         except (pipeline.PipelineError, SiteApiError) as exc:
-            self.log.setPlainText(f"Not built: {exc}")
+            self._say(f"Not built: {exc}", fresh=True)
             return
         except Exception as exc:  # a rule's own failure must not leave "Building..."
-            self.log.setPlainText(f"Not built, unexpected {type(exc).__name__}: {exc}")
+            self._say(f"Not built, unexpected {type(exc).__name__}: {exc}", fresh=True)
             return
         finally:
             QApplication.restoreOverrideCursor()
-        self.log.setPlainText("\n".join(built.report))
-        self.log.appendPlainText(f"Built: {len(built.document['sections'])} table(s)")
+        summary = f"Built: {len(built.document['sections'])} table(s)"
+        self.log.setPlainText("\n".join([*built.report, summary]))
+        errors = sum(line.startswith("ERROR:") for line in built.report)
+        if errors:
+            summary += f", {errors} error(s): see the Log tab"
+        self.status.setText(summary)
         self._built = built
         self.publish_button.setEnabled(True)
 
@@ -294,16 +318,16 @@ class MainWindow(QMainWindow):
         try:
             refused = pipeline.publish(config, self._api(config), self._built)
         except SiteApiError as exc:
-            self.log.appendPlainText(f"Not published: {exc}")
+            self._say(f"Not published: {exc}")
             return
         except Exception as exc:  # said in the log rather than lost on stderr
             name = type(exc).__name__
-            self.log.appendPlainText(f"Not published, unexpected {name}: {exc}")
+            self._say(f"Not published, unexpected {name}: {exc}")
             return
         if refused:
-            self.log.appendPlainText(f"The site did not take the protocol: {refused}")
+            self._say(f"The site did not take the protocol: {refused}")
             return
-        self.log.appendPlainText(f"Published to section {config.publish_section}")
+        self._say(f"Published to section {config.publish_section}")
 
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802 - Qt's name
         settings.save(self.config(), self._config_path)

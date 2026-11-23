@@ -47,6 +47,7 @@ def test_the_saved_settings_fill_the_window(window):
     assert [window.tabs.tabText(i) for i in range(window.tabs.count())] == [
         "Cup",
         "Stages",
+        "Log",
     ]
     assert _titles(window) == ["Sprint", "Jump"]
     assert window.token.echoMode() == window.token.EchoMode.Password
@@ -83,6 +84,7 @@ def test_a_stage_is_deleted_but_never_the_last_one(window):
     window.delete_stage.click()
     assert _titles(window) == ["Jump"]
     assert window.log.toPlainText() == "A cup needs at least one stage."
+    assert window.status.text() == "A cup needs at least one stage."
 
 
 def test_renaming_a_stage_renames_its_tab(window):
@@ -115,9 +117,18 @@ def test_a_build_shows_its_report_and_lets_the_protocol_be_published(window):
     text = window.log.toPlainText()
     assert "Jump: bibs no protocol names: 99" in text
     assert "Built: 2 table(s)" in text
+    # The log keeps every line; the Cup tab says how it went and where to look.
+    assert window.status.text() == "Built: 2 table(s), 2 error(s): see the Log tab"
     assert window.publish_button.isEnabled()
     assert QApplication.overrideCursor() is None  # the wait cursor is gone again
     assert settings.load(window._config_path) == SAVED  # saved on build
+
+
+def test_a_build_without_errors_says_only_what_it_built(window):
+    window.apply(Config(token="cup", stages=[StageConfig("Sprint")]))
+    window.on_build()
+    assert window.status.text() == "Built: 2 table(s)"
+    assert window.log.toPlainText() == "Sprint: 3 results\nBuilt: 2 table(s)"
 
 
 def test_a_changed_setting_asks_for_a_new_build_before_publishing(window):
@@ -145,6 +156,7 @@ def test_a_build_that_fails_says_why_and_publishes_nothing(window):
     window.token.setText("")
     window.on_build()
     assert window.log.toPlainText() == "Not built: Enter the cup event's upload token"
+    assert window.status.text() == "Not built: Enter the cup event's upload token"
     assert QApplication.overrideCursor() is None
     assert not window.publish_button.isEnabled()
 
@@ -172,6 +184,7 @@ def test_publishing_sends_the_built_protocol_and_says_where(window):
     window.publish_button.click()
     assert window.site.uploads[-1]["section"] == 3
     assert window.log.toPlainText().endswith("Published to section 3")
+    assert window.status.text() == "Published to section 3"
 
 
 def test_a_refused_protocol_and_a_failed_upload_are_reported(window, monkeypatch):
