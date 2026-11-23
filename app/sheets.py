@@ -17,7 +17,7 @@ import re
 
 from app.results import StageResults, normalize_bib, parse_value
 
-_SHEETS = "https://docs.google.com/spreadsheets/d/"
+_SHEETS_URL = "https://docs.google.com/spreadsheets/d/"
 _SHEET = re.compile(r"^https://docs\.google\.com/spreadsheets/d/([A-Za-z0-9_-]+)")
 # "File > Share > Publish to the web" gives a link of its own, its id after "/d/e/".
 _PUBLISHED = re.compile(r"^https://docs\.google\.com/spreadsheets/d/e/([A-Za-z0-9_-]+)")
@@ -34,12 +34,12 @@ def export_url(link: str) -> str:
     tab = _GID.search(link)
     published = _PUBLISHED.match(link)
     if published is not None:
-        url = f"{_SHEETS}e/{published.group(1)}/pub?output=csv"
+        url = f"{_SHEETS_URL}e/{published.group(1)}/pub?output=csv"
         return url + (f"&gid={tab.group(1)}&single=true" if tab else "")
     sheet = _SHEET.match(link)
     if sheet is None:
         return link
-    url = f"{_SHEETS}{sheet.group(1)}/export?format=csv"
+    url = f"{_SHEETS_URL}{sheet.group(1)}/export?format=csv"
     return url + (f"&gid={tab.group(1)}" if tab else "")
 
 
