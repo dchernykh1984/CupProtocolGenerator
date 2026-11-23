@@ -149,7 +149,7 @@ in `groups`; athletes without a category make one untitled table.
 | a column per stage | | the result as its source wrote it, `<n> pl.` under it; empty without a result |
 | Total | `result` | the total: a number, or a time when the cup adds times up |
 
-A total that is a time is written as the timing tools write one -- `m:ss` below an hour,
+A total that is a time is written as `m:ss` below an hour,
 `h:mm:ss` from one on, a minus before a negative one -- with as many decimals as the most
 precise of the athlete's stage results is written with. The title is the `title` setting, else the cup event's title.
 
