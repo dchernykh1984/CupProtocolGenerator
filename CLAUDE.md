@@ -65,7 +65,8 @@ written as a time). Its decisions are in `docs/regulations/sum-of-times/decision
   by their role: `bib`, `name`, `team`, `result`; categories by `group`).
 - `app/sheets.py` - the Google connector: a sheet link turned into its CSV export, a
   response sheet read as bib -> result (columns by position: timestamp, bib, result; the
-  last answer for a bib wins), and a sign-in page told apart from the results.
+  first readable answer for a bib counts, a later one is reported), and a sign-in page
+  told apart from the results.
 - `app/results.py` - what every connector hands over (`StageResults`, `Athlete`), and the
   parsing of bibs and results (numbers and times), and a sum of times written back as
   a time.
@@ -76,7 +77,7 @@ written as a time). Its decisions are in `docs/regulations/sum-of-times/decision
 - `app/pipeline.py` - the steps above in order, for the window and the tests.
 - `app/config.py` - the cup's and the stages' settings in `data/config.json` (it holds
   upload tokens: `data/` is never committed).
-- `app/main_window.py` - the window: the Cup tab and the Stages tab.
+- `app/main_window.py` - the window: the Cup tab, the Stages tab and the Log tab.
 
 ## What the tests cover
 

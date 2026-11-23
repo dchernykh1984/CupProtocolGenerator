@@ -40,7 +40,10 @@ time or a place. Columns say what they hold by `role` (`place`, `bib`, `name`, `
 
 - One form per stage (or exercise), two questions in this order: the bib, then the
   result. Its response sheet has three columns -- timestamp, bib, result -- read by
-  position. A later answer for a bib replaces an earlier one.
+  position. The first readable answer for a bib counts; a later one is reported as an
+  error and never taken, so a second mark is seen (the maintainer, 2026-11-23).
 - The sheet is shared as "Anyone with the link: Viewer"; the tool reads its CSV export
-  (`/export?format=csv&gid=<tab>`). An unshared sheet answers with a sign-in page, which
-  the tool recognises and reports. Forms must not collect e-mail addresses.
+  (`/export?format=csv&gid=<tab>`, the first tab without a `gid`). An unshared sheet
+  answers HTTP 401, which the build reports as it is; a sign-in page in its place, as
+  Google used to send, is recognised and reported. Forms must not collect e-mail
+  addresses.
