@@ -155,6 +155,8 @@ class MainWindow(QMainWindow):
         self.publish_button.setEnabled(False)
         self.status = QLabel()
         self.status.setWordWrap(True)
+        # A message may quote what came from outside, "<" and all: never read as HTML.
+        self.status.setTextFormat(Qt.TextFormat.PlainText)
         buttons = QHBoxLayout()
         buttons.addWidget(self.build_button)
         buttons.addWidget(self.publish_button)

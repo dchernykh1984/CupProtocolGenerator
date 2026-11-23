@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import pytest
-from PySide6.QtCore import QEvent
+from PySide6.QtCore import QEvent, Qt
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QApplication
 
@@ -122,6 +122,12 @@ def test_a_build_shows_its_report_and_lets_the_protocol_be_published(window):
     assert window.publish_button.isEnabled()
     assert QApplication.overrideCursor() is None  # the wait cursor is gone again
     assert settings.load(window._config_path) == SAVED  # saved on build
+
+
+def test_the_status_line_shows_a_message_as_it_is_written(window):
+    window.on_build()  # a status line in use, after a build
+    # A quoted "<" never becomes markup: a link or the site's reason is shown as it is.
+    assert window.status.textFormat() == Qt.TextFormat.PlainText
 
 
 def test_a_build_without_errors_says_only_what_it_built(window):
