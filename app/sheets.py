@@ -3,9 +3,10 @@
 The form asks two questions, in this order: the bib, then the result. Its response sheet
 then has three columns -- the timestamp Google adds, the bib, the result -- and that is
 how they are read: by position, so the questions may be worded in any language.
-Answers are appended in the order they came, so a later answer for a bib replaces an
-earlier one: that is how a coach corrects a mistake. A sheet names no athletes: their
-names and categories come from the stages read from the site.
+Answers are appended in the order they came, and the first readable answer for a bib
+counts: a later one is reported, never taken, so a second mark for an athlete is seen
+by the referee, who corrects a mistake in the sheet itself. A sheet names no athletes:
+their names and categories come from the stages read from the site.
 """
 
 from __future__ import annotations
@@ -47,8 +48,10 @@ def looks_like_a_page(text: str) -> bool:
 
 
 def read(text: str) -> StageResults:
-    """The latest result for every bib, and what could not be read, line by line."""
+    """The first readable result for every bib, and what could not be read or was
+    answered again, line by line."""
     results = StageResults()
+    counted: dict[str, int] = {}  # bib -> the line its result is read from
     rows = list(csv.reader(io.StringIO(text.lstrip("\ufeff"))))
     for line, row in enumerate(rows[1:], start=2):
         if not any(cell.strip() for cell in row):
@@ -63,7 +66,13 @@ def read(text: str) -> StageResults:
             results.problems.append(f"line {line}: no bib")
         elif value is None:
             results.problems.append(f"line {line}: {row[2]!r} is not a result")
+        elif bib in counted:
+            results.problems.append(
+                f"line {line}: bib {bib} answered again ({row[2].strip()!r}); "
+                f"line {counted[bib]} ({results.texts[bib]!r}) counts"
+            )
         else:
+            counted[bib] = line
             results.values[bib] = value
             results.texts[bib] = row[2].strip()
     return results
