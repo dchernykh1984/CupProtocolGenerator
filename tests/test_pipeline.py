@@ -79,9 +79,9 @@ def test_the_stages_make_one_protocol_and_say_what_they_could_not_read():
     assert [row["cells"]["bib"] for row in boys["rows"]] == ["7", "12", "13"]
     assert built.report == [
         "Sprint: 3 results",
-        "Jump: line 6: 'x' is not a result",
+        "ERROR: Jump: line 6: 'x' is not a result",
         "Jump: 4 results",
-        "Jump: bibs no protocol names: 99",
+        "ERROR: Jump: bibs no protocol names: 99",
     ]
 
 
