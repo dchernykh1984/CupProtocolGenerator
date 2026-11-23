@@ -58,6 +58,9 @@ written as a time). Its decisions are in `docs/regulations/sum-of-times/decision
 
 ## How the pieces fit
 
+`specs/app/cup-protocol.md` describes the program as it works today; a change that
+alters what it describes updates it in the same pull request (`specs/README.md`).
+
 - `app/site_api.py` - the cycling site connector: an event's id and title by its upload
   token, its protocols, one protocol's document, the upload. Standard library only; the
   opener is injectable so tests never reach the network.
