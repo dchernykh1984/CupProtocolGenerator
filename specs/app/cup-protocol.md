@@ -66,7 +66,8 @@ is turned into its CSV export, its tab (`gid`) kept; a link without a tab export
 first one. A link of a sheet published to the web (`/d/e/<id>/...`) is turned into its
 published CSV, its tab kept too. The columns are read by position -- the timestamp Google adds, the bib, the
 result -- so the questions may be worded in any language. Rows are read in the sheet's
-order; a blank row is skipped.
+order, the order Google wrote the answers in, which may part from their timestamps by
+a second; a blank row is skipped.
 
 - The first readable answer for a bib counts. A later answer for the same bib is never
   taken; it is reported, with both values and the line that counts.

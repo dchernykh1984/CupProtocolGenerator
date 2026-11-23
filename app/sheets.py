@@ -3,7 +3,8 @@
 The form asks two questions, in this order: the bib, then the result. Its response sheet
 then has three columns -- the timestamp Google adds, the bib, the result -- and that is
 how they are read: by position, so the questions may be worded in any language.
-Answers are appended in the order they came, and the first readable answer for a bib
+Rows are read in the sheet's order -- the order Google wrote the answers in, which may
+part from their timestamps by a second -- and the first readable answer for a bib
 counts: a later one is reported, never taken, so a second mark for an athlete is seen
 by the referee, who corrects a mistake in the sheet itself. A sheet names no athletes:
 their names and categories come from the stages read from the site.
