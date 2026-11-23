@@ -64,10 +64,10 @@ so has a result that is not a number or a time.
 The form asks two questions, in this order: the bib, then the result. The sheet's link
 is turned into its CSV export, its tab (`gid`) kept; a link without a tab exports the
 first one. A link of a sheet published to the web (`/d/e/<id>/...`) is turned into its
-published CSV, its tab kept too. The columns are read by position -- the timestamp Google adds, the bib, the
-result -- so the questions may be worded in any language. Rows are read in the sheet's
-order, the order Google wrote the answers in, which may part from their timestamps by
-a second; a blank row is skipped.
+published CSV, its tab kept too. The columns are read by position -- the timestamp
+Google adds, the bib, the result -- so the questions may be worded in any language.
+Rows are read in the sheet's order, the order Google wrote the answers in, which may
+part from their timestamps by a second; a blank row is skipped.
 
 - The first readable answer for a bib counts. A later answer for the same bib is never
   taken; it is reported, with both values and the line that counts.
@@ -149,9 +149,10 @@ in `groups`; athletes without a category make one untitled table.
 | a column per stage | | the result as its source wrote it, `<n> pl.` under it; empty without a result |
 | Total | `result` | the total: a number, or a time when the cup adds times up |
 
-A total that is a time is written as `m:ss` below an hour,
-`h:mm:ss` from one on, a minus before a negative one -- with as many decimals as the most
-precise of the athlete's stage results is written with. The title is the `title` setting, else the cup event's title.
+A total that is a time is written as `m:ss` below an hour, `h:mm:ss` from one on, a
+minus before a negative one -- with as many decimals as the most precise of the
+athlete's stage results is written with. The title is the `title` setting, else the cup
+event's title.
 
 ## Publishing
 
