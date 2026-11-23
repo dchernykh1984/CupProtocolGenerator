@@ -3,7 +3,8 @@
 ``build`` reads every stage fresh, so running it again after a correction anywhere is
 all a correction takes. The athletes -- bibs, names, teams, categories -- come from the
 stages read from site protocols, the first stage that lists somebody naming them; a
-sheet only gives results by bib. What could not be read is reported line by line.
+sheet only gives results by bib. What could not be read is reported line by line, each
+such line marked ``ERROR:`` as the finish protocol generator marks its own.
 """
 
 from __future__ import annotations
@@ -107,7 +108,7 @@ def _stages(
         except (PipelineError, SiteApiError) as exc:
             # Several stages read the same way: the message names the one that failed.
             raise PipelineError(f"{name}: {exc}") from None
-        report += [f"{name}: {problem}" for problem in results.problems]
+        report += [f"ERROR: {name}: {problem}" for problem in results.problems]
         report.append(f"{name}: {len(results.values)} results")
         names.append(name)
         read.append(results)
@@ -148,7 +149,9 @@ def build(config: Config, api: SiteApi) -> Built:
     for name, results in zip(names, read, strict=True):
         strangers = sorted(set(results.values) - known)
         if strangers:
-            report.append(f"{name}: bibs no protocol names: {', '.join(strangers)}")
+            report.append(
+                f"ERROR: {name}: bibs no protocol names: {', '.join(strangers)}"
+            )
     values = [r.values for r in read]
     table = scoring.standings(athletes, values, rules, rule, config.place_everybody)
     title = config.title.strip() or event_title
