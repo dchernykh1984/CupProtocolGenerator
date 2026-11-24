@@ -171,12 +171,15 @@ def test_a_cup_by_the_largest_sum_of_results_ranks_the_most_first():
         (
             "sum_largest_wins",
             "place_lower_better",
-            "Sprint: the cup's largest sum wins: score this stage by \"Result as",
+            "^Sprint: the cup's largest sum wins: score this stage by "
+            '"Result as points, the higher the better"$',
         ),
         (
             "sum_smallest_wins",
             "result_higher_better",
-            "Sprint: the cup's smallest sum wins: score this stage by \"Place,",
+            "^Sprint: the cup's smallest sum wins: score this stage by "
+            '"Place, the lower result the better" or '
+            '"Place, the higher result the better"$',
         ),
     ],
 )
