@@ -211,10 +211,9 @@ CUP_RULES: tuple[CupRule, ...] = (
     CupRule(
         "sum_smallest_wins",
         "Sum of the stages' points, the smallest wins",
-        "The points of every stage added up -- a sum of places when every stage is "
-        "scored by its place; the smallest sum wins, equal sums share a place. "
-        "Somebody without a result in a stage is not ranked, unless everybody is "
-        "placed.",
+        "The places of every stage added up, each stage scored by its place; the "
+        "smallest sum wins, equal sums share a place. Somebody without a result in a "
+        "stage takes the place after everybody with one, so everybody is ranked.",
         _sum(Better.LOWER),
     ),
     CupRule(
