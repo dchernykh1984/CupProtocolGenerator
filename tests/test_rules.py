@@ -29,11 +29,21 @@ def test_every_rule_has_its_own_key_and_says_what_it_does():
         assert all(rule.label and rule.description for rule in rules)
 
 
-def test_the_stub_stage_rules_score_a_place_as_its_points():
+def test_the_place_rules_score_a_place_as_its_points():
     times = stage_rule("place_lower_better").score({"7": 8.4, "12": 8.9})
     counts = stage_rule("place_higher_better").score({"7": 10, "12": 12})
     assert times == {"7": StageScore(1, 1.0), "12": StageScore(2, 2.0)}
     assert counts == {"12": StageScore(1, 1.0), "7": StageScore(2, 2.0)}
+
+
+def test_the_result_as_points_places_the_highest_first_and_keeps_it_as_points():
+    rule = stage_rule("result_higher_better")
+    assert rule.points_better is Better.HIGHER and not rule.scores_time
+    assert rule.score({"7": 23, "12": 28, "3": 23}) == {
+        "12": StageScore(1, 28),
+        "7": StageScore(2, 23),
+        "3": StageScore(2, 23),
+    }
 
 
 def test_the_time_rule_places_the_lowest_first_and_keeps_the_time_as_points():
@@ -54,7 +64,7 @@ def test_the_test_rule_places_the_most_repetitions_first_a_second_off_each():
     }
 
 
-def test_the_stub_cup_rule_adds_up_points_and_ranks_only_complete_athletes():
+def test_the_smallest_sum_of_points_wins_and_ranks_only_complete_athletes():
     stages = [
         {"1": StageScore(1, 1), "2": StageScore(2, 2), "3": StageScore(3, 3)},
         {"1": StageScore(3, 3), "2": StageScore(1, 1)},
@@ -63,6 +73,33 @@ def test_the_stub_cup_rule_adds_up_points_and_ranks_only_complete_athletes():
         "1": CupScore(4, 2),
         "2": CupScore(3, 1),
         "3": CupScore(None, None),
+    }
+
+
+def test_the_largest_sum_of_points_wins_when_the_points_grow_with_the_result():
+    rule = cup_rule("sum_largest_wins")
+    assert rule.better is Better.HIGHER and not rule.adds_times
+    stages = [
+        {"1": StageScore(2, 20), "2": StageScore(1, 25), "3": StageScore(3, 10)},
+        {"1": StageScore(1, 30), "2": StageScore(2, 25), "3": StageScore(3, 5)},
+    ]
+    assert rule.combine(stages, ["1", "2", "3"], False) == {
+        "1": CupScore(50, 1),
+        "2": CupScore(50, 1),
+        "3": CupScore(15, 3),
+    }
+
+
+def test_with_everybody_placed_the_largest_sum_still_ranks_by_stages_missed_first():
+    stages = [
+        {"1": StageScore(1, 30), "2": StageScore(2, 10)},
+        {"1": StageScore(1, 30), "3": StageScore(2, 5)},
+    ]
+    assert cup_rule("sum_largest_wins").combine(stages, ["1", "2", "3", "4"], True) == {
+        "1": CupScore(60, 1),
+        "2": CupScore(10, 2),  # one stage missed: after all who have every stage
+        "3": CupScore(5, 3),
+        "4": CupScore(None, 4),  # no stage at all: the last place, no total
     }
 
 
