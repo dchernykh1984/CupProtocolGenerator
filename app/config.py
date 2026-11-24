@@ -101,7 +101,9 @@ def from_dict(data: Any) -> Config:
 def load(path: Path | None = None) -> Config:
     path = path or config_path()
     try:
-        return from_dict(json.loads(path.read_text(encoding="utf-8")))
+        # A file saved by Notepad starts with a byte order mark, which json refuses:
+        # every setting would fall back, and the next save would write the defaults.
+        return from_dict(json.loads(path.read_text(encoding="utf-8-sig")))
     except OSError, ValueError:
         return Config()
 

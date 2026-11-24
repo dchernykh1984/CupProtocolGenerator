@@ -31,6 +31,13 @@ def test_no_file_or_a_broken_one_gives_the_defaults(tmp_path):
     assert load(broken) == Config()
 
 
+def test_a_file_with_a_byte_order_mark_keeps_its_settings(tmp_path):
+    path = tmp_path / "config.json"
+    save(Config(token="cup", title="Spring cup"), path)
+    path.write_bytes(b"\xef\xbb\xbf" + path.read_bytes())  # as Notepad saves it
+    assert (load(path).token, load(path).title) == ("cup", "Spring cup")
+
+
 @pytest.mark.parametrize("data", [[], "text", None])
 def test_settings_that_are_not_an_object_give_the_defaults(data):
     assert from_dict(data) == Config()
