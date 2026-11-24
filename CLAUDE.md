@@ -27,6 +27,12 @@ written as a time). Its decisions are in `docs/regulations/sum-of-times/decision
 The stage rule `minus_second_per_repetition_test` is made up, for testing all-round
 events (the maintainer, 2026-11-23); it is not a regulation and may be deleted.
 
+The lap rule of a stage read from the site is real too (the maintainer, 2026-11-24):
+with the stage's checkbox, on by default, a rider short of his group leader's laps has no
+result in that stage, before any stage rule sees it (`app/protocol_reader.py`,
+`docs/regulations/lap-races/decisions.txt`). Regulations that rank lapped riders go to
+the maintainer first.
+
 ## Conventions
 
 - Talk to the maintainer in Russian; everything written into the repository is English
