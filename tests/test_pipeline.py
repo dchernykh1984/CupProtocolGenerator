@@ -78,7 +78,13 @@ def test_the_stages_make_one_protocol_and_say_what_they_could_not_read():
     assert site.read == [4]  # the group protocol of section 1: it carries categories
     assert built.document["title"] == "Final"
     boys = built.document["sections"][0]
-    assert [c["label"] for c in boys["columns"]][-3:] == ["Sprint", "Jump", "Total"]
+    assert [c["label"] for c in boys["columns"]][-5:] == [
+        "Sprint",
+        "Sprint place",
+        "Jump",
+        "Jump place",
+        "Total",
+    ]
     assert [row["cells"]["bib"] for row in boys["rows"]] == ["7", "12", "13"]
     assert built.report == [
         "Sprint: 3 results",
@@ -117,7 +123,7 @@ def test_a_lap_race_counts_only_the_leaders_laps_and_says_whom_it_left_out():
 def test_the_event_title_and_a_stage_number_stand_in_for_missing_names():
     built = build(_config(stages=[StageConfig()]), FakeSite())
     assert built.document["title"] == "Cup"
-    assert built.document["sections"][0]["columns"][-2]["label"] == "Stage 1"
+    assert built.document["sections"][0]["columns"][-3]["label"] == "Stage 1"
 
 
 def test_the_absolute_protocol_serves_when_a_section_has_no_group_one():
@@ -204,7 +210,7 @@ def test_a_cup_of_summed_times_shows_every_stage_and_the_total_as_a_time():
     assert boys == [("12", "1", "1:09.90"), ("7", "2", "1:10.90"), ("13", "", "")]
     assert girls == [("21", "1", "1:09.00"), ("22", "", "")]
     first = built.document["sections"][0]["rows"][0]["cells"]
-    assert (first["stage_1"]["text"], first["stage_2"]["text"]) == ("8,90", "1:01.0")
+    assert (first["stage_1"], first["stage_2"]) == ("8,90", "1:01.0")
 
 
 def test_a_broadcast_places_everybody_who_missed_stages_after_the_rest():

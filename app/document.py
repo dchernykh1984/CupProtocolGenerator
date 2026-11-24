@@ -1,8 +1,8 @@
 """The cup's protocol as the cycling site's structured document, schema 1.
 
-One table per category: place, bib, name, team when anybody has one, a column per stage
-(the result as its source wrote it, the stage place under it) and the cup's total, a
-time when the cup adds times up, as precise as the stage results are written. The
+One table per category: place, bib, name, team when anybody has one, two columns per
+stage -- the result as its source wrote it, and the stage place -- and the cup's total,
+a time when the cup adds times up, as precise as the stage results are written. The
 site draws it in its own look; ``tests/fixtures/protocol-document-v1.json`` is the
 site's schema.
 """
@@ -16,6 +16,9 @@ from app.scoring import CupRow
 
 SCHEMA_VERSION = 1
 GENERATOR = "CupProtocolGenerator"
+# The stage places are left out first where a phone has no room: the site drops the
+# highest priority number first, and unranked columns are 1 or 2.
+STAGE_PLACE_PRIORITY = 3
 
 
 def format_number(value: float) -> str:
@@ -28,6 +31,11 @@ def stage_column(index: int) -> str:
     return f"stage_{index + 1}"
 
 
+def stage_place_column(index: int) -> str:
+    """The column id of stage ``index``'s place (0-based)."""
+    return f"{stage_column(index)}_place"
+
+
 def _columns(stages: list[str], with_team: bool) -> list[dict[str, Any]]:
     columns: list[dict[str, Any]] = [
         {"id": "place", "label": "Place", "role": "place"},
@@ -36,10 +44,16 @@ def _columns(stages: list[str], with_team: bool) -> list[dict[str, Any]]:
     ]
     if with_team:
         columns.append({"id": "team", "label": "Team", "role": "team"})
-    columns += [
-        {"id": stage_column(i), "label": name, "align": "right"}
-        for i, name in enumerate(stages)
-    ]
+    for i, name in enumerate(stages):
+        columns.append({"id": stage_column(i), "label": name, "align": "right"})
+        columns.append(
+            {
+                "id": stage_place_column(i),
+                "label": f"{name} place",
+                "align": "right",
+                "priority": STAGE_PLACE_PRIORITY,
+            }
+        )
     columns.append({"id": "total", "label": "Total", "role": "result"})
     return columns
 
@@ -66,10 +80,11 @@ def _row(
         cells["team"] = athlete.team
     for index, score in enumerate(row.stages):
         if score is None:
-            cells[stage_column(index)] = ""
+            cells[stage_column(index)] = cells[stage_place_column(index)] = ""
             continue
         written = texts[index].get(athlete.bib) or format_number(score.points)
-        cells[stage_column(index)] = {"text": written, "sub": [f"{score.place} pl."]}
+        cells[stage_column(index)] = written
+        cells[stage_place_column(index)] = str(score.place)
     cells["total"] = _total(row, texts, total_is_time)
     return {"cells": cells}
 
