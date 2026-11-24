@@ -51,7 +51,9 @@ program does not read, takes its default; a file that cannot be read gives every
    stage's section the group protocol is taken, else the absolute one. Neither stops the
    build.
 3. The protocol's structured document is read (`GET /api/v1/protocols/<id>`). A protocol
-   uploaded as HTML alone has none and stops the build: it has to be published with data.
+   whose last upload brought no data the site took -- HTML alone, or data it refused --
+   has none and stops the build: it has to be published with data the site takes (the
+   timing tool's log has the site's reason for a refusal).
 
 Both reads carry the stage's upload token (`competition_token`), which the site takes for
 an invite-only or hidden event too (cycling-site, 2026-11-24); a site without that reads
