@@ -23,8 +23,9 @@ StravaProtocolGenerator.
    venue): one form per stage, two questions in this order -- the bib, then the result (a
    number). Link the form to a response sheet and share the sheet as "Anyone with the
    link: Viewer", or publish it to the web and give its published link. Do not collect
-   e-mail addresses: anyone with the link sees the sheet. The last answer for a bib
-   counts, so a judge corrects a mark by sending the form again; every answer it replaces
+   e-mail addresses: anyone with the link sees the sheet. The last answer for a bib that
+   is a number or a time counts, so a judge corrects a mark by sending the form again; an
+   answer that is neither replaces nothing. Each such answer, and every answer replaced,
    is named in the log as an error, so a mark given twice is seen.
 3. **A section for the cup's protocol**: add it on the cup event's "Protocol sections"
    page on the site; the tool publishes into it by its number.
