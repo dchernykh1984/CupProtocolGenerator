@@ -190,7 +190,7 @@ in `groups`; athletes without a category make one untitled table.
 | Name | `name` | |
 | Team | `team` | only when anybody has one |
 | a column per stage | | the result as its source wrote it; empty without a result, a place stage's placed too |
-| `<stage> place` after each | | the stage place, priority 3: a phone leaves these out first; empty without a result |
+| `<stage> place` after each | | the stage place, priority 3: a phone leaves these out first; empty for somebody the stage does not score (no result in a stage scored by its time or by its result as points) |
 | Total | `result` | the total: a number, or a time when the cup adds times up |
 
 A total that is a time is written as `m:ss` below an hour, `h:mm:ss` from one on, a
