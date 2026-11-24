@@ -54,10 +54,10 @@ from the start and moves as the stages are done. A cup of summed results: score 
 stage by "Result as points, the higher the better" and pick "Sum of the stages' points,
 the largest wins". A stage and a cup rule that do not go together are refused with the
 rule to pick. The protocol shows every stage's result and its place, each in a column of
-its own, and the total; somebody without a result in a stage is listed after the ranked
-without a place, who missed fewer stages first -- unless Place everybody is ticked. The
-settings, upload tokens included, are kept in `data/config.json` next to the app: keep it
-to yourself.
+its own, and the total; in a cup of times or of summed results, somebody without a result
+in a stage is listed after the ranked without a place, who missed fewer stages first --
+unless Place everybody is ticked. The settings, upload tokens included, are kept in
+`data/config.json` next to the app: keep it to yourself.
 
 ## Development
 
