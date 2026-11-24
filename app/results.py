@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
+from decimal import Decimal
 
 # h:mm:ss.f or m:ss.f, with a dot or a comma before the fraction.
 _TIME = re.compile(r"^(?:(\d+):)?(\d{1,2}):(\d{1,2}(?:\.\d+)?)$")
@@ -57,7 +58,8 @@ def parse_value(text: str) -> float | None:
     # A unit under a larger one stays under 60: "1:75" is no time.
     if float(seconds) >= 60 or (hours is not None and int(minutes) >= 60):
         return None
-    return int(hours or 0) * 3600 + int(minutes) * 60 + float(seconds)
+    # Summed in Decimal: "1:08.04" is then the very float "68.04" is, and a tie holds.
+    return float(int(hours or 0) * 3600 + int(minutes) * 60 + Decimal(seconds))
 
 
 def fraction_digits(text: str) -> int:
