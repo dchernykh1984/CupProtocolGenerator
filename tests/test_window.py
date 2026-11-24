@@ -245,9 +245,10 @@ def test_settings_that_cannot_be_saved_are_said_and_the_build_still_runs(
     window, monkeypatch
 ):
     _unwritable(monkeypatch)
+    window.apply(Config(token="cup", stages=[StageConfig("Sprint")]))  # no other error
     window.on_build()
     assert window.log.toPlainText().startswith("ERROR: settings not saved:")
-    assert window.status.text().endswith("error(s): see the Log tab")
+    assert window.status.text() == "Built: 2 table(s), 1 error(s): see the Log tab"
     assert window.publish_button.isEnabled()  # what was built is still publishable
     window.token.setText("")
     window.on_build()  # a build that fails says both
