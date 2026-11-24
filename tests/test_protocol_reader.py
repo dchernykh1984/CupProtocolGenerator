@@ -53,6 +53,15 @@ def test_in_a_live_race_the_leader_still_on_course_sets_the_laps():
     assert results.fewer_laps == ["2", "4", "6"]
 
 
+def test_a_rider_who_missed_the_start_check_leads_nobody():
+    # The timing generator lists him as DNS with his laps and time, never as the leader.
+    document = lap_race()
+    missed = {"bib": "8", "lap1": "15:00.0", "lap2": "15:00.0", "lap3": "15:00.0"}
+    row = {"cells": {**missed, "result": "45:00.0"}, "status": "dns"}
+    document["sections"][1]["rows"].append(row)
+    assert sorted(read(document).values) == ["1", "4", "6"]
+
+
 def test_without_the_laps_rule_every_result_counts():
     results = read(lap_race(), leader_laps_only=False)
     assert sorted(results.values) == ["1", "2", "4", "6"]

@@ -17,6 +17,9 @@ from app.results import Athlete, StageResults, normalize_bib, parse_value
 
 # A row with one of these statuses has no result, whatever its result cell says.
 _NOT_A_RESULT = {"dns", "dnf", "dsq"}
+# Nor leads the laps: disqualified, or DNS -- the generator keeps the laps of a rider
+# who missed the start check, and never makes him the leader.
+_LEADS_NOBODY = {"dns", "dsq"}
 # lap1, lap2...; lap1_s1 is a split of lap 1, not a lap.
 _LAP = re.compile(r"lap\d+")
 
@@ -59,7 +62,7 @@ def read(document: dict[str, Any], leader_laps_only: bool = True) -> StageResult
         }
     )
     seen: set[str] = set()
-    laps: dict[str, int] = {}  # bib -> laps ridden, for every bib not disqualified
+    laps: dict[str, int] = {}  # bib -> laps ridden, for every bib that may lead
     for section, group in _tables(document.get("sections") or [], ""):
         roles = _roles(section)
         if "bib" not in roles:
@@ -89,7 +92,7 @@ def read(document: dict[str, Any], leader_laps_only: bool = True) -> StageResult
             if value is not None and status not in _NOT_A_RESULT:
                 results.values[bib] = value
                 results.texts[bib] = written
-            if status != "dsq":
+            if status not in _LEADS_NOBODY:
                 laps[bib] = sum(
                     parse_value(_text(cells.get(lap))) is not None
                     for lap in lap_columns
