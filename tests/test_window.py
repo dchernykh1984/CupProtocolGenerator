@@ -181,6 +181,17 @@ def test_a_build_that_fails_says_why_and_publishes_nothing(window):
     assert not window.publish_button.isEnabled()
 
 
+def test_a_build_that_fails_after_one_that_worked_leaves_nothing_to_publish(window):
+    window.on_build()
+    assert window.publish_button.isEnabled()
+    window.site.document = {}  # the stage protocol lost its data
+    window.on_build()
+    assert window.status.text().startswith("Not built: Sprint: protocol 4 has no data")
+    assert not window.publish_button.isEnabled()
+    window.on_publish()  # a click that slipped through sends nothing
+    assert window.site.uploads == []
+
+
 def test_an_unexpected_failure_is_said_in_the_log(window, monkeypatch):
     def broken(*args, **kwargs):
         raise ValueError("a rule broke")

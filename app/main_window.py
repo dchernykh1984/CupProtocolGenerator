@@ -295,6 +295,8 @@ class MainWindow(QMainWindow):
         return self._api_factory(config.site_url or DEFAULT_SITE)
 
     def on_build(self) -> None:
+        # A build that fails leaves nothing to publish, not the build before it.
+        self._invalidate()
         config = self.config()
         settings.save(config, self._config_path)
         # The site and every sheet are read here, in the window's own thread: say so
