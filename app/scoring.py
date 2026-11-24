@@ -40,7 +40,7 @@ def standings(
     for category, members in categories.items():
         bibs = [member.bib for member in members]
         scores = [
-            stage.score({bib: values[bib] for bib in bibs if bib in values})
+            _scores(stage, values, bibs)
             for values, stage in zip(stage_values, stage_rules, strict=True)
         ]
         cup = rule.combine(scores, bibs, place_everybody)
@@ -57,6 +57,21 @@ def standings(
         unranked = sorted((row for row in rows if row.place is None), key=_missed)
         table[category] = ranked + unranked
     return table
+
+
+def _scores(
+    stage: StageRule, values: dict[str, float], bibs: list[str]
+) -> dict[str, StageScore]:
+    """One category's scores of one stage, by its rule."""
+    scores = stage.score({bib: values[bib] for bib in bibs if bib in values})
+    if stage.places_the_missing:
+        # The maintainer, 2026-11-24: equal results take the first of their places,
+        # and nobody's result yet is one result -- everybody is first before anybody
+        # has gone, and second once one has (docs/regulations/sum-of-places).
+        last = len(scores) + 1
+        for bib in bibs:
+            scores.setdefault(bib, StageScore(last, float(last)))
+    return scores
 
 
 def _place(row: CupRow) -> int:

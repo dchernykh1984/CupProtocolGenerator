@@ -32,7 +32,10 @@ def _document(**kwargs):
         "stages": STAGES,
         "table": _table(),
         "categories": {"M10": "Boys 10", "W10": "Girls 10"},
-        "texts": [{"7": "8.40"}, {}],
+        "texts": [
+            {"7": "8.40", "12": "8.90", "21": "9.10"},
+            {"7": "180", "21": "150.5"},
+        ],
     }
     return build(**{**defaults, **kwargs})
 
@@ -74,10 +77,12 @@ def test_a_row_carries_each_stage_with_its_place_and_the_total():
     assert {c.get("priority") for c in boys["columns"][5:8:2]} == {3}
     first, second = (row["cells"] for row in boys["rows"])
     assert (first["stage_1"], first["stage_1_place"]) == ("8.40", "1")  # as written
-    assert (first["stage_2"], first["stage_2_place"]) == ("1", "1")  # no text: points
+    assert (first["stage_2"], first["stage_2_place"]) == ("180", "1")
     assert (first["place"], first["total"]) == ("1", "2")
-    assert (second["stage_2"], second["stage_2_place"]) == ("", "")
-    assert (second["place"], second["total"]) == ("", "")
+    # 12 has no jump: the place stage puts him after everybody with one; no result
+    # is shown.
+    assert (second["stage_2"], second["stage_2_place"]) == ("", "2")
+    assert (second["place"], second["total"]) == ("2", "4")
 
 
 def test_no_team_column_when_nobody_has_one_nor_title_when_none_is_given():
