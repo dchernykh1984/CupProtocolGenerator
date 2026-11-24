@@ -59,7 +59,7 @@ def read(document: dict[str, Any], leader_laps_only: bool = True) -> StageResult
         }
     )
     seen: set[str] = set()
-    laps: dict[str, int] = {}  # bib -> laps ridden, for every bib with a result
+    laps: dict[str, int] = {}  # bib -> laps ridden, for every bib not disqualified
     for section, group in _tables(document.get("sections") or [], ""):
         roles = _roles(section)
         if "bib" not in roles:
@@ -89,6 +89,7 @@ def read(document: dict[str, Any], leader_laps_only: bool = True) -> StageResult
             if value is not None and status not in _NOT_A_RESULT:
                 results.values[bib] = value
                 results.texts[bib] = written
+            if status != "dsq":
                 laps[bib] = sum(
                     parse_value(_text(cells.get(lap))) is not None
                     for lap in lap_columns
@@ -99,15 +100,16 @@ def read(document: dict[str, Any], leader_laps_only: bool = True) -> StageResult
 
 
 def _drop_fewer_laps(results: StageResults, laps: dict[str, int]) -> None:
-    """Keep a result only beside the laps of its category's leader, who has the most."""
+    """Keep a result only beside the laps of its category's leader: whoever has the most
+    laps now, finished or still on course (listed as DNF, laps and no result)."""
     # The maintainer, 2026-11-24: a rider has every lap or the stage does not count, so
-    # a rider a lap down, ahead on time, is not ranked above the leader
-    # (docs/regulations/lap-races/decisions.txt).
+    # a rider a lap down, ahead on time, is not ranked above the leader -- nor while the
+    # leader rides on (docs/regulations/lap-races/decisions.txt).
     category = {athlete.bib: athlete.category for athlete in results.athletes}
     leader: dict[str, int] = {}
     for bib, count in laps.items():
         leader[category[bib]] = max(leader.get(category[bib], 0), count)
-    for bib, count in laps.items():
-        if count < leader[category[bib]]:
+    for bib in list(results.values):
+        if laps[bib] < leader[category[bib]]:
             del results.values[bib], results.texts[bib]
             results.fewer_laps.append(bib)

@@ -15,7 +15,12 @@ Left open by that word, answered by the maintainer on 2026-11-24:
 - The cup has no absolute standing beside the group ones: laps are compared with the
   group's leader, and with the absolute leader only where a protocol has no groups.
 
-Read as: the leader is whoever has the most laps among the category's results, as the
-protocol ranks laps first (a disqualified or unfinished rider leads nobody); a rider
-short of them has no result in that stage, as one who did not finish, and the build's
-log names them.
+2026-11-24, the maintainer, asked who leads at a moment of a live race, when the finish
+protocol generator lists a rider still on course as DNF (laps, no result) and a lapped
+rider given a finish mark already has a result: the leader on the course -- whoever has
+the most laps now, finished or not; a disqualified rider leads nobody. So a lapped rider
+who has finished is not counted while the leader rides on, and nobody of a group counts
+until its leader finishes. Final protocols come out the same either way.
+
+Read as: a rider short of the leader's laps has no result in that stage, as one who did
+not finish, and the build's log names them.
