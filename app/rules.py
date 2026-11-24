@@ -15,10 +15,10 @@ from enum import StrEnum
 
 
 class Better(StrEnum):
-    """Which way a result improves."""
+    """Which way a result, a stage's points or a cup's sum improves."""
 
-    LOWER = "lower"  # a time
-    HIGHER = "higher"  # a count, a length, points
+    LOWER = "lower"  # a time, a place
+    HIGHER = "higher"  # a count, a length, results as points
 
 
 @dataclass(frozen=True)
