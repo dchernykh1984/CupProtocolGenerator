@@ -6,6 +6,7 @@ tests hand in a fake and never reach the network.
 
 from __future__ import annotations
 
+import http.client
 import json
 import urllib.error
 import urllib.parse
@@ -69,6 +70,10 @@ class SiteApi:
             raise SiteApiError(f"HTTP {exc.code}: {_detail(exc)}") from exc
         except urllib.error.URLError as exc:
             raise SiteApiError(f"Connection error: {exc.reason}") from exc
+        except (OSError, http.client.HTTPException) as exc:
+            # A timeout, a dropped connection, an answer cut short: urllib leaves them
+            # unwrapped, and the build names the stage only for a SiteApiError.
+            raise SiteApiError(f"Connection error: {exc!r}") from exc
 
     def _url(self, path: str) -> str:
         # urllib would quote the whole address, token and all, in its refusal.

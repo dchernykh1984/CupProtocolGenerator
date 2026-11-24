@@ -1,3 +1,4 @@
+import http.client
 import io
 import json
 import urllib.error
@@ -113,6 +114,19 @@ def test_an_answer_that_is_no_json_never_shows_the_token(read):
     with pytest.raises(SiteApiError, match="Invalid answer from /api/v1/") as raised:
         read(SiteApi(opener=_Opener(b"<html>")))
     assert "SECRET" not in str(raised.value)
+
+
+@pytest.mark.parametrize(
+    "failure",
+    [
+        TimeoutError("timed out"),
+        http.client.RemoteDisconnected("Remote end closed connection"),
+        http.client.IncompleteRead(b"[", 10),
+    ],
+)
+def test_a_timeout_or_a_dropped_connection_is_a_site_error(failure):
+    with pytest.raises(SiteApiError, match="Connection error"):
+        SiteApi(opener=_Opener(failure)).protocols(1, "tok")
 
 
 def test_a_site_address_without_its_scheme_is_refused_before_any_request():
