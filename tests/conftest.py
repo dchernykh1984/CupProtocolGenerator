@@ -49,6 +49,47 @@ def stage_protocol() -> dict[str, Any]:
     }
 
 
+def lap_race() -> dict[str, Any]:
+    """A group protocol of a lap race as the chip-timing generator uploads it: its laps
+    in columns ``lap<n>``, a split of lap 1 beside them. In M bib 2 is a lap down and
+    ahead on time; in W the disqualified bib 5 has more laps than anybody who counts."""
+    columns = [
+        {"id": "bib", "role": "bib"},
+        {"id": "lap1", "label": "Lap 1"},
+        {"id": "lap1_s1", "label": "(1 split)"},
+        {"id": "lap2", "label": "Lap 2"},
+        {"id": "lap3", "label": "Lap 3"},
+        {"id": "result", "role": "result"},
+    ]
+    three = {"lap1": "14:00.0", "lap2": "14:00.0", "lap3": {"text": "14:00.0"}}
+    men = [
+        {"cells": {"bib": "1", **three, "result": "42:00.0"}},
+        {
+            "cells": {
+                "bib": "2",
+                "lap1": "20:00.0",
+                "lap1_s1": "9:00.0",
+                "lap2": "20:00.0",
+                "result": "40:00.0",
+            }
+        },
+    ]
+    two = {"lap1": "16:00.0", "lap2": "16:00.0"}
+    women = [
+        {"cells": {"bib": "4", **two, "result": "32:00.0"}},
+        {"cells": {"bib": "5", **three, "result": "42:00.0"}, "status": "dsq"},
+        {"cells": {"bib": "6", **two, "result": "33:00.0"}},
+    ]
+    return {
+        "schema": 1,
+        "groups": [{"id": "M"}, {"id": "W"}],
+        "sections": [
+            {"group": "M", "columns": columns, "rows": men},
+            {"group": "W", "columns": columns, "rows": women},
+        ],
+    }
+
+
 @pytest.fixture
 def stage_document() -> dict[str, Any]:
     return stage_protocol()

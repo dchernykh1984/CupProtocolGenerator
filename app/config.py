@@ -37,6 +37,9 @@ class StageConfig:
     section: int = 1  # the stage event's protocol section, for a site protocol
     link: str = ""  # the response sheet's link, for a sheet
     rule: str = STAGE_RULES[0].key
+    # A site protocol: a result counts only beside the laps of its category's leader.
+    # Off for Number of Tries, whose attempts fill the columns laps fill.
+    leader_laps_only: bool = True
 
 
 @dataclass
@@ -71,6 +74,7 @@ def _stage(data: Any) -> StageConfig:
     stage.link = _text(data, "link", stage.link)
     stage.rule = _text(data, "rule", stage.rule)
     stage.section = _section(data.get("section"), stage.section)
+    stage.leader_laps_only = data.get("leader_laps_only") is not False
     if data.get("source") in Source.__members__.values():
         stage.source = Source(data["source"])
     return stage
