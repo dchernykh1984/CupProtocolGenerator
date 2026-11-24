@@ -116,6 +116,18 @@ def test_an_answer_that_is_no_json_never_shows_the_token(read):
     assert "SECRET" not in str(raised.value)
 
 
+@pytest.mark.parametrize("site", ["https://site.test/a b", "https://site.test/\tx"])
+def test_a_site_address_with_a_space_is_refused_before_a_request_quotes_the_token(
+    site,
+):
+    # http.client's InvalidURL quotes the whole request path, the token in its query.
+    opener = _Opener()
+    with pytest.raises(SiteApiError, match="space or a control character") as raised:
+        SiteApi(site, opener).competition("SECRET")
+    assert "SECRET" not in str(raised.value)
+    assert opener.requests == []
+
+
 def test_a_site_address_in_capitals_is_still_a_web_address():
     # urllib takes HTTPS:// as https://; a caps-lock address must not read as refused.
     opener = _Opener({"competition_id": 249, "competition_title": "Cup"})

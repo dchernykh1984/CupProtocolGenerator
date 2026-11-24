@@ -47,9 +47,10 @@ A byte order mark at its start, as Notepad writes one, is read past.
 
 1. The upload token is looked up (`GET /api/v1/participants/?competition_token=`) for the
    event's id and title; each token once per build. An event the site does not know stops
-   the build. A site address that does not start with `https://` (or `http://`) is
-   refused before any request, so no error quotes a token; a timeout or a dropped
-   connection stops the build as an HTTP failure does, the stage named.
+   the build. A site address that does not start with `https://` (or `http://`), or holds
+   a space or a control character, is refused before any request, so no error quotes a
+   token; a timeout or a dropped connection stops the build as an HTTP failure does, the
+   stage named.
 2. The event's protocols are listed (`GET /api/v1/protocols/?competition_id=`); in the
    stage's section the group protocol is taken, else the absolute one. Neither stops the
    build.
