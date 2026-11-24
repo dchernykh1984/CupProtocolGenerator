@@ -258,10 +258,16 @@ def test_a_broadcast_places_everybody_who_missed_stages_after_the_rest():
         cells = [row["cells"] for row in rows]
         return [(cell["bib"], cell["place"], cell["total"]) for cell in cells]
 
-    # 13 has no sprint time and an unreadable jump: no stage at all, so no total.
-    ranked = [("7", "1", "3"), ("12", "1", "3")]
-    assert boys(_config()) == [*ranked, ("13", "", "")]
-    assert boys(_config(place_everybody=True)) == [*ranked, ("13", "3", "")]
+    # Stages scored by time: 13 has no sprint time and no run, so no stage and no total.
+    # (A place stage would place him after everybody with a result instead.)
+    stages = [
+        StageConfig("Sprint", Source.SITE, rule="time"),
+        StageConfig("Run", Source.SHEET, link=RUNS, rule="time"),
+    ]
+    times = {"stages": stages, "rule": "sum_of_times"}
+    ranked = [("12", "1", "1:09.90"), ("7", "2", "1:10.90")]
+    assert boys(_config(**times)) == [*ranked, ("13", "", "")]
+    assert boys(_config(**times, place_everybody=True)) == [*ranked, ("13", "3", "")]
 
 
 def test_publishing_sends_the_protocol_to_its_section_live_until_final():

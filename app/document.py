@@ -82,8 +82,8 @@ def _row(
         if score is None:
             cells[stage_column(index)] = cells[stage_place_column(index)] = ""
             continue
-        written = texts[index].get(athlete.bib) or format_number(score.points)
-        cells[stage_column(index)] = written
+        # A place stage scores somebody without a result too: his result stays empty.
+        cells[stage_column(index)] = texts[index].get(athlete.bib, "")
         cells[stage_place_column(index)] = str(score.place)
     cells["total"] = _total(row, texts, total_is_time)
     return {"cells": cells}

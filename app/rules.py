@@ -51,6 +51,8 @@ class StageRule:
     score: StageScorer
     scores_time: bool = False  # its points are the stage's time, in seconds
     points_better: Better = Better.LOWER  # which way the points improve
+    # Somebody without a result takes the first place after everybody with one.
+    places_the_missing: bool = False
 
 
 @dataclass(frozen=True)
@@ -160,16 +162,19 @@ STAGE_RULES: tuple[StageRule, ...] = (
         "place_lower_better",
         "Place, the lower result the better",
         "A place by the result, a time for one: the lowest first, equal results "
-        "sharing a place. The place is the stage's points, the lower the better.",
+        "sharing a place, somebody without a result after everybody with one. The "
+        "place is the stage's points, the lower the better.",
         _place_as_points(Better.LOWER),
+        places_the_missing=True,
     ),
     StageRule(
         "place_higher_better",
         "Place, the higher result the better",
         "A place by the result, a count or a length for one: the highest first, "
-        "equal results sharing a place. The place is the stage's points, the lower "
-        "the better.",
+        "equal results sharing a place, somebody without a result after everybody "
+        "with one. The place is the stage's points, the lower the better.",
         _place_as_points(Better.HIGHER),
+        places_the_missing=True,
     ),
     StageRule(
         "result_higher_better",
