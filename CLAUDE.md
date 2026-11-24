@@ -64,8 +64,8 @@ events (the maintainer, 2026-11-23); it is not a regulation and may be deleted.
 alters what it describes updates it in the same pull request (`specs/README.md`).
 
 - `app/site_api.py` - the cycling site connector: an event's id and title by its upload
-  token, its protocols, one protocol's document, the upload. Standard library only; the
-  opener is injectable so tests never reach the network.
+  token, its protocols and one protocol's document by the same token, the upload.
+  Standard library only; the opener is injectable so tests never reach the network.
 - `app/protocol_reader.py` - a stage's results out of a site protocol document (columns
   by their role: `bib`, `name`, `team`, `result`; categories by `group`; laps by the
   `lap<n>` columns, a result counting only beside its category leader's laps).

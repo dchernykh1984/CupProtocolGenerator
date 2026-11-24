@@ -12,15 +12,18 @@ The site is universalbicycle.team (`DEFAULT_SITE`); its API has no language pref
 - `GET /api/v1/participants/?competition_token=<token>` answers `competition_id` and
   `competition_title` for an event's upload token (and its registrations, which carry
   no bibs: bibs come from the protocols).
-- `GET /api/v1/protocols/?competition_id=<id>` lists the event's protocols in section
-  order: `id`, `section`, `section_name`, `protocol_type` (`absolute` or `group`),
+- `GET /api/v1/protocols/?competition_id=<id>&competition_token=<token>` lists the
+  event's protocols in section order: `id`, `section`, `section_name`, `protocol_type` (`absolute` or `group`),
   `stage_label`, `is_live`, `last_updated`, `file_hash`, `shown` (`document` or `html`),
   `has_html`.
-- `GET /api/v1/protocols/<id>` adds `document` (null when the last upload was HTML
-  alone) and the update history. A stage protocol must be uploaded "with data".
-- Reading needs no token for a published event. An invite-only event's protocols need
-  the reader's personal token, and a hidden, unpublished or deleted event's protocols
-  answer 404 to everybody -- test on a published event.
+- `GET /api/v1/protocols/<id>?competition_token=<token>` adds `document` (null when
+  the last upload was HTML alone) and the update history. A stage protocol must be
+  uploaded "with data".
+- Both reads send the stage event's upload token: the site lets it read its own event's
+  protocols whatever the event's visibility, invite-only and hidden ones included
+  (cycling-site, 2026-11-24), and refuses a token no approved event holds with 401;
+  another event's token reads nothing (404). A published event's protocols need no
+  token, and an older site ignores it.
 - `POST /api/v1/protocols/upload/`, multipart: `competition_token`, `protocol_type`,
   `is_live`, `stage_label`, `section`, and the file `document` (`protocol.json`,
   `application/json`). The section must exist: the organizer adds it on the event's
