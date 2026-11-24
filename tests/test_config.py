@@ -79,6 +79,23 @@ def test_a_settings_file_made_read_only_is_refused_and_left_as_it_was(tmp_path):
     assert load(path)[0].token == "cup"
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="POSIX permissions")
+def test_a_writable_file_in_a_folder_nobody_may_write_to_is_saved_in_place(tmp_path):
+    # A shared install: the data folder is the admin's, the file the referee's.
+    folder = tmp_path / "data"
+    path = folder / "config.json"
+    save(Config(token="cup"), path)
+    path.chmod(0o644)
+    folder.chmod(0o555)
+    try:
+        save(Config(token="other"), path)
+        assert load(path)[0].token == "other"
+        with pytest.raises(PermissionError):  # no file to write in place either
+            save(Config(), folder / "other.json")
+    finally:
+        folder.chmod(0o755)
+
+
 def test_no_file_gives_the_defaults_and_says_nothing(tmp_path):
     assert load(tmp_path / "missing.json") == (Config(), "")
 
