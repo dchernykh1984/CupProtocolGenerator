@@ -23,6 +23,16 @@ Asked and answered by the maintainer on 2026-11-24:
   the site as for a form: equal results share a place. It is not taken from the timing
   protocol's place column (see bugs N3 of the 2026-11-24 test).
 
+2026-11-24, the maintainer: athletes with the same result all take the first of their
+possible places. Counted so, everybody is first in every discipline at the start; the
+table moves as the exercises are done: once somebody has done one, everybody else is
+second in it and he is first.
+
+Read as: in a stage scored by its place, nobody's result yet is one result -- somebody
+without a result takes the first place after everybody with one, shared with everybody
+else who has none, so everybody has every stage and the cup ranks everybody all along.
+A stage scored by its time or by its result as points leaves him unscored, as before.
+
 Read as: the place rules were the stubs that stood in before; they are the maintainer's
 now, with the sum of the stages' points. Places and their sums keep the rest of the cup's
 rules: equal sums share a place, a missed stage gives no place unless everybody is
