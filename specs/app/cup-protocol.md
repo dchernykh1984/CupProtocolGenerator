@@ -70,8 +70,8 @@ Laps have no role: they are the columns named `lap<n>`, as the finish protocol g
 writes them when it shows lap times (`lap<n>_s<m>`, a split, is no lap), and a row's laps
 are those of its lap cells that hold a time. With `leader_laps_only` a result counts only
 beside as many laps as its category's leader has -- the most any rider of the category
-has now, finished or still on course (the generator lists one on course as `dnf`, laps
-and no result); a disqualified rider leads nobody. A rider short of them has no result in
+has now, finished, still on course or abandoned (the generator lists the last two alike,
+as `dnf` with laps and no result); a disqualified rider leads nobody. A rider short of them has no result in
 that stage, as one who did not finish, and the log names them; while a group's leader
 rides on, nobody of the group counts yet. A protocol without lap columns leaves every result counted. The
 generator writes the attempts of a Number of Tries race in the same columns, so a stage
