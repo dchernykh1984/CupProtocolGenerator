@@ -112,4 +112,8 @@ def save(config: Config, path: Path | None = None) -> None:
     path = path or config_path()
     path.parent.mkdir(parents=True, exist_ok=True)
     text = json.dumps(asdict(config), ensure_ascii=False, indent=2)
-    path.write_text(text, encoding="utf-8")
+    # Written beside it, then put in its place: a write a full disk cuts short leaves
+    # the old file whole.
+    draft = path.with_name(path.name + ".tmp")
+    draft.write_text(text, encoding="utf-8")
+    draft.replace(path)
