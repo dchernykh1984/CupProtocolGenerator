@@ -56,6 +56,19 @@ def test_a_save_keeps_the_files_own_permissions_and_a_new_file_is_its_owners(tmp
     assert stat.S_IMODE(path.stat().st_mode) == 0o640
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="POSIX links")
+def test_a_linked_settings_file_is_saved_through_its_link(tmp_path):
+    # A file kept in a folder two machines sync: the link must not become a copy.
+    real = tmp_path / "synced" / "config.json"
+    real.parent.mkdir()
+    save(Config(token="cup"), real)
+    link = tmp_path / "config.json"
+    link.symlink_to(real)
+    save(Config(token="other"), link)
+    assert link.is_symlink()
+    assert load(real)[0].token == "other"
+
+
 def test_no_file_gives_the_defaults_and_says_nothing(tmp_path):
     assert load(tmp_path / "missing.json") == (Config(), "")
 

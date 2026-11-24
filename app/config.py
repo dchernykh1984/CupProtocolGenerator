@@ -125,7 +125,8 @@ def load(path: Path | None = None) -> tuple[Config, str]:
 
 
 def save(config: Config, path: Path | None = None) -> None:
-    path = path or config_path()
+    # Through a link, as a write in place went: the real file replaced, the link kept.
+    path = (path or config_path()).resolve()
     path.parent.mkdir(parents=True, exist_ok=True)
     text = json.dumps(asdict(config), ensure_ascii=False, indent=2)
     # Written beside it, then put in its place: a write a full disk cuts short leaves
