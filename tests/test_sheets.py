@@ -26,6 +26,11 @@ PUBLISHED = "https://docs.google.com/spreadsheets/d/e/2PACX-1vAb_c-9"
             f"{PUBLISHED}/pub?gid=45&single=true&output=csv",
             f"{PUBLISHED}/pub?output=csv&gid=45&single=true",
         ),
+        # Capitalised too, "e" is still never taken for the id.
+        (
+            f"Https://{PUBLISHED[8:]}/pubhtml?gid=5",
+            f"{PUBLISHED}/pub?output=csv&gid=5&single=true",
+        ),
     ],
 )
 def test_a_sheet_link_becomes_its_csv_export(link, url):
