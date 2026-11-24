@@ -15,7 +15,15 @@ from typing import Any
 from app import document, protocol_reader, scoring, sheets
 from app.config import Config, Source, StageConfig
 from app.results import Athlete, StageResults
-from app.rules import CUP_RULES, STAGE_RULES, CupRule, StageRule, cup_rule, stage_rule
+from app.rules import (
+    CUP_RULES,
+    STAGE_RULES,
+    Better,
+    CupRule,
+    StageRule,
+    cup_rule,
+    stage_rule,
+)
 from app.site_api import SiteApi, SiteApiError
 
 
@@ -105,6 +113,18 @@ def _stages(
             raise PipelineError(
                 f"{name}: the stage counts by its time, but the cup rule does not add "
                 f"times up: pick the cup rule {adders}"
+            )
+        # Places summed where the largest sum wins, or results where the smallest
+        # does, would rank the stage backwards.
+        if rules[-1].points_better is not cup.better:
+            fitting = " or ".join(
+                f'"{r.label}"'
+                for r in STAGE_RULES
+                if r.points_better is cup.better and not r.scores_time
+            )
+            way = "largest" if cup.better is Better.HIGHER else "smallest"
+            raise PipelineError(
+                f"{name}: the cup's {way} sum wins: score this stage by {fitting}"
             )
         try:
             results = _read_stage(site, config, stage)

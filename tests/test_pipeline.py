@@ -120,6 +120,45 @@ def test_a_lap_race_counts_only_the_leaders_laps_and_says_whom_it_left_out():
     assert built.report == ["XCO: 4 results"]
 
 
+def test_a_cup_by_the_sum_of_places_adds_each_stages_place_up():
+    stages = [
+        StageConfig("Sprint", Source.SITE, rule="place_lower_better"),
+        StageConfig("Jump", Source.SHEET, link=JUMPS, rule="place_higher_better"),
+    ]
+    built = build(_config(stages=stages, rule="sum_smallest_wins"), FakeSite())
+    boys = {
+        row["cells"]["bib"]: row["cells"]
+        for row in built.document["sections"][0]["rows"]
+    }
+    # Sprint: 7 first, 12 second; Jump: 12 (190) first, 7 (180) second.
+    assert (boys["7"]["stage_1_place"], boys["7"]["stage_2_place"]) == ("1", "2")
+    assert (boys["7"]["total"], boys["12"]["total"]) == ("3", "3")
+    assert (boys["7"]["place"], boys["12"]["place"]) == ("1", "1")
+
+
+@pytest.mark.parametrize(
+    ("cup", "stage", "message"),
+    [
+        (
+            "sum_largest_wins",
+            "place_lower_better",
+            "Sprint: the cup's largest sum wins: score this stage by \"Result as",
+        ),
+        (
+            "sum_smallest_wins",
+            "result_higher_better",
+            "Sprint: the cup's smallest sum wins: score this stage by \"Place,",
+        ),
+    ],
+)
+def test_points_that_improve_the_other_way_than_the_sum_wins_are_refused(
+    cup, stage, message
+):
+    stages = [StageConfig("Sprint", Source.SITE, rule=stage)]
+    with pytest.raises(PipelineError, match=message):
+        build(_config(stages=stages, rule=cup), FakeSite())
+
+
 def test_the_event_title_and_a_stage_number_stand_in_for_missing_names():
     built = build(_config(stages=[StageConfig()]), FakeSite())
     assert built.document["title"] == "Cup"
