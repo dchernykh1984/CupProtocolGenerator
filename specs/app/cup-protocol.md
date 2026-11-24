@@ -71,13 +71,14 @@ writes them when it shows lap times (`lap<n>_s<m>`, a split, is no lap), and a r
 are those of its lap cells that hold a time. With `leader_laps_only` a result counts only
 beside as many laps as its category's leader has -- the most any rider of the category
 has now, finished, still on course or abandoned (the generator lists the last two alike,
-as `dnf` with laps and no result); a disqualified rider leads nobody, nor one who missed
-the start check (`dns`, his laps kept, as the generator never makes him the leader). A
-rider short of them has no result in that stage, as one who did not finish, and the log
-names them; while a group's leader rides on, nobody of the group counts yet. A protocol
-without lap columns leaves every result counted. The generator writes the attempts of a
-Number of Tries race in the same columns, so a stage of one has the setting off. The
-maintainer's word of 2026-11-24
+as `dnf` with laps and no result, while its "Print DNF" is on, as by default; with it off
+a rider on course is not listed, and a lapped finisher counts until his leader finishes);
+a disqualified rider leads nobody, nor one who missed the start check (`dns`, his laps
+kept, as the generator never makes him the leader). A rider short of them has no result
+in that stage, as one who did not finish, and the log names them; while a group's leader
+rides on, nobody of the group counts yet. A protocol without lap columns leaves every
+result counted. The generator writes the attempts of a Number of Tries race in the same
+columns, so a stage of one has the setting off. The maintainer's word of 2026-11-24
 ([`docs/regulations/lap-races/decisions.txt`](../../docs/regulations/lap-races/decisions.txt)).
 
 ### A Google Forms response sheet (`app/sheets.py`)
