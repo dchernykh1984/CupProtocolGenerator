@@ -19,9 +19,12 @@ import re
 from app.results import StageResults, normalize_bib, parse_value
 
 _SHEETS_URL = "https://docs.google.com/spreadsheets/d/"
-_SHEET = re.compile(r"^https://docs\.google\.com/spreadsheets/d/([A-Za-z0-9_-]+)")
+# In any case, as a site address is: a phone may well capitalise "Https://".
+_SHEET = re.compile(r"^https://docs\.google\.com/spreadsheets/d/([A-Za-z0-9_-]+)", re.I)
 # "File > Share > Publish to the web" gives a link of its own, its id after "/d/e/".
-_PUBLISHED = re.compile(r"^https://docs\.google\.com/spreadsheets/d/e/([A-Za-z0-9_-]+)")
+_PUBLISHED = re.compile(
+    r"^https://docs\.google\.com/spreadsheets/d/e/([A-Za-z0-9_-]+)", re.I
+)
 _GID = re.compile(r"[#?&]gid=(\d+)")
 
 
