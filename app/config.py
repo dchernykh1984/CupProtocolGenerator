@@ -137,8 +137,15 @@ def save(config: Config, path: Path | None = None) -> None:
     # Written beside it, then put in its place: a write a full disk cuts short leaves
     # the old file whole.
     draft = path.with_name(path.name + ".tmp")
-    draft.unlink(missing_ok=True)  # one a cut-short save left would keep its own mode
-    draft.touch(mode=0o600)  # the tokens: its owner's alone...
+    try:
+        draft.unlink(missing_ok=True)  # one a cut-short save left keeps its own mode
+        draft.touch(mode=0o600)  # the tokens: its owner's alone...
+    except PermissionError:
+        if not path.exists():
+            raise
+        # A folder the referee may not write to, the file writable: in place, as before.
+        path.write_text(text, encoding="utf-8")
+        return
     draft.write_text(text, encoding="utf-8")
     with contextlib.suppress(FileNotFoundError):
         shutil.copymode(path, draft)  # ...or as open as the file it replaces
