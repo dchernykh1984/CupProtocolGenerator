@@ -255,6 +255,20 @@ def test_settings_that_cannot_be_saved_are_said_and_the_build_still_runs(
     assert "ERROR: settings not saved:" in window.log.toPlainText()
 
 
+def test_an_unexpected_failure_also_says_the_settings_were_not_saved(
+    window, monkeypatch
+):
+    def broken(*args, **kwargs):
+        raise ValueError("a rule broke")
+
+    _unwritable(monkeypatch)
+    monkeypatch.setattr("app.pipeline.build", broken)
+    window.on_build()
+    lines = window.log.toPlainText().splitlines()
+    assert lines[0] == "Not built, unexpected ValueError: a rule broke"
+    assert lines[1].startswith("ERROR: settings not saved:")
+
+
 def test_closing_with_settings_that_cannot_be_saved_warns(window, monkeypatch):
     _unwritable(monkeypatch)
     warned: list[str] = []
