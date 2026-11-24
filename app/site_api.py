@@ -101,8 +101,8 @@ class SiteApi:
         return list(self._json(f"/api/v1/protocols/?{query}"))
 
     def protocol(self, protocol_id: int, token: str) -> dict[str, Any]:
-        """One protocol with its structured document (None for HTML alone), read by its
-        event's upload token."""
+        """One protocol with its structured document (None when the site took none: HTML
+        alone, or data it refused), read by its event's upload token."""
         query = urllib.parse.urlencode({"competition_token": token})
         return dict(self._json(f"/api/v1/protocols/{int(protocol_id)}?{query}"))
 

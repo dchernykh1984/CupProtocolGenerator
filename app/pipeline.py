@@ -58,8 +58,10 @@ class _Site:
             raise PipelineError(f"no protocol in section {section} of its event")
         detail = self.api.protocol(chosen["id"], token)
         if not detail.get("document"):
+            # The site keeps none when an upload brought HTML alone, or data it refused.
             raise PipelineError(
-                f"protocol {chosen['id']} has no data, only HTML: publish it with data"
+                f"protocol {chosen['id']} has no data the site took (HTML alone, or "
+                "data it refused: the timing tool's log says why): publish it with data"
             )
         return dict(detail["document"])
 

@@ -17,8 +17,8 @@ The site is universalbicycle.team (`DEFAULT_SITE`); its API has no language pref
   `stage_label`, `is_live`, `last_updated`, `file_hash`, `shown` (`document` or `html`),
   `has_html`.
 - `GET /api/v1/protocols/<id>?competition_token=<token>` adds `document` (null when
-  the last upload was HTML alone) and the update history. A stage protocol must be
-  uploaded "with data".
+  the last upload brought none the site took: HTML alone, or a document it refused) and
+  the update history. A stage protocol must be uploaded "with data" the site takes.
 - Both reads send the stage event's upload token: the site lets it read its own event's
   protocols whatever the event's visibility, invite-only and hidden ones included
   (cycling-site, 2026-11-24), and refuses a token no approved event holds with 401;
