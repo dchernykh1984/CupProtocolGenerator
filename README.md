@@ -14,7 +14,10 @@ StravaProtocolGenerator.
    the protocol format "HTML + data": this tool reads the data, not the HTML. In the
    section you name it takes the group protocol (it carries the categories), else the
    absolute one. Athletes -- bibs, names, teams, categories -- come from these
-   protocols, the first stage that lists somebody naming them.
+   protocols, the first stage that lists somebody naming them. In a lap race only
+   riders with as many laps as their category's leader count, so show the lap times in
+   the protocol; untick "Only riders with their leader's laps" for a Number of Tries
+   stage, whose attempts fill the lap columns.
 2. **Stages from Google Forms** (an exercise of an all-round event, a result taken at
    the venue): one form per stage, two questions in this order -- the bib, then the
    result (a number). Link the form to a response sheet and share the sheet as "Anyone
@@ -37,7 +40,8 @@ StravaProtocolGenerator.
   asks for a new build after any change.
 - **Stages tab** - a tab per stage: its name, where its results come from (a protocol on
   the site, by the stage event's upload token -- the cup event's when left empty -- and
-  its section; or a Google Forms sheet, by its link) and the stage rule. Add a copy of
+  its section, with the laps checkbox; or a Google Forms sheet, by its link) and the
+  stage rule. Add a copy of
   the current stage to its left or right, or delete it.
 
 A cup of summed times: score every stage by "Time, the lowest first" and pick the cup

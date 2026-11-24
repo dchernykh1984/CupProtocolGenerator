@@ -35,6 +35,11 @@ every document against it, so keep it in sync with the site's
 time or a place. Columns say what they hold by `role` (`place`, `bib`, `name`, `team`,
 `result`, `gap`, `group`); `place` and `result` stay visible on a phone; a column id is
 `[A-Za-z0-9_-]{1,64}`; a section's or a row's `group` must be declared in `groups`.
+Laps have no role: the finish protocol generator names its lap columns `lap<n>` (their
+splits `lap<n>_s<m>`) and writes them only when it shows lap times; in a Number of Tries
+race the same columns hold the attempts. The reader counts a row's laps from them, for
+the rule that a result counts only beside the laps of its category's leader
+(`leader_laps_only`, the maintainer, 2026-11-24).
 
 ## Google Forms sheets (`app/sheets.py`)
 
