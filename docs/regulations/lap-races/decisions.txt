@@ -20,7 +20,11 @@ protocol generator lists a rider still on course as DNF (laps, no result) and a 
 rider given a finish mark already has a result: the leader on the course -- whoever has
 the most laps now, finished or not; a disqualified rider leads nobody. So a lapped rider
 who has finished is not counted while the leader rides on, and nobody of a group counts
-until its leader finishes. Final protocols come out the same either way.
+until its leader finishes.
 
 Read as: a rider short of the leader's laps has no result in that stage, as one who did
-not finish, and the build's log names them.
+not finish, and the build's log names them. The protocol lists a rider who abandoned as
+DNF too, alike with one still on course, so he leads as well: a final protocol counts as
+it did before that answer, unless a rider who abandoned rode more laps than every
+finisher of his group -- then nobody of the group counts. The maintainer's rule has no
+such finishers (a rider has every lap or is DNF).

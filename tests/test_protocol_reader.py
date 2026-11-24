@@ -43,7 +43,8 @@ def test_in_a_lap_race_only_the_leaders_laps_count_each_category_its_own():
 
 
 def test_in_a_live_race_the_leader_still_on_course_sets_the_laps():
-    # The timing generator lists a rider still on course as DNF: laps, no result.
+    # The timing generator lists a rider still on course as DNF, laps and no result, as
+    # it lists one who abandoned: either leads.
     document = lap_race()
     on_course = {"bib": "7", "lap1": "15:00.0", "lap2": "15:00.0", "lap3": "15:00.0"}
     document["sections"][1]["rows"].append({"cells": on_course, "status": "dnf"})

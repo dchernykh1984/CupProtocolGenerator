@@ -101,7 +101,7 @@ def read(document: dict[str, Any], leader_laps_only: bool = True) -> StageResult
 
 def _drop_fewer_laps(results: StageResults, laps: dict[str, int]) -> None:
     """Keep a result only beside the laps of its category's leader: whoever has the most
-    laps now, finished or still on course (listed as DNF, laps and no result)."""
+    laps now, finished, on course or abandoned (both listed as DNF, laps, no result)."""
     # The maintainer, 2026-11-24: a rider has every lap or the stage does not count, so
     # a rider a lap down, ahead on time, is not ranked above the leader -- nor while the
     # leader rides on (docs/regulations/lap-races/decisions.txt).
