@@ -138,6 +138,9 @@ class MainWindow(QMainWindow):
         self.tabs.addTab(self._log_tab(), "Log")
         self.setCentralWidget(self.tabs)
         config, unread = settings.load(self._config_path)
+        # Still there after a load that failed: it could not be kept aside, so nothing
+        # is written over it while this window runs.
+        self._held = bool(unread) and self._config_path.exists()
         self.apply(config)
         if unread:
             self._say(unread)
@@ -351,6 +354,11 @@ class MainWindow(QMainWindow):
     def _save(self, config: Config) -> str:
         """Save the settings: "" once they are, else the log's error line saying why --
         a read-only folder or a full disk must not pass in silence."""
+        if self._held:
+            return (
+                "ERROR: settings not saved: the settings file could not be read at the "
+                "start; restart once it can be"
+            )
         try:
             settings.save(config, self._config_path)
         except OSError as exc:

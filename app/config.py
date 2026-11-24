@@ -101,7 +101,7 @@ def from_dict(data: Any) -> Config:
 def load(path: Path | None = None) -> tuple[Config, str]:
     """The settings and "", or the defaults and the log's error line for a file there
     that cannot be read: it is kept aside when it can be, so that no save writes over
-    it, and the line says when it could not."""
+    it; the line says when it could not, and the window then saves nothing over it."""
     path = path or config_path()
     try:
         # A file saved by Notepad starts with a byte order mark, which json refuses.
@@ -116,8 +116,8 @@ def load(path: Path | None = None) -> tuple[Config, str]:
             path.replace(aside)
         except OSError as kept:
             return Config(), (
-                f"ERROR: settings not read ({exc}) nor kept aside ({kept}): "
-                "the next save writes over them"
+                f"ERROR: settings not read ({exc}) nor kept aside ({kept}): nothing "
+                "is saved over it; restart once it can be read"
             )
         return Config(), f"ERROR: settings not read ({exc}): kept as {aside.name}"
 
