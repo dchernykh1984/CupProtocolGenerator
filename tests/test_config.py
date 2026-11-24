@@ -22,7 +22,7 @@ def test_the_settings_survive_a_restart(tmp_path):
     )
     path = tmp_path / "data" / "config.json"
     save(config, path)
-    assert load(path) == config
+    assert load(path) == (config, "")
 
 
 def test_a_save_a_full_disk_cuts_short_keeps_the_old_file_whole(tmp_path, monkeypatch):
@@ -38,21 +38,51 @@ def test_a_save_a_full_disk_cuts_short_keeps_the_old_file_whole(tmp_path, monkey
     with pytest.raises(OSError, match="No space left"):
         save(Config(token="other"), path)
     monkeypatch.undo()
-    assert load(path).token == "cup"
+    assert load(path)[0].token == "cup"
 
 
-def test_no_file_or_a_broken_one_gives_the_defaults(tmp_path):
-    assert load(tmp_path / "missing.json") == Config()
-    broken = tmp_path / "broken.json"
-    broken.write_text("{not json")
-    assert load(broken) == Config()
+def test_no_file_gives_the_defaults_and_says_nothing(tmp_path):
+    assert load(tmp_path / "missing.json") == (Config(), "")
+
+
+@pytest.mark.parametrize(
+    "broken",
+    [
+        b'{"token": "cup",}',  # a comma left behind by hand
+        '{"title": "\u041a\u0443\u0431\u043e\u043a"}'.encode("cp1251"),  # ANSI
+    ],
+)
+def test_a_file_that_cannot_be_read_is_kept_aside_and_said(tmp_path, broken):
+    # The next save, closing the window too, must not write the defaults over it.
+    path = tmp_path / "config.json"
+    path.write_bytes(broken)
+    config, said = load(path)
+    assert config == Config()
+    assert said.startswith("ERROR: settings not read (")
+    assert said.endswith("): kept as config.json.unreadable")
+    assert not path.exists()
+    assert (tmp_path / "config.json.unreadable").read_bytes() == broken
+
+
+def test_a_file_that_cannot_be_kept_aside_either_is_said(tmp_path, monkeypatch):
+    def held(self, target):
+        raise PermissionError(13, "Permission denied")
+
+    path = tmp_path / "config.json"
+    path.write_text("{not json")
+    monkeypatch.setattr(Path, "replace", held)
+    config, said = load(path)
+    assert config == Config()
+    assert "nor kept aside ([Errno 13] Permission denied)" in said
+    assert said.endswith("the next save writes over them")
 
 
 def test_a_file_with_a_byte_order_mark_keeps_its_settings(tmp_path):
     path = tmp_path / "config.json"
     save(Config(token="cup", title="Spring cup"), path)
     path.write_bytes(b"\xef\xbb\xbf" + path.read_bytes())  # as Notepad saves it
-    assert (load(path).token, load(path).title) == ("cup", "Spring cup")
+    config, said = load(path)
+    assert (config.token, config.title, said) == ("cup", "Spring cup", "")
 
 
 @pytest.mark.parametrize("data", [[], "text", None])

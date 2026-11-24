@@ -98,14 +98,27 @@ def from_dict(data: Any) -> Config:
     return config
 
 
-def load(path: Path | None = None) -> Config:
+def load(path: Path | None = None) -> tuple[Config, str]:
+    """The settings and "", or the defaults and the log's error line for a file there
+    that cannot be read: it is kept aside, so that no save writes over it."""
     path = path or config_path()
     try:
-        # A file saved by Notepad starts with a byte order mark, which json refuses:
-        # every setting would fall back, and the next save would write the defaults.
-        return from_dict(json.loads(path.read_text(encoding="utf-8-sig")))
-    except OSError, ValueError:
-        return Config()
+        # A file saved by Notepad starts with a byte order mark, which json refuses.
+        return from_dict(json.loads(path.read_text(encoding="utf-8-sig"))), ""
+    except FileNotFoundError:
+        return Config(), ""  # the first run
+    except (OSError, ValueError) as exc:
+        aside = path.with_name(path.name + ".unreadable")
+        try:
+            # shortcut: a second unreadable file replaces the first one kept aside;
+            # number them if a referee ever meets two.
+            path.replace(aside)
+        except OSError as kept:
+            return Config(), (
+                f"ERROR: settings not read ({exc}) nor kept aside ({kept}): "
+                "the next save writes over them"
+            )
+        return Config(), f"ERROR: settings not read ({exc}): kept as {aside.name}"
 
 
 def save(config: Config, path: Path | None = None) -> None:

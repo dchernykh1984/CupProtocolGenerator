@@ -123,7 +123,7 @@ def test_a_build_shows_its_report_and_lets_the_protocol_be_published(window):
     assert window.status.text() == "Built: 2 table(s), 2 error(s): see the Log tab"
     assert window.publish_button.isEnabled()
     assert QApplication.overrideCursor() is None  # the wait cursor is gone again
-    assert settings.load(window._config_path) == SAVED  # saved on build
+    assert settings.load(window._config_path)[0] == SAVED  # saved on build
 
 
 def test_the_status_line_shows_a_message_as_it_is_written(window):
@@ -154,7 +154,7 @@ def test_placing_everybody_is_kept_and_asks_for_a_new_build(window):
     window.on_build()
     boys = window._built.document["sections"][0]["rows"]
     assert [row["cells"]["place"] for row in boys] == ["1", "1", "3"]
-    assert settings.load(window._config_path).place_everybody
+    assert settings.load(window._config_path)[0].place_everybody
     window.place_everybody.setChecked(False)
     window.apply(Config(place_everybody=True))
     assert window.place_everybody.isChecked()  # a saved broadcast comes back
@@ -167,7 +167,7 @@ def test_the_laps_rule_is_kept_per_stage_and_asks_for_a_new_build(window):
     sprint.leader_laps_only.setChecked(False)  # a Number of Tries race
     assert not window.publish_button.isEnabled()
     window.on_build()
-    assert settings.load(window._config_path).stages[0].leader_laps_only is False
+    assert settings.load(window._config_path)[0].stages[0].leader_laps_only is False
     window.apply(Config(stages=[StageConfig(leader_laps_only=False)]))
     assert not window.stage_tabs()[0].leader_laps_only.isChecked()  # it comes back
 
@@ -279,7 +279,21 @@ def test_closing_with_settings_that_cannot_be_saved_warns(window, monkeypatch):
     assert warned and warned[0].startswith("settings not saved:")
 
 
+def test_a_settings_file_that_cannot_be_read_is_said_and_survives_a_close(
+    qt_app, tmp_path
+):
+    path = tmp_path / "config.json"
+    path.write_text('{"token": "cup",}')  # a comma left behind by hand
+    window = MainWindow(api_factory=lambda url: FakeSite(), config_path=path)
+    assert window.status.text().startswith("ERROR: settings not read (")
+    assert window.log.toPlainText() == window.status.text()
+    window.closeEvent(QCloseEvent())
+    assert (tmp_path / "config.json.unreadable").read_text() == '{"token": "cup",}'
+    assert settings.load(path) == (Config(), "")  # the defaults saved beside it
+    window.deleteLater()
+
+
 def test_closing_the_window_keeps_the_settings(window):
     window.title.setText("Spring cup")
     window.closeEvent(QCloseEvent())
-    assert settings.load(window._config_path).title == "Spring cup"
+    assert settings.load(window._config_path)[0].title == "Spring cup"

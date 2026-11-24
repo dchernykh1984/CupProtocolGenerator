@@ -17,8 +17,11 @@ and nothing else.
 
 Kept in `data/config.json` next to the program (`app/config.py`). The file holds upload
 tokens, so `data/` is never committed. A setting the file lacks, or holds in a shape the
-program does not read, takes its default; a file that cannot be read gives every default.
-A byte order mark at its start, as Notepad writes one, is read past.
+program does not read, takes its default. A file that cannot be read gives every default
+and is kept aside as `data/config.json.unreadable`, so that no save writes over it; the
+status line and the log say so at the start, `ERROR: settings not read (<why>): kept as
+config.json.unreadable`. A byte order mark at its start, as Notepad writes one, is read
+past.
 
 | Cup setting | Default | Meaning |
 | --- | --- | --- |
