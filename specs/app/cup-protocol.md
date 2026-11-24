@@ -18,6 +18,7 @@ and nothing else.
 Kept in `data/config.json` next to the program (`app/config.py`). The file holds upload
 tokens, so `data/` is never committed. A setting the file lacks, or holds in a shape the
 program does not read, takes its default; a file that cannot be read gives every default.
+A byte order mark at its start, as Notepad writes one, is read past.
 
 | Cup setting | Default | Meaning |
 | --- | --- | --- |
@@ -46,7 +47,9 @@ program does not read, takes its default; a file that cannot be read gives every
 
 1. The upload token is looked up (`GET /api/v1/participants/?competition_token=`) for the
    event's id and title; each token once per build. An event the site does not know stops
-   the build.
+   the build. A site address that does not start with `https://` (or `http://`) is
+   refused before any request, so no error quotes a token; a timeout or a dropped
+   connection stops the build as an HTTP failure does, the stage named.
 2. The event's protocols are listed (`GET /api/v1/protocols/?competition_id=`); in the
    stage's section the group protocol is taken, else the absolute one. Neither stops the
    build.
@@ -207,16 +210,19 @@ document as `protocol.json`. The site's reason for not taking the document
   last stage cannot be deleted.
 - **Log** tab: everything the last build said and what publishing said since.
 
-Build saves the settings and reads every stage. Its log is every line the build reported
-and `Built: <n> table(s)`; a line that is an error starts with `ERROR:` -- `ERROR:
-<stage>: line <n>: ...` for a sheet's line, `ERROR: <stage>: bibs no protocol names: ...`
--- and the other lines say how many results a stage gave and whom it did not count for
-fewer laps than their leader (`<stage>: not counted, fewer laps than their leader:
-<bibs>`). The status line says `Built: <n> table(s)`, and how many errors with a pointer
-to the Log tab when there were any. A build that cannot be made says `Not built: <why>`,
-the stage named first when the stage is the reason.
+Build saves the settings and reads every stage; settings that cannot be saved (a
+read-only folder, a full disk) are the log's first line, `ERROR: settings not saved:
+<why>`, and the build goes on. Its log is every line the build reported and `Built: <n>
+table(s)`; a line that is an error starts with `ERROR:` -- `ERROR: <stage>: line <n>:
+...` for a sheet's line, `ERROR: <stage>: bibs no protocol names: ...` -- and the other
+lines say how many results a stage gave and whom it did not count for fewer laps than
+their leader (`<stage>: not counted, fewer laps than their leader: <bibs>`). The status
+line says `Built: <n> table(s)`, and how many errors with a pointer to the Log tab when
+there were any. A build that cannot be made says `Not built: <why>`, the stage named
+first when the stage is the reason.
 
-Publish is enabled only by a build, and any change to a setting disables it until the
-next one, so what goes to the site is what the log just showed. It says `Published to
-section <n>`, `The site did not take the protocol: <why>` or `Not published: <why>`. The
-settings are saved on closing too.
+Publish is enabled only by a build that worked: any change to a setting, and a build that
+fails, disable it until the next one that works, so what goes to the site is what the log
+just showed. It says `Published to section <n>`, `The site did not take the protocol:
+<why>` or `Not published: <why>`. The settings are saved on closing too, and a warning
+says so when they cannot be.
