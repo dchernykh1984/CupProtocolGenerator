@@ -12,7 +12,9 @@ from app.rules import CupRule, StageRule, StageScore
 @dataclass
 class CupRow:
     athlete: Athlete
-    stages: list[StageScore | None]  # in stage order; None without a result there
+    # In stage order; None where the stage does not score the athlete: no result in a
+    # stage not scored by its place.
+    stages: list[StageScore | None]
     total: float | None
     place: int | None
 
