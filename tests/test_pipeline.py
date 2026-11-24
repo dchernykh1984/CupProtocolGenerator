@@ -136,6 +136,35 @@ def test_a_cup_by_the_sum_of_places_adds_each_stages_place_up():
     assert (boys["7"]["place"], boys["12"]["place"]) == ("1", "1")
 
 
+def test_a_cup_by_the_largest_sum_of_results_ranks_the_most_first():
+    # Sprint and Jump scored by their results as points: 12 has 8.90 + 190, 7 has
+    # 8.40 + 180; 13 has no result at all and stays unscored, unless all are placed.
+    stages = [
+        StageConfig("Sprint", Source.SITE, rule="result_higher_better"),
+        StageConfig("Jump", Source.SHEET, link=JUMPS, rule="result_higher_better"),
+    ]
+
+    def boys(**kwargs):
+        config = _config(stages=stages, rule="sum_largest_wins", **kwargs)
+        rows = build(config, FakeSite()).document["sections"][0]["rows"]
+        return [row["cells"] for row in rows]
+
+    cells = boys()
+    assert [(c["bib"], c["place"], c["total"]) for c in cells] == [
+        ("12", "1", "198.9"),
+        ("7", "2", "188.4"),
+        ("13", "", ""),
+    ]
+    assert (cells[0]["stage_1_place"], cells[0]["stage_2_place"]) == ("1", "1")
+    assert (cells[2]["stage_1"], cells[2]["stage_1_place"]) == ("", "")
+    placed = boys(place_everybody=True)
+    assert [(c["bib"], c["place"]) for c in placed] == [
+        ("12", "1"),
+        ("7", "2"),
+        ("13", "3"),
+    ]
+
+
 @pytest.mark.parametrize(
     ("cup", "stage", "message"),
     [
