@@ -51,8 +51,9 @@ def stage_protocol() -> dict[str, Any]:
 
 def lap_race() -> dict[str, Any]:
     """A group protocol of a lap race as the chip-timing generator uploads it: its laps
-    in columns ``lap<n>``, a split of lap 1 beside them. In M bib 2 is a lap down and
-    ahead on time; in W the disqualified bib 5 has more laps than anybody who counts."""
+    in columns ``lap<n>``, a split of lap 1 beside them. In M bib 2 is a lap down -- its
+    third lap begun, which holds no time -- and ahead on time; in W the disqualified bib
+    5 has more laps than anybody who counts."""
     columns = [
         {"id": "bib", "role": "bib"},
         {"id": "lap1", "label": "Lap 1"},
@@ -70,6 +71,7 @@ def lap_race() -> dict[str, Any]:
                 "lap1": "20:00.0",
                 "lap1_s1": "9:00.0",
                 "lap2": "20:00.0",
+                "lap3": "UNKNOWN",
                 "result": "40:00.0",
             }
         },
