@@ -19,7 +19,10 @@ Both kinds live in `app/rules.py` and are picked from drop-downs:
 
 - A **stage rule** (`StageRule`) turns one category's results of one stage into scores:
   `score(values: dict[bib, result]) -> dict[bib, StageScore(place, points)]`. A bib
-  with no result is absent from `values` and must be absent from the answer.
+  with no result is absent from `values` and must be absent from the answer -- and so
+  is a site stage's rider short of his group leader's laps, by the lap rule
+  (`leader_laps_only`, `docs/regulations/lap-races/decisions.txt`): regulations that
+  rank lapped riders go to the maintainer first.
 - A **cup rule** (`CupRule`) adds the stages up within one category:
   `combine(stages: list[dict[bib, StageScore]], bibs: list[str], place_everybody:
   bool) -> dict[bib, CupScore(total, place)]`, an entry for every bib in `bibs`;
