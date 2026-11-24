@@ -90,6 +90,14 @@ def test_a_place_stage_puts_everybody_without_a_result_first_after_the_rest():
     assert rows[2].stages == [StageScore(3, 3.0), StageScore(2, 2.0)]
 
 
+def test_after_a_tie_somebody_without_a_result_takes_the_place_after_everybody():
+    # 8.4, 8.9, 8.9 are 1, 2, 2: the next possible place is 4, not 3.
+    athletes = [Athlete(bib, bib) for bib in ("1", "2", "3", "4")]
+    table = standings(athletes, [{"1": 8.4, "2": 8.9, "3": 8.9}], [LOWER], SUM)
+    places = {r.athlete.bib: r.stages[0].place for r in table[""] if r.stages[0]}
+    assert places == {"1": 1, "2": 2, "3": 2, "4": 4}
+
+
 def test_before_anybody_has_gone_everybody_is_first_in_every_place_stage():
     athletes = [Athlete("5", "A"), Athlete("9", "B")]
     table = standings(athletes, [{}, {"9": 12}], [LOWER, HIGHER], SUM)
