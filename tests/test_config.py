@@ -1,3 +1,4 @@
+import stat
 import sys
 from pathlib import Path
 
@@ -39,6 +40,20 @@ def test_a_save_a_full_disk_cuts_short_keeps_the_old_file_whole(tmp_path, monkey
         save(Config(token="other"), path)
     monkeypatch.undo()
     assert load(path)[0].token == "cup"
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="POSIX permissions")
+def test_a_save_keeps_the_files_own_permissions_and_a_new_file_is_its_owners(tmp_path):
+    # The file holds the upload tokens: a referee's chmod 600 must survive a save.
+    path = tmp_path / "config.json"
+    stale = tmp_path / "config.json.tmp"  # a save cut short left it open to all
+    stale.write_text("{")
+    stale.chmod(0o644)
+    save(Config(token="cup"), path)
+    assert stat.S_IMODE(path.stat().st_mode) == 0o600
+    path.chmod(0o640)
+    save(Config(token="other"), path)
+    assert stat.S_IMODE(path.stat().st_mode) == 0o640
 
 
 def test_no_file_gives_the_defaults_and_says_nothing(tmp_path):
