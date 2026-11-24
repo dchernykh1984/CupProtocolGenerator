@@ -1,5 +1,54 @@
 # Changelog
 
+## [0.5.0](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.4.0...v0.5.0) (2026-11-24)
+
+
+### Features
+
+* **document:** every stage's place in a column of its own beside its result ([8bbf38b](https://github.com/dchernykh1984/CupProtocolGenerator/commit/8bbf38b27065d30614a922c261389cc8a308ac89))
+* **rules:** a cup by the smallest sum of places, or by the largest sum of results as points ([db6b95d](https://github.com/dchernykh1984/CupProtocolGenerator/commit/db6b95de0fd2727564ed64ddec12d3065de4c359))
+* **scoring:** in a place stage, everybody without a result shares the place after the rest ([3d0aff6](https://github.com/dchernykh1984/CupProtocolGenerator/commit/3d0aff6c47f8518bc177f7ba222b31ddb9739225))
+
+
+### Bug Fixes
+
+* **config:** a save a full disk cuts short leaves the old settings file whole ([5a614cc](https://github.com/dchernykh1984/CupProtocolGenerator/commit/5a614cca52130c706beb4a77b63b84bb9e03c86a))
+* **config:** a save keeps the settings file's own permissions, and a new file is its owner's alone ([52ad1d1](https://github.com/dchernykh1984/CupProtocolGenerator/commit/52ad1d164807a88b41634f8a18b627dc249fec1c))
+* **config:** a settings file made read-only is refused, not saved over ([9debc55](https://github.com/dchernykh1984/CupProtocolGenerator/commit/9debc5559db8f55b2a30833b259401e5cdd45a06))
+* **config:** a settings file reached through a link is saved through it, the link kept ([7e59f12](https://github.com/dchernykh1984/CupProtocolGenerator/commit/7e59f12f85f8e742e48d6f0927fd2a2e1a9e9eab))
+* **config:** a settings file that cannot be read is kept aside and said, not saved over ([61b1249](https://github.com/dchernykh1984/CupProtocolGenerator/commit/61b1249312069c9b3c831902abf968967e91408e))
+* **config:** a settings file that could neither be read nor kept aside is never saved over ([d22dcd2](https://github.com/dchernykh1984/CupProtocolGenerator/commit/d22dcd24db540e0c34d50b83fb841ce212764f86))
+* **config:** a settings file with a byte order mark keeps its settings, not the defaults ([834c814](https://github.com/dchernykh1984/CupProtocolGenerator/commit/834c81456054ce8abbc4454ef8c521e40e904544))
+* **config:** a writable settings file in a folder the program may not write to is saved in place, as before ([1f58e82](https://github.com/dchernykh1984/CupProtocolGenerator/commit/1f58e8236a48cb0e4811938b103d491b3e5e75af))
+* **document:** a total with a fraction keeps every digit, not six of them ([d3c9a3a](https://github.com/dchernykh1984/CupProtocolGenerator/commit/d3c9a3aae32ae06fa844d29796c3181491c9cb29))
+* **results:** a time and the same time written in seconds are one value, so their tie holds ([f73fd08](https://github.com/dchernykh1984/CupProtocolGenerator/commit/f73fd08728d87a5a59de862011b0349cc4565542))
+* **rules:** the smallest sum of places says everybody without a result takes the place after the rest ([d8e35cb](https://github.com/dchernykh1984/CupProtocolGenerator/commit/d8e35cbb1f8b468c432e2dfa6836892529f6eeae))
+* **sheets:** a sheet link with a capital in its scheme still becomes its CSV export ([bf84e98](https://github.com/dchernykh1984/CupProtocolGenerator/commit/bf84e9852e9da5155d339119a70b2578f85164fd))
+* **sheets:** a sheet link with a space or a letter outside ASCII is refused with the stage named, not an unexpected error ([5defd78](https://github.com/dchernykh1984/CupProtocolGenerator/commit/5defd78f5e1f89c29b18080161a27b552a44b252))
+* **site:** a site address typed in capitals is still a web address ([996be0c](https://github.com/dchernykh1984/CupProtocolGenerator/commit/996be0cce8441c1f4af30c81f1afb2b2362e987e))
+* **site:** a site address with a letter outside ASCII is refused before any request, not blamed on the answer ([2c62ba6](https://github.com/dchernykh1984/CupProtocolGenerator/commit/2c62ba6c182ac908ee93035d3e44edeef9db925d))
+* **site:** a site address with a space or a control character is refused before it shows the token ([bd088b5](https://github.com/dchernykh1984/CupProtocolGenerator/commit/bd088b5e0c456a2ade92b71ff0e8a4fbde05912a))
+* **site:** a site address without https:// is refused before a request can show the token ([e87daa9](https://github.com/dchernykh1984/CupProtocolGenerator/commit/e87daa94ddc861c79acaf410416c21353143b1c3))
+* **site:** a timeout or a dropped connection is a site error, named with its stage ([fd61e2c](https://github.com/dchernykh1984/CupProtocolGenerator/commit/fd61e2cc103a3f9c4f6a7c7db77b7fcbffc32eea))
+* **window:** a build that fails leaves nothing to publish, not the build before it ([b78d5e9](https://github.com/dchernykh1984/CupProtocolGenerator/commit/b78d5e9623286ae432d724d3b47769273fc65247))
+* **window:** settings that cannot be saved are said, at a build and on closing ([d6bb363](https://github.com/dchernykh1984/CupProtocolGenerator/commit/d6bb363ef13350c5ba051832f11b84af3931725a))
+
+
+### Documentation
+
+* a cup by the sum of places or of results as points, every stage's place in a column ([2bf3d8f](https://github.com/dchernykh1984/CupProtocolGenerator/commit/2bf3d8f72a8bfeb7d685337e37077180ff477e29))
+* **agents:** the test rule's note is a paragraph of its own, not part of the last rule's bullet ([1fb131d](https://github.com/dchernykh1984/CupProtocolGenerator/commit/1fb131d8bd7117ff100ccf79548404eb9de21c3d))
+* **config:** an unreadable settings file is kept aside when it can be, and the line says when not ([7e9e953](https://github.com/dchernykh1984/CupProtocolGenerator/commit/7e9e9534c754197f82ba84effc1cea6dd77009e0))
+* in a place stage everybody without a result shares the place after the rest ([39e32d4](https://github.com/dchernykh1984/CupProtocolGenerator/commit/39e32d426c6f427bdf41527ac1dfc5eb95b9454c))
+* **regulations:** a missed stage is unplaced only in a sum of results, as the decision above it says ([a4cb5ef](https://github.com/dchernykh1984/CupProtocolGenerator/commit/a4cb5efcf3b8c1f4c1da3b0640183f504c348b36))
+* **regulations:** the reworded line is wrapped at the width of the rest ([2cc829c](https://github.com/dchernykh1984/CupProtocolGenerator/commit/2cc829c3c8452a1dd68b85b8539809f4749eca50))
+* **rules:** Better is the way a result, a stage's points or a cup's sum improves ([8f57749](https://github.com/dchernykh1984/CupProtocolGenerator/commit/8f577492e3fa36ef48f57be13576d252b329615d))
+* **rules:** the three new rules quote the decision each comes from ([ed2807a](https://github.com/dchernykh1984/CupProtocolGenerator/commit/ed2807a05ac23ee86f6ceedb31c4a3ca6ea9f9cc))
+* **scoring:** a cup row's stage is None only where the stage does not score the athlete ([e7facf9](https://github.com/dchernykh1984/CupProtocolGenerator/commit/e7facf92b20fdf9082b2b96cb0e952e0e809a72d))
+* **spec:** a stage's place is empty only where the stage does not score somebody ([feca3a2](https://github.com/dchernykh1984/CupProtocolGenerator/commit/feca3a29c4b9349a4690eeb6ecd43547f6c0f8e6))
+* **spec:** settings not saved come after Not built when the build fails ([d341e38](https://github.com/dchernykh1984/CupProtocolGenerator/commit/d341e38f4c8927fae2e925dd32e0a9e2ba6d4337))
+* **spec:** what the window and the site connector say when saving or reaching the site fails ([f8ff9f8](https://github.com/dchernykh1984/CupProtocolGenerator/commit/f8ff9f823f934cb459eb155b749f7592f9b26d47))
+
 ## [0.4.0](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.3.0...v0.4.0) (2026-11-24)
 
 
