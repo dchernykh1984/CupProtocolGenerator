@@ -48,14 +48,15 @@ def test_the_event_of_a_token_is_its_id_and_title():
     )
 
 
-def test_an_events_protocols_and_one_protocol_are_read():
+def test_an_events_protocols_and_one_protocol_are_read_by_its_upload_token():
+    # The token lets the site give an invite-only event's protocols too.
     opener = _Opener([{"id": 1}], {"id": 1, "document": None})
     api = SiteApi("https://site.test", opener)
-    assert api.protocols(249) == [{"id": 1}]
-    assert api.protocol(1) == {"id": 1, "document": None}
+    assert api.protocols(249, "tok en") == [{"id": 1}]
+    assert api.protocol(1, "tok en") == {"id": 1, "document": None}
     assert [_url(r) for r in opener.requests] == [
-        "https://site.test/api/v1/protocols/?competition_id=249",
-        "https://site.test/api/v1/protocols/1",
+        "https://site.test/api/v1/protocols/?competition_id=249&competition_token=tok+en",
+        "https://site.test/api/v1/protocols/1?competition_token=tok+en",
     ]
 
 
@@ -89,14 +90,14 @@ def test_a_refusal_without_a_reason_says_its_status():
         "https://site.test", 500, "Server Error", {}, io.BytesIO(b"<html>")
     )
     with pytest.raises(SiteApiError, match="HTTP 500: Server Error"):
-        SiteApi(opener=_Opener(refusal)).protocols(1)
+        SiteApi(opener=_Opener(refusal)).protocols(1, "tok")
 
 
 def test_a_broken_connection_and_a_broken_answer_are_errors():
     with pytest.raises(SiteApiError, match="Connection error"):
-        SiteApi(opener=_Opener(urllib.error.URLError("down"))).protocol(1)
+        SiteApi(opener=_Opener(urllib.error.URLError("down"))).protocol(1, "tok")
     with pytest.raises(SiteApiError, match="Invalid answer"):
-        SiteApi(opener=_Opener(b"<html>")).protocol(1)
+        SiteApi(opener=_Opener(b"<html>")).protocol(1, "tok")
 
 
 def test_the_upload_sends_the_document_into_its_section():

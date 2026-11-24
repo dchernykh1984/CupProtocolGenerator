@@ -50,13 +50,13 @@ class _Site:
         competition_id, _ = self.event(token)
         found = {
             p["protocol_type"]: p
-            for p in self.api.protocols(competition_id)
+            for p in self.api.protocols(competition_id, token)
             if p["section"] == section
         }
         chosen = found.get("group") or found.get("absolute")
         if chosen is None:
             raise PipelineError(f"no protocol in section {section} of its event")
-        detail = self.api.protocol(chosen["id"])
+        detail = self.api.protocol(chosen["id"], token)
         if not detail.get("document"):
             raise PipelineError(
                 f"protocol {chosen['id']} has no data, only HTML: publish it with data"
