@@ -41,8 +41,7 @@ StravaProtocolGenerator.
 - **Stages tab** - a tab per stage: its name, where its results come from (a protocol on
   the site, by the stage event's upload token -- the cup event's when left empty -- and
   its section, with the laps checkbox; or a Google Forms sheet, by its link) and the
-  stage rule. Add a copy of
-  the current stage to its left or right, or delete it.
+  stage rule. Add a copy of the current stage to its left or right, or delete it.
 
 A cup of summed times: score every stage by "Time, the lowest first" and pick the cup
 rule "Sum of the stages' times, the smallest wins". The protocol shows every stage's

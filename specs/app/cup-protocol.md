@@ -72,11 +72,12 @@ are those of its lap cells that hold a time. With `leader_laps_only` a result co
 beside as many laps as its category's leader has -- the most any rider of the category
 has now, finished, still on course or abandoned (the generator lists the last two alike,
 as `dnf` with laps and no result); a disqualified rider leads nobody, nor one who missed
-the start check (`dns`, his laps kept, as the generator never makes him the leader). A rider short of them has no result in
-that stage, as one who did not finish, and the log names them; while a group's leader
-rides on, nobody of the group counts yet. A protocol without lap columns leaves every result counted. The
-generator writes the attempts of a Number of Tries race in the same columns, so a stage
-of one has the setting off. The maintainer's word of 2026-11-24
+the start check (`dns`, his laps kept, as the generator never makes him the leader). A
+rider short of them has no result in that stage, as one who did not finish, and the log
+names them; while a group's leader rides on, nobody of the group counts yet. A protocol
+without lap columns leaves every result counted. The generator writes the attempts of a
+Number of Tries race in the same columns, so a stage of one has the setting off. The
+maintainer's word of 2026-11-24
 ([`docs/regulations/lap-races/decisions.txt`](../../docs/regulations/lap-races/decisions.txt)).
 
 ### A Google Forms response sheet (`app/sheets.py`)
@@ -187,20 +188,18 @@ document as `protocol.json`. The site's reason for not taking the document
 - **Stages** tab: a tab per stage, titled by its name (an unnamed one by its place, as
   the protocol names it): where its results come from -- a site protocol by token and
   section, with the laps checkbox, or a sheet by its link, the other source's fields
-  hidden -- and its rule. A
-  copy of the current stage is added to its left or right; the last stage cannot be
-  deleted.
+  hidden -- and its rule. A copy of the current stage is added to its left or right; the
+  last stage cannot be deleted.
 - **Log** tab: everything the last build said and what publishing said since.
 
 Build saves the settings and reads every stage. Its log is every line the build reported
-and `Built: <n> table(s)`; a line that is an error starts with `ERROR:` --
-`ERROR: <stage>: line <n>: ...` for a sheet's line, `ERROR: <stage>: bibs no protocol
-names: ...` -- and the other lines say how many results a stage gave and whom it did not
-count for fewer laps than their leader (`<stage>: not counted, fewer laps than their
-leader: <bibs>`). The status line says
-`Built: <n> table(s)`, and how many errors with a pointer to the Log tab when there were
-any. A build that cannot be made says `Not built: <why>`, the stage named first when the
-stage is the reason.
+and `Built: <n> table(s)`; a line that is an error starts with `ERROR:` -- `ERROR:
+<stage>: line <n>: ...` for a sheet's line, `ERROR: <stage>: bibs no protocol names: ...`
+-- and the other lines say how many results a stage gave and whom it did not count for
+fewer laps than their leader (`<stage>: not counted, fewer laps than their leader:
+<bibs>`). The status line says `Built: <n> table(s)`, and how many errors with a pointer
+to the Log tab when there were any. A build that cannot be made says `Not built: <why>`,
+the stage named first when the stage is the reason.
 
 Publish is enabled only by a build, and any change to a setting disables it until the
 next one, so what goes to the site is what the log just showed. It says `Published to

@@ -13,9 +13,9 @@ The site is universalbicycle.team (`DEFAULT_SITE`); its API has no language pref
   `competition_title` for an event's upload token (and its registrations, which carry
   no bibs: bibs come from the protocols).
 - `GET /api/v1/protocols/?competition_id=<id>&competition_token=<token>` lists the
-  event's protocols in section order: `id`, `section`, `section_name`, `protocol_type` (`absolute` or `group`),
-  `stage_label`, `is_live`, `last_updated`, `file_hash`, `shown` (`document` or `html`),
-  `has_html`.
+  event's protocols in section order: `id`, `section`, `section_name`, `protocol_type`
+  (`absolute` or `group`), `stage_label`, `is_live`, `last_updated`, `file_hash`, `shown`
+  (`document` or `html`), `has_html`.
 - `GET /api/v1/protocols/<id>?competition_token=<token>` adds `document` (null when
   the last upload brought none the site took: HTML alone, or a document it refused) and
   the update history. A stage protocol must be uploaded "with data" the site takes.
