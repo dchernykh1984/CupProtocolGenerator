@@ -67,7 +67,8 @@ class _Site:
 def _read_stage(site: _Site, config: Config, stage: StageConfig) -> StageResults:
     if stage.source is Source.SITE:
         token = stage.token.strip() or config.token.strip()
-        return protocol_reader.read(site.protocol(token, stage.section))
+        document = site.protocol(token, stage.section)
+        return protocol_reader.read(document, stage.leader_laps_only)
     if not stage.link.strip():
         raise PipelineError("no sheet link")
     text = site.api.fetch_text(sheets.export_url(stage.link))
@@ -110,6 +111,11 @@ def _stages(
             raise PipelineError(f"{name}: {exc}") from None
         report += [f"ERROR: {name}: {problem}" for problem in results.problems]
         report.append(f"{name}: {len(results.values)} results")
+        if results.fewer_laps:
+            report.append(
+                f"{name}: not counted, fewer laps than their leader: "
+                f"{', '.join(results.fewer_laps)}"
+            )
         names.append(name)
         read.append(results)
     return names, rules, read

@@ -7,7 +7,7 @@ import pytest
 from app.config import Config, Source, StageConfig
 from app.pipeline import PipelineError, build, publish
 from app.site_api import SiteApiError
-from tests.conftest import stage_protocol
+from tests.conftest import lap_race, stage_protocol
 
 JUMPS = "https://docs.google.com/spreadsheets/d/JUMP/edit#gid=1"
 JUMPS_CSV = "https://docs.google.com/spreadsheets/d/JUMP/export?format=csv&gid=1"
@@ -91,6 +91,24 @@ def test_a_stage_of_another_event_is_read_by_its_token_and_each_event_asked_once
     build(_config(stages=[StageConfig("Home"), stage, StageConfig("Again")]), site)
     assert site.read == [4, 8, 4]
     assert site.asked == ["cup", "other"]
+
+
+def test_a_lap_race_counts_only_the_leaders_laps_and_says_whom_it_left_out():
+    site = FakeSite(document=lap_race())
+    stages = [StageConfig("XCO", Source.SITE, rule="time")]
+    built = build(_config(stages=stages, rule="sum_of_times"), site)
+    assert built.report == [
+        "XCO: 3 results",
+        "XCO: not counted, fewer laps than their leader: 2",
+    ]
+    men = built.document["sections"][0]["rows"]
+    assert [(row["cells"]["bib"], row["cells"]["place"]) for row in men] == [
+        ("1", "1"),
+        ("2", ""),
+    ]
+    stages[0].leader_laps_only = False  # a Number of Tries race: attempts, no laps
+    built = build(_config(stages=stages, rule="sum_of_times"), site)
+    assert built.report == ["XCO: 4 results"]
 
 
 def test_the_event_title_and_a_stage_number_stand_in_for_missing_names():

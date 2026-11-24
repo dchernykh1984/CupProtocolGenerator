@@ -76,6 +76,10 @@ class StageTab(QWidget):
         self.token.setEchoMode(QLineEdit.EchoMode.Password)
         self.token.setPlaceholderText("The cup event's token when left empty")
         self.section = _section_box(stage.section)
+        self.leader_laps_only = QCheckBox(
+            "Only riders with their leader's laps (untick for Number of Tries)"
+        )
+        self.leader_laps_only.setChecked(stage.leader_laps_only)
         self.link = QLineEdit(stage.link)
         self.link.setPlaceholderText("Google Sheets link to the form's responses")
         self.rule = _rule_box(STAGE_RULES, stage.rule)
@@ -84,6 +88,7 @@ class StageTab(QWidget):
         self.form.addRow("Results from", self.source)
         self.form.addRow("Stage event's upload token", self.token)
         self.form.addRow("Protocol section", self.section)
+        self.form.addRow("", self.leader_laps_only)
         self.form.addRow("Sheet link", self.link)
         self.form.addRow("Stage rule", self.rule)
         self.source.currentIndexChanged.connect(self._show_source)
@@ -93,11 +98,13 @@ class StageTab(QWidget):
         for box in (self.source, self.rule):
             box.currentIndexChanged.connect(on_change)
         self.section.valueChanged.connect(on_change)
+        self.leader_laps_only.toggled.connect(on_change)
 
     def _show_source(self) -> None:
         on_site = self.source.currentData() == Source.SITE.value
         self.form.setRowVisible(self.token, on_site)
         self.form.setRowVisible(self.section, on_site)
+        self.form.setRowVisible(self.leader_laps_only, on_site)
         self.form.setRowVisible(self.link, not on_site)
 
     def stage(self) -> StageConfig:
@@ -108,6 +115,7 @@ class StageTab(QWidget):
             section=self.section.value(),
             link=self.link.text().strip(),
             rule=str(self.rule.currentData()),
+            leader_laps_only=self.leader_laps_only.isChecked(),
         )
 
 

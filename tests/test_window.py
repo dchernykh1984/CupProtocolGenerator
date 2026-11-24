@@ -56,9 +56,11 @@ def test_the_saved_settings_fill_the_window(window):
 def test_a_stage_shows_the_fields_of_its_source(window):
     sprint, jump = window.stage_tabs()
     assert sprint.form.isRowVisible(sprint.section)
+    assert sprint.form.isRowVisible(sprint.leader_laps_only)
     assert not sprint.form.isRowVisible(sprint.link)
     assert jump.form.isRowVisible(jump.link)
     assert not jump.form.isRowVisible(jump.token)
+    assert not jump.form.isRowVisible(jump.leader_laps_only)
     sprint.source.setCurrentIndex(sprint.source.findData(Source.SHEET.value))
     assert sprint.form.isRowVisible(sprint.link)
 
@@ -156,6 +158,16 @@ def test_placing_everybody_is_kept_and_asks_for_a_new_build(window):
     window.place_everybody.setChecked(False)
     window.apply(Config(place_everybody=True))
     assert window.place_everybody.isChecked()  # a saved broadcast comes back
+
+
+def test_the_laps_rule_is_kept_per_stage_and_asks_for_a_new_build(window):
+    window.on_build()
+    sprint = window.stage_tabs()[0]
+    assert sprint.leader_laps_only.isChecked()
+    sprint.leader_laps_only.setChecked(False)  # a Number of Tries race
+    assert not window.publish_button.isEnabled()
+    window.on_build()
+    assert settings.load(window._config_path).stages[0].leader_laps_only is False
 
 
 def test_a_build_that_fails_says_why_and_publishes_nothing(window):

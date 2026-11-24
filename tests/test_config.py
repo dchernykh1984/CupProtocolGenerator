@@ -16,6 +16,7 @@ def test_the_settings_survive_a_restart(tmp_path):
         stages=[
             StageConfig("Sprint", Source.SITE, token="stage", section=3),
             StageConfig("Jump", Source.SHEET, link="https://docs.test/1", rule="x"),
+            StageConfig("Tries", leader_laps_only=False),
         ],
     )
     path = tmp_path / "data" / "config.json"
@@ -49,7 +50,13 @@ def test_a_setting_of_the_wrong_shape_falls_back_to_its_default():
             "final": "yes",
             "place_everybody": 1,
             "stages": [
-                {"name": "A", "source": "ftp", "section": 0, "link": 5},
+                {
+                    "name": "A",
+                    "source": "ftp",
+                    "section": 0,
+                    "link": 5,
+                    "leader_laps_only": "no",
+                },
                 "not a stage",
             ],
         }

@@ -32,6 +32,8 @@ class StageResults:
     texts: dict[str, str] = field(default_factory=dict)  # bib -> result as written
     categories: dict[str, str] = field(default_factory=dict)  # group id -> label
     problems: list[str] = field(default_factory=list)
+    # Bibs whose result does not count: fewer laps than their category's leader.
+    fewer_laps: list[str] = field(default_factory=list)
 
 
 def normalize_bib(text: str) -> str:
