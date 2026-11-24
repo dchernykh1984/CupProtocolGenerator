@@ -63,21 +63,21 @@ def test_a_row_carries_each_stage_with_its_place_and_the_total():
         "name",
         "team",
         "stage_1",
+        "stage_1_place",
         "stage_2",
+        "stage_2_place",
         "total",
     ]
-    assert [c["label"] for c in boys["columns"]][4:6] == STAGES
+    labels = [c["label"] for c in boys["columns"]][4:8]
+    assert labels == [STAGES[0], f"{STAGES[0]} place", STAGES[1], f"{STAGES[1]} place"]
+    # A phone leaves out the stage places first: the highest priority goes first.
+    assert {c.get("priority") for c in boys["columns"][5:8:2]} == {3}
     first, second = (row["cells"] for row in boys["rows"])
-    assert first["stage_1"] == {
-        "text": "8.40",
-        "sub": ["1 pl."],
-    }  # as its source wrote it
-    assert first["stage_2"] == {
-        "text": "1",
-        "sub": ["1 pl."],
-    }  # no text kept: the points
+    assert (first["stage_1"], first["stage_1_place"]) == ("8.40", "1")  # as written
+    assert (first["stage_2"], first["stage_2_place"]) == ("1", "1")  # no text: points
     assert (first["place"], first["total"]) == ("1", "2")
-    assert (second["stage_2"], second["place"], second["total"]) == ("", "", "")
+    assert (second["stage_2"], second["stage_2_place"]) == ("", "")
+    assert (second["place"], second["total"]) == ("", "")
 
 
 def test_no_team_column_when_nobody_has_one_nor_title_when_none_is_given():
@@ -112,7 +112,7 @@ def test_a_sum_of_times_is_written_as_a_time_as_precise_as_its_stages():
         ("12", "2", "1:00:00.5"),
         ("3", "", ""),
     ]
-    assert rows[0]["stage_2"] == {"text": "1:02.5", "sub": ["2 pl."]}
+    assert (rows[0]["stage_2"], rows[0]["stage_2_place"]) == ("1:02.5", "2")
 
 
 def test_a_time_less_the_repetitions_is_the_total_of_an_all_round_test():
@@ -127,7 +127,7 @@ def test_a_time_less_the_repetitions_is_the_total_of_an_all_round_test():
         ("7", "1", "0:39.5"),  # 62.5 s less 23 pull-ups
         ("12", "2", "0:56.0"),
     ]
-    assert rows[0]["stage_2"] == {"text": "23", "sub": ["1 pl."]}
+    assert (rows[0]["stage_2"], rows[0]["stage_2_place"]) == ("23", "1")
 
 
 @pytest.mark.parametrize(
