@@ -115,6 +115,21 @@ def test_an_answer_that_is_no_json_never_shows_the_token(read):
     assert "SECRET" not in str(raised.value)
 
 
+def test_a_site_address_without_its_scheme_is_refused_before_any_request():
+    # urllib's own refusal quotes the whole address, the upload token in its query.
+    opener = _Opener()
+    api = SiteApi("universalbicycle.team", opener)
+    for read in (
+        lambda: api.competition("SECRET"),
+        lambda: api.protocols(1, "SECRET"),
+        lambda: api.upload("SECRET", {}, section=2),
+    ):
+        with pytest.raises(SiteApiError, match="must start with https://") as raised:
+            read()
+        assert "SECRET" not in str(raised.value)
+    assert opener.requests == []
+
+
 def test_the_upload_sends_the_document_into_its_section():
     opener = _Opener({"id": 5, "document_error": None})
     api = SiteApi("https://site.test", opener)

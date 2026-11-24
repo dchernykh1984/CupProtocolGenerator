@@ -70,9 +70,17 @@ class SiteApi:
         except urllib.error.URLError as exc:
             raise SiteApiError(f"Connection error: {exc.reason}") from exc
 
+    def _url(self, path: str) -> str:
+        # urllib would quote the whole address, token and all, in its refusal.
+        if not self.base_url.startswith(("https://", "http://")):
+            raise SiteApiError(
+                f"The site's address must start with https://: {self.base_url!r}"
+            )
+        return self.base_url + path
+
     def _json(self, path: str) -> Any:
         try:
-            return json.loads(self._open(self.base_url + path).decode("utf-8"))
+            return json.loads(self._open(self._url(path)).decode("utf-8"))
         except ValueError as exc:
             # The query carries the upload token: the message names the path alone.
             where = path.partition("?")[0]
@@ -135,7 +143,7 @@ class SiteApi:
             ],
         )
         request = urllib.request.Request(  # noqa: S310 - the site's own https address
-            self.base_url + "/api/v1/protocols/upload/",
+            self._url("/api/v1/protocols/upload/"),
             data=body,
             headers={"Content-Type": content_type},
             method="POST",
