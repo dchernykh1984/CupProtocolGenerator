@@ -168,6 +168,8 @@ def test_the_laps_rule_is_kept_per_stage_and_asks_for_a_new_build(window):
     assert not window.publish_button.isEnabled()
     window.on_build()
     assert settings.load(window._config_path).stages[0].leader_laps_only is False
+    window.apply(Config(stages=[StageConfig(leader_laps_only=False)]))
+    assert not window.stage_tabs()[0].leader_laps_only.isChecked()  # it comes back
 
 
 def test_a_build_that_fails_says_why_and_publishes_nothing(window):
