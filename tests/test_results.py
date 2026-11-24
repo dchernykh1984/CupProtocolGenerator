@@ -21,6 +21,15 @@ def test_a_result_is_a_number_or_a_time_in_seconds(text, value):
 
 
 @pytest.mark.parametrize(
+    ("time", "seconds"),
+    [("1:08.04", "68.04"), ("1:08.21", "68.21"), ("1:00:08.215", "3608.215")],
+)
+def test_a_time_is_the_very_number_its_seconds_are(time, seconds):
+    # Equal results share a place: one time written two ways must not split it.
+    assert parse_value(time) == parse_value(seconds)
+
+
+@pytest.mark.parametrize(
     "text", ["", "DNF", "dns", "-8.4", "8.4.3", "1:75", "1:60:00", "1 2", "abc"]
 )
 def test_anything_else_is_no_result(text):
