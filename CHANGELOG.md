@@ -1,5 +1,46 @@
 # Changelog
 
+## [0.4.0](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.3.0...v0.4.0) (2026-11-24)
+
+
+### Features
+
+* a lap race counts only riders with their leader's laps ([12f4dfa](https://github.com/dchernykh1984/CupProtocolGenerator/commit/12f4dfad9df838b188a62cac48dffb8cca78ff48))
+* **pipeline:** mark what a build could not read as ERROR lines ([a432424](https://github.com/dchernykh1984/CupProtocolGenerator/commit/a43242476b9482a702791812cea56bb80a218b94))
+* **rules:** a made-up all-round stage rule for testing, a second off per repetition ([85bcfd5](https://github.com/dchernykh1984/CupProtocolGenerator/commit/85bcfd5ee4231ce0d21987ddcb705c4c0b950a99))
+* **sheets:** count the first answer for a bib and report every later one ([39b9c3f](https://github.com/dchernykh1984/CupProtocolGenerator/commit/39b9c3f5ef1a50faa9c27f696aff93ea316b3d6b))
+* **sheets:** the last answer for a bib counts, so a judge can correct a mark ([d2088bc](https://github.com/dchernykh1984/CupProtocolGenerator/commit/d2088bcd783b4b0e30f47007ec6ea637f6970588))
+* **site:** read a stage's protocols by its upload token, an invite-only event's too ([baf20d5](https://github.com/dchernykh1984/CupProtocolGenerator/commit/baf20d51b37deca6d9cf56cbfe2177c3c5139408))
+* **window:** the log on a tab of its own, a status line on the Cup tab ([0a3436b](https://github.com/dchernykh1984/CupProtocolGenerator/commit/0a3436b3c934216c335d7c735f7c3785e518ec77))
+
+
+### Bug Fixes
+
+* **pipeline:** say a protocol without data may have had its data refused ([d04eb92](https://github.com/dchernykh1984/CupProtocolGenerator/commit/d04eb92d0ee1bd41f7b37cb305daf6e72c8159ba))
+* **reader:** a rider who missed the start check leads no laps, as in the timing generator ([0056b14](https://github.com/dchernykh1984/CupProtocolGenerator/commit/0056b1401888dc945f0871517d71d1168ec22796))
+* **reader:** the leader still on course sets the laps a live cup counts ([e72c0f8](https://github.com/dchernykh1984/CupProtocolGenerator/commit/e72c0f8043400c5442d7841063f5de6030a808b7))
+* **sheets:** read a sheet published to the web by its published link ([e1e2e67](https://github.com/dchernykh1984/CupProtocolGenerator/commit/e1e2e679a62c96e3a550cbd2ec82dc5c4c31bf31))
+* **site:** keep the upload token out of an invalid answer's message ([6d0670c](https://github.com/dchernykh1984/CupProtocolGenerator/commit/6d0670cc18d5e6ebfd3e42095bc91abdba81cd33))
+* **window:** show the status line as plain text, never as markup ([4a1be3a](https://github.com/dchernykh1984/CupProtocolGenerator/commit/4a1be3a1dd0cfd2f76479b4efce9a6186012fbca))
+
+
+### Documentation
+
+* a lap race counts only riders with their leader's laps ([8f7dab3](https://github.com/dchernykh1984/CupProtocolGenerator/commit/8f7dab3bc04c1993e66c7e5d85bd0c38eaf5891a))
+* a live lap race needs the timing tool to print its DNF riders ([fa2ac06](https://github.com/dchernykh1984/CupProtocolGenerator/commit/fa2ac0684661430c3531db58ab178934a90e2f61))
+* a rider who abandoned leads the laps as one still on course does ([e571beb](https://github.com/dchernykh1984/CupProtocolGenerator/commit/e571beb229a19e4a6fedada76933fadd1b6daf7a))
+* a stage's protocols are read by its upload token ([6d68348](https://github.com/dchernykh1984/CupProtocolGenerator/commit/6d683482f4b48cbfaf2722e8a84b712b194d6631))
+* add the program's specification ([dab3e1b](https://github.com/dchernykh1984/CupProtocolGenerator/commit/dab3e1b22115d24c35b7126e202a0656fbb59af8))
+* name the made-up test rule in the cup-rules skill ([bd4f559](https://github.com/dchernykh1984/CupProtocolGenerator/commit/bd4f5590bb695b4bd18bcf5f6d14092bdab739db))
+* **results:** drop the claim that totals are written as the timing tools write ([48e5777](https://github.com/dchernykh1984/CupProtocolGenerator/commit/48e5777a08d75f8551cc51411f3b1e26e616e698))
+* **sheets:** say the rows are read in the sheet's order, not the timestamps' ([52003cb](https://github.com/dchernykh1984/CupProtocolGenerator/commit/52003cbe696a8110f696517e0a5be958675c906f))
+* the agent docs name the lap rule beside the rules ([4416740](https://github.com/dchernykh1984/CupProtocolGenerator/commit/4416740d823c71e2f4724e934edb120ebd5036e7))
+* the first sheet answer counts, and the log has a tab of its own ([7aeff36](https://github.com/dchernykh1984/CupProtocolGenerator/commit/7aeff36ee4ea2019cdd56e871ad5ead354cd6283))
+* the last sheet answer counts, every one it replaces is an error ([ea5776b](https://github.com/dchernykh1984/CupProtocolGenerator/commit/ea5776bcceb3f7516b3b539145c0516094d58d5c))
+* the README says the last readable sheet answer counts, an unreadable one replaces nothing ([cbb1c38](https://github.com/dchernykh1984/CupProtocolGenerator/commit/cbb1c38e37dc2449f85b989f80ce21ef30e392ad))
+* wrap the lap-rule paragraphs as the rest is wrapped ([1381281](https://github.com/dchernykh1984/CupProtocolGenerator/commit/138128162ca2fdf5f5160f0198408aff87836ea4))
+* wrap the spec's paragraphs as the rest of it is wrapped ([44ec1da](https://github.com/dchernykh1984/CupProtocolGenerator/commit/44ec1da2e3ff4fa5c6a61d533e352bc9cb01e88e))
+
 ## [0.3.0](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.2.0...v0.3.0) (2026-11-19)
 
 
