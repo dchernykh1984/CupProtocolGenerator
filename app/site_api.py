@@ -74,7 +74,9 @@ class SiteApi:
         try:
             return json.loads(self._open(self.base_url + path).decode("utf-8"))
         except ValueError as exc:
-            raise SiteApiError(f"Invalid answer from {path}: {exc}") from exc
+            # The query carries the upload token: the message names the path alone.
+            where = path.partition("?")[0]
+            raise SiteApiError(f"Invalid answer from {where}: {exc}") from exc
 
     def fetch_text(self, url: str) -> str:
         """Any address as text, such as a sheet's CSV export."""

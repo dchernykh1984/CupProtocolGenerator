@@ -100,6 +100,21 @@ def test_a_broken_connection_and_a_broken_answer_are_errors():
         SiteApi(opener=_Opener(b"<html>")).protocol(1, "tok")
 
 
+@pytest.mark.parametrize(
+    "read",
+    [
+        lambda api: api.competition("SECRET"),
+        lambda api: api.protocols(249, "SECRET"),
+        lambda api: api.protocol(1, "SECRET"),
+    ],
+)
+def test_an_answer_that_is_no_json_never_shows_the_token(read):
+    # A Wi-Fi sign-in page answers 200: the message goes to the log, the token must not.
+    with pytest.raises(SiteApiError, match="Invalid answer from /api/v1/") as raised:
+        read(SiteApi(opener=_Opener(b"<html>")))
+    assert "SECRET" not in str(raised.value)
+
+
 def test_the_upload_sends_the_document_into_its_section():
     opener = _Opener({"id": 5, "document_error": None})
     api = SiteApi("https://site.test", opener)
