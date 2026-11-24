@@ -10,14 +10,15 @@ StravaProtocolGenerator.
 
 ## Before the cup
 
-1. **Stages on the site.** Publish every stage protocol from the timing software with
-   the protocol format "HTML + data": this tool reads the data, not the HTML. In the
-   section you name it takes the group protocol (it carries the categories), else the
-   absolute one. Athletes -- bibs, names, teams, categories -- come from these
-   protocols, the first stage that lists somebody naming them. In a lap race only
-   riders with as many laps as their category's leader count, so show the lap times in
-   the protocol; untick "Only riders with their leader's laps" for a Number of Tries
-   stage, whose attempts fill the lap columns.
+1. **Stages on the site.** Publish every stage protocol from the timing software with the
+   protocol format "HTML + data": this tool reads the data, not the HTML. In the section
+   you name it takes the group protocol (it carries the categories), else the absolute
+   one. Athletes -- bibs, names, teams, categories -- come from these protocols, the
+   first stage that lists somebody naming them. In a lap race only riders with as many
+   laps as their category's leader count, so show the lap times in the protocol and, for
+   a live race, keep "Print DNF" on (its default): a rider still on course is listed as
+   DNF, and the cup compares laps with him; untick "Only riders with their leader's laps"
+   for a Number of Tries stage, whose attempts fill the lap columns.
 2. **Stages from Google Forms** (an exercise of an all-round event, a result taken at
    the venue): one form per stage, two questions in this order -- the bib, then the
    result (a number). Link the form to a response sheet and share the sheet as "Anyone
