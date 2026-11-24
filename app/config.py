@@ -7,7 +7,9 @@ or holds in a shape this build does not read, falls back to its default.
 
 from __future__ import annotations
 
+import contextlib
 import json
+import shutil
 from dataclasses import asdict, dataclass, field
 from enum import StrEnum
 from pathlib import Path
@@ -129,5 +131,9 @@ def save(config: Config, path: Path | None = None) -> None:
     # Written beside it, then put in its place: a write a full disk cuts short leaves
     # the old file whole.
     draft = path.with_name(path.name + ".tmp")
+    draft.unlink(missing_ok=True)  # one a cut-short save left would keep its own mode
+    draft.touch(mode=0o600)  # the tokens: its owner's alone...
     draft.write_text(text, encoding="utf-8")
+    with contextlib.suppress(FileNotFoundError):
+        shutil.copymode(path, draft)  # ...or as open as the file it replaces
     draft.replace(path)

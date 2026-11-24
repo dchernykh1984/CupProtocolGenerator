@@ -16,10 +16,11 @@ and nothing else.
 ## Settings
 
 Kept in `data/config.json` next to the program (`app/config.py`). The file holds upload
-tokens, so `data/` is never committed. A setting the file lacks, or holds in a shape the
-program does not read, takes its default. A file that cannot be read gives every default
-and is kept aside as `data/config.json.unreadable`, so that no save writes over it; the
-status line and the log say so at the start, `ERROR: settings not read (<why>): kept as
+tokens, so `data/` is never committed, and a save keeps the file's own permissions: a new
+one is its owner's alone. A setting the file lacks, or holds in a shape the program does
+not read, takes its default. A file that cannot be read gives every default and is kept
+aside as `data/config.json.unreadable`, so that no save writes over it; the status line
+and the log say so at the start, `ERROR: settings not read (<why>): kept as
 config.json.unreadable`. One that cannot be moved aside either is left as it is, and
 nothing is saved over it until a restart reads it: Build and closing say `ERROR: settings
 not saved: the settings file could not be read at the start; restart once it can be`. A
