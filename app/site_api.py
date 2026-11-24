@@ -18,8 +18,9 @@ from typing import Any
 
 Opener = Callable[..., Any]
 DEFAULT_SITE = "https://universalbicycle.team"
-# What http.client refuses in a request path -- quoting the path, token and all.
-_NOT_IN_AN_ADDRESS = re.compile(r"[\x00-\x20\x7f]")
+# What http.client refuses in a request path -- quoting the path, token and all --
+# and a letter outside ASCII, which it cannot even encode: printable ASCII alone.
+_NOT_IN_AN_ADDRESS = re.compile(r"[^\x21-\x7e]")
 
 
 class SiteApiError(Exception):
@@ -86,7 +87,8 @@ class SiteApi:
             )
         if _NOT_IN_AN_ADDRESS.search(self.base_url):
             raise SiteApiError(
-                f"The site's address holds a space or a control character: "
+                f"The site's address holds a space, a control character or a letter "
+                f"outside ASCII: "
                 f"{self.base_url!r}"
             )
         return self.base_url + path
