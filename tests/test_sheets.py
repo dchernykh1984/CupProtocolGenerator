@@ -15,6 +15,11 @@ PUBLISHED = "https://docs.google.com/spreadsheets/d/e/2PACX-1vAb_c-9"
         (f" {SHEET}/edit ", EXPORT),
         (f"{EXPORT}&gid=7", f"{EXPORT}&gid=7"),
         ("https://example.com/results.csv", "https://example.com/results.csv"),
+        # A capital a phone put in: still the sheet, its id as written.
+        (
+            "Https://docs.google.com/spreadsheets/d/1AbC_d-9/edit#gid=1",
+            f"{EXPORT}&gid=1",
+        ),
         # Published to the web: its own id after "/d/e/", never "e" taken for the id.
         (f"{PUBLISHED}/pubhtml", f"{PUBLISHED}/pub?output=csv"),
         (
