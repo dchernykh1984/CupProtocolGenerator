@@ -126,14 +126,16 @@ Rules are picked from drop-downs; a rule's key is what the settings keep.
 
 | Stage rule | What it does |
 | --- | --- |
-| `place_lower_better` (stub) | a place by the result, the lowest first; the place is the points |
-| `place_higher_better` (stub) | a place by the result, the highest first; the place is the points |
+| `place_lower_better` | a place by the result, the lowest first; the place is the points, the lower the better |
+| `place_higher_better` | a place by the result, the highest first; the place is the points, the lower the better |
+| `result_higher_better` | a place by the result, the highest first; the result is the points, the higher the better |
 | `time` | a place by the time, the lowest first; the time in seconds is the points |
 | `minus_second_per_repetition_test` (test) | a place by the count, the highest first; the count as minus seconds is the points, a second off the cup's sum of times per repetition |
 
 | Cup rule | What it does |
 | --- | --- |
-| `sum_smallest_wins` (stub) | the stages' points added up, the smallest sum first |
+| `sum_smallest_wins` | the stages' points added up, the smallest sum first: a sum of places |
+| `sum_largest_wins` | the stages' points added up, the largest sum first: a sum of results as points |
 | `sum_of_times` | the stages' times added up, the smallest sum first, the total written as a time |
 
 - Equal results share a place and the next place is skipped (1, 2, 2, 4).
@@ -144,11 +146,15 @@ Rules are picked from drop-downs; a rule's key is what the settings keep.
   of the stages it has, the places running on across the groups. Somebody with no stage
   at all shares the last place, with no total.
 - A cup rule that adds times up refuses a stage not scored by its time, and a stage
-  scored by its time refuses a cup rule that does not add times up; the refusal names the
-  rule to pick.
+  scored by its time refuses a cup rule that does not add times up; a cup rule refuses a
+  stage whose points improve the other way than its sum wins (places where the largest
+  sum wins, results as points where the smallest does). Every refusal names the rules to
+  pick.
 - `time` and `sum_of_times` are the maintainer's
-  ([`docs/regulations/sum-of-times/decisions.txt`](../../docs/regulations/sum-of-times/decisions.txt));
-  the stubs stand in until a cup's regulations replace them.
+  ([`docs/regulations/sum-of-times/decisions.txt`](../../docs/regulations/sum-of-times/decisions.txt)),
+  so are the place rules, `result_higher_better`, `sum_smallest_wins` and
+  `sum_largest_wins`
+  ([`docs/regulations/sum-of-places/decisions.txt`](../../docs/regulations/sum-of-places/decisions.txt)).
   `minus_second_per_repetition_test` is made up for testing all-round events, by the
   maintainer's word of 2026-11-23 (no all-round regulations yet), and may be deleted.
 
@@ -170,7 +176,8 @@ in `groups`; athletes without a category make one untitled table.
 | Bib | `bib` | |
 | Name | `name` | |
 | Team | `team` | only when anybody has one |
-| a column per stage | | the result as its source wrote it, `<n> pl.` under it; empty without a result |
+| a column per stage | | the result as its source wrote it; empty without a result |
+| `<stage> place` after each | | the stage place, priority 3: a phone leaves these out first; empty without a result |
 | Total | `result` | the total: a number, or a time when the cup adds times up |
 
 A total that is a time is written as `m:ss` below an hour, `h:mm:ss` from one on, a

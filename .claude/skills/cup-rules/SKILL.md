@@ -35,9 +35,13 @@ Both kinds live in `app/rules.py` and are picked from drop-downs:
   document writes a sum of times as a time, with as many decimals as the stage results
   are written with.
 - A rule's `key` is stored in the settings: never rename or reuse one once released.
-- The stubs (`place_lower_better`, `place_higher_better`, `sum_smallest_wins`) stay
-  until the maintainer says to drop them. `time` and `sum_of_times` are the
-  maintainer's (`docs/regulations/sum-of-times/decisions.txt`).
+- A stage rule says which way its points improve (`points_better`, lower for a place or
+  a time, higher for `result_higher_better`), a cup rule which way its sum wins
+  (`better`); the pipeline refuses a stage that improves the other way, and names the
+  rules to pick. `time` and `sum_of_times` are the maintainer's
+  (`docs/regulations/sum-of-times/decisions.txt`), so are the place rules,
+  `result_higher_better`, `sum_smallest_wins` and `sum_largest_wins`
+  (`docs/regulations/sum-of-places/decisions.txt`).
   `minus_second_per_repetition_test` is made up, for testing all-round events (the
   maintainer, 2026-11-23): it is no regulation, and may be deleted.
 

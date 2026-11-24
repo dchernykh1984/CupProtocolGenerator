@@ -1,0 +1,29 @@
+Sum of places: the stage rules "place_lower_better" and "place_higher_better", the cup
+rule "sum_smallest_wins"; results as points: "result_higher_better", "sum_largest_wins"
+=====================================================================================
+
+2026-11-24, the maintainer: a cup must be countable by the smallest sum of places. A
+stage's points are its place; the cup's result is the sum of the places, the smallest
+first. The stage places are shown in a field of their own, not only the results. A
+stage counts its place, the cup adds the stages up, and how the result is ordered --
+falling or rising -- is a choice.
+
+Asked and answered by the maintainer on 2026-11-24:
+
+- The choice of order is wanted for the cup's sum too: a cup rule "the largest sum
+  wins" beside "the smallest sum wins".
+- For it, a stage rule whose points grow with the result: "result as points, the higher
+  the better" (a count of repetitions, say). A cup rule refuses a stage whose points
+  improve the other way than its sum wins, and names the rule to pick: places summed
+  where the largest sum wins, or results where the smallest does, would rank backwards.
+- The stage place is a column of its own beside the stage's result in every cup, sum of
+  times included; the "<n> pl." line under the result is gone. A phone leaves the place
+  columns out first.
+- The stage place is counted by the cup from the stage's results, for a stage read from
+  the site as for a form: equal results share a place. It is not taken from the timing
+  protocol's place column (see bugs N3 of the 2026-11-24 test).
+
+Read as: the place rules were the stubs that stood in before; they are the maintainer's
+now, with the sum of the stages' points. Places and their sums keep the rest of the cup's
+rules: equal sums share a place, a missed stage gives no place unless everybody is
+placed (docs/regulations/sum-of-times/decisions.txt).

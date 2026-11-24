@@ -11,19 +11,21 @@ Sibling tools: FinishProtocolGeneratorPython (chip timing; it writes the stage p
 this tool reads), StartProtocolMakerPython, StravaProtocolGenerator (the same window
 layout: a Cup tab and a Stages tab with a tab per stage).
 
-## The rules are stubs: the regulations are coming
+## The rules: the maintainer's, and the regulations to come
 
-The stage rules and the cup rule in `app/rules.py` are placeholders that make the road
-from the sources to the site work end to end. The maintainer will send the real ones --
-the cup's regulations and how each stage counts -- to the agent working here. They go
-into `docs/regulations/` (see its README) and become entries in `STAGE_RULES` and
-`CUP_RULES` with tests, by the cup-rules skill. Never invent a rule, a points table or a
-tie-break: when the regulations leave something open, ask, and record the answer next
-to the regulations.
+Every rule in `app/rules.py` is the maintainer's word, its decisions kept in
+`docs/regulations/`. A cup's own regulations, as the maintainer sends them, go there too
+(see its README) and become entries in `STAGE_RULES` and `CUP_RULES` with tests, by the
+cup-rules skill. Never invent a rule, a points table or a tie-break: when the
+regulations leave something open, ask, and record the answer next to the regulations.
 
-One pair is real, by the maintainer's word: the stage rule `time` (a stage counts by
-its time) and the cup rule `sum_of_times` (the cup by the sum of the stages' times,
-written as a time). Its decisions are in `docs/regulations/sum-of-times/decisions.txt`.
+- The stage rule `time` (a stage counts by its time) and the cup rule `sum_of_times` (the
+  cup by the sum of the stages' times, written as a time):
+  `docs/regulations/sum-of-times/decisions.txt`.
+- The stage rules `place_lower_better` and `place_higher_better` (a stage counts by its
+  place) with the cup rule `sum_smallest_wins` (the smallest sum of places), and
+  `result_higher_better` (the result as points) with `sum_largest_wins`:
+  `docs/regulations/sum-of-places/decisions.txt` (2026-11-24).
 The stage rule `minus_second_per_repetition_test` is made up, for testing all-round
 events (the maintainer, 2026-11-23); it is not a regulation and may be deleted.
 

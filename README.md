@@ -46,12 +46,15 @@ StravaProtocolGenerator.
   stage rule. Add a copy of the current stage to its left or right, or delete it.
 
 A cup of summed times: score every stage by "Time, the lowest first" and pick the cup
-rule "Sum of the stages' times, the smallest wins". The protocol shows every stage's
-time, with the stage place under it, in a column of its own, and the total time;
-somebody without a time in a stage is listed after the ranked without a place, who
-missed fewer stages first -- unless Place everybody is ticked. The other rules are
-stubs for now (a place per stage, the smallest sum of places wins): the cup's
-regulations replace them. The settings, upload tokens included, are kept in
+rule "Sum of the stages' times, the smallest wins". A cup of summed places: score every
+stage by "Place, the lower result the better" (a time) or "Place, the higher result the
+better" (a count) and pick "Sum of the stages' points, the smallest wins". A cup of
+summed results: score every stage by "Result as points, the higher the better" and pick
+"Sum of the stages' points, the largest wins". A stage and a cup rule that do not go
+together are refused with the rule to pick. The protocol shows every stage's result and
+its place, each in a column of its own, and the total; somebody without a result in a
+stage is listed after the ranked without a place, who missed fewer stages first --
+unless Place everybody is ticked. The settings, upload tokens included, are kept in
 `data/config.json` next to the app: keep it to yourself.
 
 ## Development
