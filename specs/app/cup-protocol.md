@@ -141,6 +141,11 @@ Rules are picked from drop-downs; a rule's key is what the settings keep.
 - Equal results share a place and the next place is skipped (1, 2, 2, 4).
 - Sums are rounded to a millionth before they are compared, so equal sums of different
   times share a place.
+- In a stage scored by its place, somebody without a result takes the first place after
+  everybody with one, shared with everybody else who has none (the maintainer,
+  2026-11-24): before anybody has gone everybody is first, and the cup ranks everybody
+  all along. In a stage scored by its time or by its result as points he has no result
+  there.
 - Somebody without a result in a stage gets no total and no place -- unless everybody is
   placed: then everybody is, those who missed fewer stages first, each group by the sum
   of the stages it has, the places running on across the groups. Somebody with no stage
@@ -176,7 +181,7 @@ in `groups`; athletes without a category make one untitled table.
 | Bib | `bib` | |
 | Name | `name` | |
 | Team | `team` | only when anybody has one |
-| a column per stage | | the result as its source wrote it; empty without a result |
+| a column per stage | | the result as its source wrote it; empty without a result, a place stage's placed too |
 | `<stage> place` after each | | the stage place, priority 3: a phone leaves these out first; empty without a result |
 | Total | `result` | the total: a number, or a time when the cup adds times up |
 
