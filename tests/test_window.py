@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 from PySide6.QtCore import QEvent, Qt
 from PySide6.QtGui import QCloseEvent
@@ -290,6 +292,47 @@ def test_a_settings_file_that_cannot_be_read_is_said_and_survives_a_close(
     window.closeEvent(QCloseEvent())
     assert (tmp_path / "config.json.unreadable").read_text() == '{"token": "cup",}'
     assert settings.load(path) == (Config(), "")  # the defaults saved beside it
+    window.deleteLater()
+
+
+def test_a_settings_file_that_cannot_be_read_nor_kept_aside_is_never_written_over(
+    qt_app, tmp_path, monkeypatch
+):
+    # A sync client holds it at the start, then lets it go: a close must not write the
+    # defaults over the cup's token.
+    path = tmp_path / "config.json"
+    settings.save(SAVED, path)
+    kept = path.read_text()
+    real_read, real_replace = Path.read_text, Path.replace
+
+    def held_read(self, *args, **kwargs):
+        if self == path:
+            raise PermissionError(13, "held by a sync client")
+        return real_read(self, *args, **kwargs)
+
+    def held_replace(self, target):
+        if self == path:
+            raise PermissionError(13, "held by a sync client")
+        return real_replace(self, target)
+
+    monkeypatch.setattr(Path, "read_text", held_read)
+    monkeypatch.setattr(Path, "replace", held_replace)
+    window = MainWindow(api_factory=lambda url: FakeSite(), config_path=path)
+    monkeypatch.undo()  # the file is let go
+    assert "nor kept aside" in window.status.text()
+    warned: list[str] = []
+    monkeypatch.setattr(
+        QMessageBox, "warning", lambda parent, title, text: warned.append(text)
+    )
+    window.on_build()
+    window.closeEvent(QCloseEvent())
+    assert path.read_text() == kept
+    lines = window.log.toPlainText().splitlines()  # the build had no token
+    assert lines[-1].startswith("ERROR: settings not saved: the settings file")
+    assert warned == [
+        "settings not saved: the settings file could not be read at the start; "
+        "restart once it can be"
+    ]
     window.deleteLater()
 
 

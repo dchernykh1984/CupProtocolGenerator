@@ -74,7 +74,7 @@ def test_a_file_that_cannot_be_kept_aside_either_is_said(tmp_path, monkeypatch):
     config, said = load(path)
     assert config == Config()
     assert "nor kept aside ([Errno 13] Permission denied)" in said
-    assert said.endswith("the next save writes over them")
+    assert said.endswith("nothing is saved over it; restart once it can be read")
 
 
 def test_a_file_with_a_byte_order_mark_keeps_its_settings(tmp_path):
