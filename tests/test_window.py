@@ -29,6 +29,18 @@ def qt_app():
     return QApplication.instance() or QApplication([])
 
 
+@pytest.fixture(autouse=True)
+def no_unexpected_warning(monkeypatch):
+    """A real modal box would hang the suite: one no test expects fails it instead.
+    A test that expects one patches QMessageBox.warning itself."""
+    warned: list[str] = []
+    monkeypatch.setattr(
+        QMessageBox, "warning", lambda parent, title, text: warned.append(text)
+    )
+    yield
+    assert warned == []
+
+
 @pytest.fixture
 def window(qt_app, tmp_path):
     site = FakeSite()
