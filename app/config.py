@@ -100,7 +100,8 @@ def from_dict(data: Any) -> Config:
 
 def load(path: Path | None = None) -> tuple[Config, str]:
     """The settings and "", or the defaults and the log's error line for a file there
-    that cannot be read: it is kept aside, so that no save writes over it."""
+    that cannot be read: it is kept aside when it can be, so that no save writes over
+    it, and the line says when it could not."""
     path = path or config_path()
     try:
         # A file saved by Notepad starts with a byte order mark, which json refuses.
