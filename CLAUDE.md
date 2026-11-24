@@ -26,6 +26,7 @@ regulations leave something open, ask, and record the answer next to the regulat
   place) with the cup rule `sum_smallest_wins` (the smallest sum of places), and
   `result_higher_better` (the result as points) with `sum_largest_wins`:
   `docs/regulations/sum-of-places/decisions.txt` (2026-11-24).
+
 The stage rule `minus_second_per_repetition_test` is made up, for testing all-round
 events (the maintainer, 2026-11-23); it is not a regulation and may be deleted.
 
