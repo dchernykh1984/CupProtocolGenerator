@@ -137,7 +137,10 @@ class MainWindow(QMainWindow):
         self.tabs.addTab(self._stages_tab(), "Stages")
         self.tabs.addTab(self._log_tab(), "Log")
         self.setCentralWidget(self.tabs)
-        self.apply(settings.load(self._config_path))
+        config, unread = settings.load(self._config_path)
+        self.apply(config)
+        if unread:
+            self._say(unread)
 
     def _cup_tab(self) -> QWidget:
         self.site_url = QLineEdit()
