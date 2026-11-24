@@ -103,7 +103,10 @@ class SiteApi:
 
     def fetch_text(self, url: str) -> str:
         """Any address as text, such as a sheet's CSV export."""
-        if not url.startswith(("https://", "http://")):
+        # A letter outside ASCII would stop the build unexplained, the stage unnamed.
+        if not url.lower().startswith(("https://", "http://")) or (
+            _NOT_IN_AN_ADDRESS.search(url)
+        ):
             raise SiteApiError(f"Not a web address: {url!r}")
         return self._open(url).decode("utf-8-sig")
 

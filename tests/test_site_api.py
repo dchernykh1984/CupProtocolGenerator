@@ -69,9 +69,24 @@ def test_a_sheet_is_read_as_text_without_its_byte_order_mark():
     )
 
 
-def test_only_a_web_address_is_fetched():
+@pytest.mark.parametrize(
+    "url",
+    [
+        "file:///etc/passwd",
+        "https://example.test/a b.csv",
+        # http.client cannot even encode it: no stage would be named.
+        "https://example.test/\u0440\u0443.csv",
+    ],
+)
+def test_only_a_web_address_is_fetched(url):
+    opener = _Opener()
     with pytest.raises(SiteApiError, match="Not a web address"):
-        SiteApi(opener=_Opener()).fetch_text("file:///etc/passwd")
+        SiteApi(opener=opener).fetch_text(url)
+    assert opener.requests == []
+
+
+def test_a_sheet_address_in_capitals_is_still_fetched():
+    assert SiteApi(opener=_Opener(b"a,b")).fetch_text("HTTPS://example.test/x") == "a,b"
 
 
 def test_a_refusal_says_the_sites_own_reason():

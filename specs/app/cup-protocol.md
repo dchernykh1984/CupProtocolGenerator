@@ -93,13 +93,16 @@ columns, so a stage of one has the setting off. The maintainer's word of 2026-11
 
 ### A Google Forms response sheet (`app/sheets.py`)
 
-The form asks two questions, in this order: the bib, then the result. The sheet's link
-is turned into its CSV export, its tab (`gid`) kept; a link without a tab exports the
-first one. A link of a sheet published to the web (`/d/e/<id>/...`) is turned into its
-published CSV, its tab kept too. The columns are read by position -- the timestamp
-Google adds, the bib, the result -- so the questions may be worded in any language.
-Rows are read in the sheet's order, the order Google wrote the answers in, which may
-part from their timestamps by a second; a blank row is skipped.
+The form asks two questions, in this order: the bib, then the result. The sheet's link is
+turned into its CSV export, its tab (`gid`) kept; a link without a tab exports the first
+one. A link of a sheet published to the web (`/d/e/<id>/...`) is turned into its
+published CSV, its tab kept too. Any other link is fetched as it is; one that is no web
+address -- another scheme, a space, a control character or a letter outside ASCII --
+stops the build with `<stage>: Not a web address: ...` before any request. The columns
+are read by position -- the timestamp Google adds, the bib, the result -- so the
+questions may be worded in any language. Rows are read in the sheet's order, the order
+Google wrote the answers in, which may part from their timestamps by a second; a blank
+row is skipped.
 
 - The last readable answer for a bib counts, so a judge corrects a mark by answering
   again (the maintainer, 2026-11-24). Every answer it replaces is reported, with both
