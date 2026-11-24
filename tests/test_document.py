@@ -136,7 +136,15 @@ def test_a_time_less_the_repetitions_is_the_total_of_an_all_round_test():
 
 
 @pytest.mark.parametrize(
-    ("value", "text"), [(12.0, "12"), (150.5, "150.5"), (2.35, "2.35")]
+    ("value", "text"),
+    [
+        (12.0, "12"),
+        (150.5, "150.5"),
+        (2.35, "2.35"),
+        (1351.123, "1351.123"),  # every digit of a sum of results, not six of them
+        (45123.45, "45123.45"),
+        (1234567.5, "1234567.5"),
+    ],
 )
 def test_a_number_is_written_as_a_person_would(value, text):
     assert format_number(value) == text

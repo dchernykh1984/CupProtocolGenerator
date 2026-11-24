@@ -22,8 +22,11 @@ STAGE_PLACE_PRIORITY = 3
 
 
 def format_number(value: float) -> str:
-    """A number as a person would write it: ``12`` rather than ``12.0``."""
-    return str(int(value)) if value == int(value) else f"{value:g}"
+    """A number as a person would write it: ``12`` rather than ``12.0``, and every
+    digit of a fraction a sum keeps (totals are rounded to a millionth)."""
+    if value == int(value):
+        return str(int(value))
+    return f"{value:.6f}".rstrip("0").rstrip(".")
 
 
 def stage_column(index: int) -> str:
