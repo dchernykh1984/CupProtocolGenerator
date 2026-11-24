@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 from PySide6.QtCore import QEvent, Qt
 from PySide6.QtGui import QCloseEvent
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QMessageBox
 
 from app import config as settings
 from app.config import Config, Source, StageConfig
@@ -232,6 +232,36 @@ def test_a_refused_protocol_and_a_failed_upload_are_reported(window, monkeypatch
     monkeypatch.setattr(window.site, "upload", fail)
     window.on_publish()
     assert window.log.toPlainText().endswith("Not published: HTTP 400: no section 2")
+
+
+def _unwritable(monkeypatch):
+    def refuse(config, path=None):
+        raise PermissionError(13, "Permission denied", str(path))
+
+    monkeypatch.setattr(settings, "save", refuse)
+
+
+def test_settings_that_cannot_be_saved_are_said_and_the_build_still_runs(
+    window, monkeypatch
+):
+    _unwritable(monkeypatch)
+    window.on_build()
+    assert window.log.toPlainText().startswith("ERROR: settings not saved:")
+    assert window.status.text().endswith("error(s): see the Log tab")
+    assert window.publish_button.isEnabled()  # what was built is still publishable
+    window.token.setText("")
+    window.on_build()  # a build that fails says both
+    assert "ERROR: settings not saved:" in window.log.toPlainText()
+
+
+def test_closing_with_settings_that_cannot_be_saved_warns(window, monkeypatch):
+    _unwritable(monkeypatch)
+    warned: list[str] = []
+    monkeypatch.setattr(
+        QMessageBox, "warning", lambda parent, title, text: warned.append(text)
+    )
+    window.closeEvent(QCloseEvent())
+    assert warned and warned[0].startswith("settings not saved:")
 
 
 def test_closing_the_window_keeps_the_settings(window):

@@ -22,6 +22,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QLineEdit,
     QMainWindow,
+    QMessageBox,
     QPlainTextEdit,
     QPushButton,
     QSpinBox,
@@ -298,7 +299,7 @@ class MainWindow(QMainWindow):
         # A build that fails leaves nothing to publish, not the build before it.
         self._invalidate()
         config = self.config()
-        settings.save(config, self._config_path)
+        unsaved = self._save(config)
         # The site and every sheet are read here, in the window's own thread: say so
         # before it goes quiet for the seconds that takes.
         self._say("Building...", fresh=True)
@@ -308,15 +309,18 @@ class MainWindow(QMainWindow):
             built = pipeline.build(config, self._api(config))
         except (pipeline.PipelineError, SiteApiError) as exc:
             self._say(f"Not built: {exc}", fresh=True)
+            self._log_unsaved(unsaved)
             return
         except Exception as exc:  # a rule's own failure must not leave "Building..."
             self._say(f"Not built, unexpected {type(exc).__name__}: {exc}", fresh=True)
+            self._log_unsaved(unsaved)
             return
         finally:
             QApplication.restoreOverrideCursor()
+        report = [*([unsaved] if unsaved else []), *built.report]
         summary = f"Built: {len(built.document['sections'])} table(s)"
-        self.log.setPlainText("\n".join([*built.report, summary]))
-        errors = sum(line.startswith("ERROR:") for line in built.report)
+        self.log.setPlainText("\n".join([*report, summary]))
+        errors = sum(line.startswith("ERROR:") for line in report)
         if errors:
             summary += f", {errors} error(s): see the Log tab"
         self.status.setText(summary)
@@ -341,6 +345,21 @@ class MainWindow(QMainWindow):
             return
         self._say(f"Published to section {config.publish_section}")
 
+    def _save(self, config: Config) -> str:
+        """Save the settings: "" once they are, else the log's error line saying why --
+        a read-only folder or a full disk must not pass in silence."""
+        try:
+            settings.save(config, self._config_path)
+        except OSError as exc:
+            return f"ERROR: settings not saved: {exc}"
+        return ""
+
+    def _log_unsaved(self, unsaved: str) -> None:
+        if unsaved:
+            self.log.appendPlainText(unsaved)
+
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802 - Qt's name
-        settings.save(self.config(), self._config_path)
+        unsaved = self._save(self.config())
+        if unsaved:
+            QMessageBox.warning(self, APP_DISPLAY_NAME, unsaved.removeprefix("ERROR: "))
         super().closeEvent(event)
