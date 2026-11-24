@@ -176,6 +176,9 @@ STAGE_RULES: tuple[StageRule, ...] = (
         _place_as_points(Better.HIGHER),
         places_the_missing=True,
     ),
+    # The maintainer, 2026-11-24: "result as points, the higher the better" (a count
+    # of repetitions, say), for a cup whose largest sum wins
+    # (docs/regulations/sum-of-places/decisions.txt).
     StageRule(
         "result_higher_better",
         "Result as points, the higher the better",
@@ -208,6 +211,8 @@ STAGE_RULES: tuple[StageRule, ...] = (
 )
 
 CUP_RULES: tuple[CupRule, ...] = (
+    # The maintainer, 2026-11-24: "a cup must be countable by the smallest sum of
+    # places" (docs/regulations/sum-of-places/decisions.txt).
     CupRule(
         "sum_smallest_wins",
         "Sum of the stages' points, the smallest wins",
@@ -216,6 +221,8 @@ CUP_RULES: tuple[CupRule, ...] = (
         "stage takes the place after everybody with one, so everybody is ranked.",
         _sum(Better.LOWER),
     ),
+    # The maintainer, 2026-11-24: a cup rule "the largest sum wins" beside "the
+    # smallest sum wins" (docs/regulations/sum-of-places/decisions.txt).
     CupRule(
         "sum_largest_wins",
         "Sum of the stages' points, the largest wins",
