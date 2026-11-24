@@ -213,14 +213,14 @@ document as `protocol.json`. The site's reason for not taking the document
 
 Build saves the settings and reads every stage; settings that cannot be saved (a
 read-only folder, a full disk) are the log's first line, `ERROR: settings not saved:
-<why>`, and the build goes on. Its log is every line the build reported and `Built: <n>
-table(s)`; a line that is an error starts with `ERROR:` -- `ERROR: <stage>: line <n>:
-...` for a sheet's line, `ERROR: <stage>: bibs no protocol names: ...` -- and the other
-lines say how many results a stage gave and whom it did not count for fewer laps than
-their leader (`<stage>: not counted, fewer laps than their leader: <bibs>`). The status
-line says `Built: <n> table(s)`, and how many errors with a pointer to the Log tab when
-there were any. A build that cannot be made says `Not built: <why>`, the stage named
-first when the stage is the reason.
+<why>`, the file left as it was, and the build goes on. Its log is every line the build
+reported and `Built: <n> table(s)`; a line that is an error starts with `ERROR:` --
+`ERROR: <stage>: line <n>: ...` for a sheet's line, `ERROR: <stage>: bibs no protocol
+names: ...` -- and the other lines say how many results a stage gave and whom it did not
+count for fewer laps than their leader (`<stage>: not counted, fewer laps than their
+leader: <bibs>`). The status line says `Built: <n> table(s)`, and how many errors with a
+pointer to the Log tab when there were any. A build that cannot be made says `Not built:
+<why>`, the stage named first when the stage is the reason.
 
 Publish is enabled only by a build that worked: any change to a setting, and a build that
 fails, disable it until the next one that works, so what goes to the site is what the log

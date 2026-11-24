@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 
 import pytest
 
@@ -22,6 +23,22 @@ def test_the_settings_survive_a_restart(tmp_path):
     path = tmp_path / "data" / "config.json"
     save(config, path)
     assert load(path) == config
+
+
+def test_a_save_a_full_disk_cuts_short_keeps_the_old_file_whole(tmp_path, monkeypatch):
+    path = tmp_path / "config.json"
+    save(Config(token="cup"), path)
+    real = Path.write_text
+
+    def full_disk(self, text, *args, **kwargs):
+        real(self, text[:20], *args, **kwargs)
+        raise OSError(28, "No space left on device")
+
+    monkeypatch.setattr(Path, "write_text", full_disk)
+    with pytest.raises(OSError, match="No space left"):
+        save(Config(token="other"), path)
+    monkeypatch.undo()
+    assert load(path).token == "cup"
 
 
 def test_no_file_or_a_broken_one_gives_the_defaults(tmp_path):
