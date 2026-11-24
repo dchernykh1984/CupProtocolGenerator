@@ -53,6 +53,10 @@ program does not read, takes its default; a file that cannot be read gives every
 3. The protocol's structured document is read (`GET /api/v1/protocols/<id>`). A protocol
    uploaded as HTML alone has none and stops the build: it has to be published with data.
 
+Both reads carry the stage's upload token (`competition_token`), which the site takes for
+an invite-only or hidden event too (cycling-site, 2026-11-24); a site without that reads
+only a published event's protocols and ignores the token.
+
 The document is read by the columns' roles: `bib`, `name`, `team`, `result`. Every
 section with rows is read, nested ones too; a row's category is its own `group`, else its
 section's (inherited down the nesting). A row without a bib is skipped. An athlete listed
