@@ -69,6 +69,16 @@ def test_a_linked_settings_file_is_saved_through_its_link(tmp_path):
     assert load(real)[0].token == "other"
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="POSIX permissions")
+def test_a_settings_file_made_read_only_is_refused_and_left_as_it_was(tmp_path):
+    path = tmp_path / "config.json"
+    save(Config(token="cup"), path)
+    path.chmod(0o400)
+    with pytest.raises(PermissionError, match="Read-only file"):
+        save(Config(token="other"), path)
+    assert load(path)[0].token == "cup"
+
+
 def test_no_file_gives_the_defaults_and_says_nothing(tmp_path):
     assert load(tmp_path / "missing.json") == (Config(), "")
 
