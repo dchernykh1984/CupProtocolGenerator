@@ -8,7 +8,9 @@ or holds in a shape this build does not read, falls back to its default.
 from __future__ import annotations
 
 import contextlib
+import errno
 import json
+import os
 import shutil
 from dataclasses import asdict, dataclass, field
 from enum import StrEnum
@@ -127,6 +129,9 @@ def load(path: Path | None = None) -> tuple[Config, str]:
 def save(config: Config, path: Path | None = None) -> None:
     # Through a link, as a write in place went: the real file replaced, the link kept.
     path = (path or config_path()).resolve()
+    # A rename ignores the file's own mode: one made read-only is refused, as before.
+    if path.exists() and not os.access(path, os.W_OK):
+        raise PermissionError(errno.EACCES, "Read-only file", str(path))
     path.parent.mkdir(parents=True, exist_ok=True)
     text = json.dumps(asdict(config), ensure_ascii=False, indent=2)
     # Written beside it, then put in its place: a write a full disk cuts short leaves
