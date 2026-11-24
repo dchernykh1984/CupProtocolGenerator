@@ -19,13 +19,13 @@ StravaProtocolGenerator.
    a live race, keep "Print DNF" on (its default): a rider still on course is listed as
    DNF, and the cup compares laps with him; untick "Only riders with their leader's laps"
    for a Number of Tries stage, whose attempts fill the lap columns.
-2. **Stages from Google Forms** (an exercise of an all-round event, a result taken at
-   the venue): one form per stage, two questions in this order -- the bib, then the
-   result (a number). Link the form to a response sheet and share the sheet as "Anyone
-   with the link: Viewer", or publish it to the web and give its published link. Do not
-   collect e-mail addresses: anyone with the link sees the sheet. The first answer for a
-   bib counts; a later one is not taken but named in the log as an error, so a mark
-   given twice is seen. Correct a mistake in the sheet.
+2. **Stages from Google Forms** (an exercise of an all-round event, a result taken at the
+   venue): one form per stage, two questions in this order -- the bib, then the result (a
+   number). Link the form to a response sheet and share the sheet as "Anyone with the
+   link: Viewer", or publish it to the web and give its published link. Do not collect
+   e-mail addresses: anyone with the link sees the sheet. The last answer for a bib
+   counts, so a judge corrects a mark by sending the form again; every answer it replaces
+   is named in the log as an error, so a mark given twice is seen.
 3. **A section for the cup's protocol**: add it on the cup event's "Protocol sections"
    page on the site; the tool publishes into it by its number.
 

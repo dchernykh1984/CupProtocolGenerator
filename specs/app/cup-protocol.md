@@ -91,11 +91,13 @@ Google adds, the bib, the result -- so the questions may be worded in any langua
 Rows are read in the sheet's order, the order Google wrote the answers in, which may
 part from their timestamps by a second; a blank row is skipped.
 
-- The first readable answer for a bib counts. A later answer for the same bib is never
-  taken; it is reported, with both values and the line that counts.
+- The last readable answer for a bib counts, so a judge corrects a mark by answering
+  again (the maintainer, 2026-11-24). Every answer it replaces is reported, with both
+  values and both lines.
 - Reported, line by line: a row with fewer than three columns, a row without a bib, a
-  result that is neither a number nor a time, an answer given again.
-- An answer that cannot be read leaves the next one for that bib to count.
+  result that is neither a number nor a time, an answer replaced by a later one.
+- An answer that cannot be read replaces nothing: the bib keeps its last readable
+  answer, or takes the next one.
 - A web page in place of the export (a sign-in page) stops the build and says to share
   the sheet as "Anyone with the link: Viewer". An unshared sheet that answers HTTP 401
   stops it with that status.

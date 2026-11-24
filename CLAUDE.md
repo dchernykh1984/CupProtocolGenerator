@@ -77,8 +77,8 @@ alters what it describes updates it in the same pull request (`specs/README.md`)
   `lap<n>` columns, a result counting only beside its category leader's laps).
 - `app/sheets.py` - the Google connector: a sheet link turned into its CSV export, a
   response sheet read as bib -> result (columns by position: timestamp, bib, result; the
-  first readable answer for a bib counts, a later one is reported), and a sign-in page
-  told apart from the results.
+  last readable answer for a bib counts, every one it replaces is reported), and a
+  sign-in page told apart from the results.
 - `app/results.py` - what every connector hands over (`StageResults`, `Athlete`), and the
   parsing of bibs and results (numbers and times), and a sum of times written back as
   a time.

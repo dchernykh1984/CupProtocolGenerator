@@ -48,8 +48,10 @@ the rule that a result counts only beside the laps of its category's leader
 
 - One form per stage (or exercise), two questions in this order: the bib, then the
   result. Its response sheet has three columns -- timestamp, bib, result -- read by
-  position. The first readable answer for a bib counts; a later one is reported as an
-  error and never taken, so a second mark is seen (the maintainer, 2026-11-23).
+  position. The last readable answer for a bib counts, so a judge can correct a mark by
+  answering again; every answer it replaces is reported as an error, so a second mark is
+  seen (the maintainer, 2026-11-24: his first-answer word of 2026-11-23 left a judge no
+  way to correct a mark).
 - The sheet is shared as "Anyone with the link: Viewer"; the tool reads its CSV export
   (`/export?format=csv&gid=<tab>`, the first tab without a `gid`); a sheet published to
   the web is read by its published link (`/d/e/<id>/pub?output=csv`). An unshared sheet
