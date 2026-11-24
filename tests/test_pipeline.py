@@ -44,10 +44,13 @@ class FakeSite:
         self.asked.append(token)
         return self.events.get(token, (0, ""))
 
-    def protocols(self, competition_id: int):
+    def protocols(self, competition_id: int, token: str):
+        assert self.events[token][0] == competition_id  # read by the event's own token
         return self.listed.get(competition_id, [])
 
-    def protocol(self, protocol_id: int):
+    def protocol(self, protocol_id: int, token: str):
+        listed = self.listed.get(self.events[token][0], [])
+        assert protocol_id in [p["id"] for p in listed]  # its event's token reads it
         self.read.append(protocol_id)
         return {"id": protocol_id, "document": self.document}
 

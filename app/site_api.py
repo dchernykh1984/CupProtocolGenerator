@@ -90,14 +90,19 @@ class SiteApi:
             data.get("competition_title") or ""
         )
 
-    def protocols(self, competition_id: int) -> list[dict[str, Any]]:
-        """The event's protocols in the order of its sections."""
-        query = urllib.parse.urlencode({"competition_id": competition_id})
+    def protocols(self, competition_id: int, token: str) -> list[dict[str, Any]]:
+        """The event's protocols in the order of its sections, read by its upload token,
+        which the site takes for an invite-only or hidden event too."""
+        query = urllib.parse.urlencode(
+            {"competition_id": competition_id, "competition_token": token}
+        )
         return list(self._json(f"/api/v1/protocols/?{query}"))
 
-    def protocol(self, protocol_id: int) -> dict[str, Any]:
-        """One protocol with its structured document (None for HTML alone)."""
-        return dict(self._json(f"/api/v1/protocols/{int(protocol_id)}"))
+    def protocol(self, protocol_id: int, token: str) -> dict[str, Any]:
+        """One protocol with its structured document (None for HTML alone), read by its
+        event's upload token."""
+        query = urllib.parse.urlencode({"competition_token": token})
+        return dict(self._json(f"/api/v1/protocols/{int(protocol_id)}?{query}"))
 
     def upload(
         self,
