@@ -77,7 +77,7 @@ class SiteApi:
 
     def _url(self, path: str) -> str:
         # urllib would quote the whole address, token and all, in its refusal.
-        if not self.base_url.startswith(("https://", "http://")):
+        if not self.base_url.lower().startswith(("https://", "http://")):
             raise SiteApiError(
                 f"The site's address must start with https://: {self.base_url!r}"
             )

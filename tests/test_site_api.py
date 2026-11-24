@@ -116,6 +116,12 @@ def test_an_answer_that_is_no_json_never_shows_the_token(read):
     assert "SECRET" not in str(raised.value)
 
 
+def test_a_site_address_in_capitals_is_still_a_web_address():
+    # urllib takes HTTPS:// as https://; a caps-lock address must not read as refused.
+    opener = _Opener({"competition_id": 249, "competition_title": "Cup"})
+    assert SiteApi("HTTPS://site.test", opener).competition("tok") == (249, "Cup")
+
+
 @pytest.mark.parametrize(
     "failure",
     [
