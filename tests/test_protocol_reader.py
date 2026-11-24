@@ -42,6 +42,16 @@ def test_in_a_lap_race_only_the_leaders_laps_count_each_category_its_own():
     assert [athlete.bib for athlete in results.athletes] == ["1", "2", "4", "5", "6"]
 
 
+def test_in_a_live_race_the_leader_still_on_course_sets_the_laps():
+    # The timing generator lists a rider still on course as DNF: laps, no result.
+    document = lap_race()
+    on_course = {"bib": "7", "lap1": "15:00.0", "lap2": "15:00.0", "lap3": "15:00.0"}
+    document["sections"][1]["rows"].append({"cells": on_course, "status": "dnf"})
+    results = read(document)
+    assert sorted(results.values) == ["1"]  # W's two-lap finishers trail bib 7
+    assert results.fewer_laps == ["2", "4", "6"]
+
+
 def test_without_the_laps_rule_every_result_counts():
     results = read(lap_race(), leader_laps_only=False)
     assert sorted(results.values) == ["1", "2", "4", "6"]
