@@ -116,13 +116,21 @@ def test_an_answer_that_is_no_json_never_shows_the_token(read):
     assert "SECRET" not in str(raised.value)
 
 
-@pytest.mark.parametrize("site", ["https://site.test/a b", "https://site.test/\tx"])
+@pytest.mark.parametrize(
+    "site",
+    [
+        "https://site.test/a b",
+        "https://site.test/\tx",
+        # Not even sent: no answer to blame, as the answer's parse error would.
+        "https://site.test/\u0440\u0443",
+    ],
+)
 def test_a_site_address_with_a_space_is_refused_before_a_request_quotes_the_token(
     site,
 ):
     # http.client's InvalidURL quotes the whole request path, the token in its query.
     opener = _Opener()
-    with pytest.raises(SiteApiError, match="space or a control character") as raised:
+    with pytest.raises(SiteApiError, match="a control character or a letter") as raised:
         SiteApi(site, opener).competition("SECRET")
     assert "SECRET" not in str(raised.value)
     assert opener.requests == []
