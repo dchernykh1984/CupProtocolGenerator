@@ -4,10 +4,10 @@ The form asks two questions, in this order: the bib, then the result. Its respon
 then has three columns -- the timestamp Google adds, the bib, the result -- and that is
 how they are read: by position, so the questions may be worded in any language.
 Rows are read in the sheet's order -- the order Google wrote the answers in, which may
-part from their timestamps by a second -- and the first readable answer for a bib
-counts: a later one is reported, never taken, so a second mark for an athlete is seen
-by the referee, who corrects a mistake in the sheet itself. A sheet names no athletes:
-their names and categories come from the stages read from the site.
+part from their timestamps by a second -- and the last readable answer for a bib
+counts, so a judge corrects a mark by answering again; every answer it replaces is
+reported, so a second mark for an athlete is seen by the referee. A sheet names no
+athletes: their names and categories come from the stages read from the site.
 """
 
 from __future__ import annotations
@@ -56,8 +56,8 @@ def looks_like_a_page(text: str) -> bool:
 
 
 def read(text: str) -> StageResults:
-    """The first readable result for every bib, and what could not be read or was
-    answered again, line by line."""
+    """The last readable result for every bib, and what could not be read or was
+    replaced by a later answer, line by line."""
     results = StageResults()
     counted: dict[str, int] = {}  # bib -> the line its result is read from
     rows = list(csv.reader(io.StringIO(text.lstrip("\ufeff"))))
@@ -74,12 +74,14 @@ def read(text: str) -> StageResults:
             results.problems.append(f"line {line}: no bib")
         elif value is None:
             results.problems.append(f"line {line}: {row[2]!r} is not a result")
-        elif bib in counted:
-            results.problems.append(
-                f"line {line}: bib {bib} answered again ({row[2].strip()!r}); "
-                f"line {counted[bib]} ({results.texts[bib]!r}) counts"
-            )
         else:
+            # The maintainer, 2026-11-24: the last answer counts, so a judge can correct
+            # a mark by answering again; the answer it replaces is still an error.
+            if bib in counted:
+                results.problems.append(
+                    f"line {line}: bib {bib} answered again ({row[2].strip()!r}), "
+                    f"replacing line {counted[bib]} ({results.texts[bib]!r})"
+                )
             counted[bib] = line
             results.values[bib] = value
             results.texts[bib] = row[2].strip()
