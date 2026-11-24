@@ -67,7 +67,8 @@ alters what it describes updates it in the same pull request (`specs/README.md`)
   token, its protocols, one protocol's document, the upload. Standard library only; the
   opener is injectable so tests never reach the network.
 - `app/protocol_reader.py` - a stage's results out of a site protocol document (columns
-  by their role: `bib`, `name`, `team`, `result`; categories by `group`).
+  by their role: `bib`, `name`, `team`, `result`; categories by `group`; laps by the
+  `lap<n>` columns, a result counting only beside its category leader's laps).
 - `app/sheets.py` - the Google connector: a sheet link turned into its CSV export, a
   response sheet read as bib -> result (columns by position: timestamp, bib, result; the
   first readable answer for a bib counts, a later one is reported), and a sign-in page

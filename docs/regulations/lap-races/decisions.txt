@@ -1,0 +1,21 @@
+Lap races: who counts in the cup
+================================
+
+2026-11-24, the maintainer: in a lap race (XCO) the stage rule "time" put riders a lap
+down ahead of those who rode every lap, and that is wrong. In a real race a rider
+either has every lap or is DNF, and then the stage does not count for them. So the cup
+counts only riders who have, at the moment, exactly as many laps as their group's
+leader -- for a group standing -- and as the absolute leader for an absolute one.
+
+Left open by that word, answered by the maintainer on 2026-11-24:
+
+- The finish protocol generator writes the attempts of a Number of Tries race in the
+  columns it writes laps in, and a rider there may have a result without every attempt:
+  a stage has a checkbox for the rule, ticked by default, to untick for Number of Tries.
+- The cup has no absolute standing beside the group ones: laps are compared with the
+  group's leader, and with the absolute leader only where a protocol has no groups.
+
+Read as: the leader is whoever has the most laps among the category's results, as the
+protocol ranks laps first (a disqualified or unfinished rider leads nobody); a rider
+short of them has no result in that stage, as one who did not finish, and the build's
+log names them.
