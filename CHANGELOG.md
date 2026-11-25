@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.5.0...v0.5.1) (2026-11-25)
+
+
+### Bug Fixes
+
+* **document:** the stage columns ask the site for "end", the alignment it draws, not "right" ([1b048b6](https://github.com/dchernykh1984/CupProtocolGenerator/commit/1b048b68808af0c2a70c0c11c43737dccb0fe8cf))
+
 ## [0.5.0](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.4.0...v0.5.0) (2026-11-24)
 
 
