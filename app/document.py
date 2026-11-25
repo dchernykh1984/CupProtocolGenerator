@@ -48,12 +48,12 @@ def _columns(stages: list[str], with_team: bool) -> list[dict[str, Any]]:
     if with_team:
         columns.append({"id": "team", "label": "Team", "role": "team"})
     for i, name in enumerate(stages):
-        columns.append({"id": stage_column(i), "label": name, "align": "right"})
+        columns.append({"id": stage_column(i), "label": name, "align": "end"})
         columns.append(
             {
                 "id": stage_place_column(i),
                 "label": f"{name} place",
-                "align": "right",
+                "align": "end",
                 "priority": STAGE_PLACE_PRIORITY,
             }
         )
