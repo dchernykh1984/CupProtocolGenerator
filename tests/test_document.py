@@ -85,6 +85,13 @@ def test_a_row_carries_each_stage_with_its_place_and_the_total():
     assert (second["place"], second["total"]) == ("2", "4")
 
 
+def test_the_stage_columns_ask_for_an_alignment_the_site_draws():
+    # The site draws "start", "center" and "end" (its protocols/rendering.py) and
+    # drops any other value, which leaves the column centred.
+    boys = _document()["sections"][0]
+    assert [c.get("align") for c in boys["columns"][4:8]] == ["end"] * 4
+
+
 def test_no_team_column_when_nobody_has_one_nor_title_when_none_is_given():
     document = _document(title="  ", table=_table(team=""))
     assert "team" not in [c["id"] for c in document["sections"][0]["columns"]]
