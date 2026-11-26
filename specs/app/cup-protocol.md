@@ -34,7 +34,7 @@ byte order mark at its start, as Notepad writes one, is read past.
 | `token` | empty | the cup event's upload token; its protocol is published there |
 | `title` | empty | the protocol's title; empty: the cup event's title on the site |
 | `rule` | `sum_smallest_wins` | the cup rule |
-| `publish_section` | 2 | the cup event's protocol section to publish into (1 or more) |
+| `publish_section` | 2 | the cup event's protocol section to publish into (1 or more), not one a stage reads (see Publishing) |
 | `final` | false | a final protocol: the site stops checking it for updates |
 | `place_everybody` | false | a broadcast: those who missed stages are placed too |
 | `stages` | one empty stage | the stages, in order |
@@ -212,6 +212,14 @@ event's title.
 section, `stage_label` (the `title` setting), `is_live` (true unless `final`), and the
 document as `protocol.json`. The site's reason for not taking the document
 (`document_error`) is reported; so is an HTTP failure.
+
+A site stage on the cup's own event in the section the cup publishes into stops the
+build, `<stage>: the cup publishes into section <n> of its event "<title>", which this
+stage reads: pick another section to publish to`, and nothing is built to publish. The
+events are compared as the site gives them for the tokens, not the tokens' texts (the
+site takes a token in capitals too). The upload would replace that section's absolute
+protocol, which a later build reads as the stage when the section has no group protocol
+(the maintainer, 2026-11-26).
 
 ## The window (`app/main_window.py`)
 

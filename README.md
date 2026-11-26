@@ -28,7 +28,9 @@ StravaProtocolGenerator.
    answer that is neither replaces nothing. Each such answer, and every answer replaced,
    is named in the log as an error, so a mark given twice is seen.
 3. **A section for the cup's protocol**: add it on the cup event's "Protocol sections"
-   page on the site; the tool publishes into it by its number.
+   page on the site; the tool publishes into it by its number. It is a section of its
+   own: Build refuses one a stage of the same event is read from, as the cup's protocol
+   would replace that stage's absolute protocol there.
 
 ## In the window
 

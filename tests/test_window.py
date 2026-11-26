@@ -232,6 +232,19 @@ def test_publishing_sends_the_built_protocol_and_says_where(window):
     assert window.status.text() == "Published to section 3"
 
 
+def test_a_build_that_would_publish_over_a_stage_is_refused(window):
+    window.publish_section.setValue(1)  # the section of the cup's event Sprint reads
+    window.on_build()
+    assert window.status.text() == (
+        'Not built: Sprint: the cup publishes into section 1 of its event "Cup", '
+        "which this stage reads: pick another section to publish to"
+    )
+    assert window.log.toPlainText() == window.status.text()
+    assert not window.publish_button.isEnabled()
+    window.on_publish()
+    assert window.site.uploads == []
+
+
 def test_a_refused_protocol_and_a_failed_upload_are_reported(window, monkeypatch):
     window.on_build()
     monkeypatch.setattr(window.site, "upload", lambda *a, **k: "bad cell")
