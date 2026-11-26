@@ -79,8 +79,9 @@ def _read_stage(site: _Site, config: Config, stage: StageConfig) -> StageResults
         token = stage.token.strip() or config.token.strip()
         event, title = site.event(token)
         cup_event, _ = site.event(config.token.strip())
-        # Published here, the cup would replace the stage's absolute protocol (and be
-        # read back as the stage). By the event: the site takes a token in capitals too.
+        # Published here, the cup would replace the stage's absolute protocol, and a
+        # section without a group one would read the cup back as the stage. By the
+        # event: the site takes a token in capitals too.
         if stage.section == config.publish_section and event == cup_event:
             raise PipelineError(
                 f"the cup publishes into section {stage.section} of its event "
