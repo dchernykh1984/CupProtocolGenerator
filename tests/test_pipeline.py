@@ -311,3 +311,37 @@ def test_publishing_sends_the_protocol_to_its_section_live_until_final():
         {"token": "cup", "section": 5, "label": "Final", "live": False},
         {"token": "cup", "section": 2, "label": "", "live": True},
     ]
+
+
+DAY_2 = {"id": 5, "section": 2, "protocol_type": "absolute"}  # of the cup's event
+
+
+@pytest.mark.parametrize("token", ["", "CUP"])
+def test_a_stage_in_the_section_the_cup_publishes_into_is_refused(token):
+    # Day 2 by the cup's token, or by it in capitals, which the site takes for the same
+    # event: the cup would replace day 2's protocol, and read itself back as day 2.
+    site = FakeSite(events={"cup": (249, "Cup"), "CUP": (249, "Cup")})
+    site.listed[249].append(DAY_2)
+    stages = [StageConfig("Day 1"), StageConfig("Day 2", token=token, section=2)]
+    with pytest.raises(
+        PipelineError,
+        match=r'^Day 2: the cup publishes into section 2 of its event "Cup", which '
+        r"this stage reads: pick another section to publish to$",
+    ):
+        build(_config(stages=stages, publish_section=2), site)
+    assert site.read == [4]  # day 1 alone: day 2 is not even read
+    assert site.uploads == []
+
+
+@pytest.mark.parametrize(("token", "publish_section"), [("", 3), ("other", 2)])
+def test_a_stage_in_another_section_or_of_another_event_is_published_as_before(
+    token, publish_section
+):
+    site = FakeSite()
+    site.listed[249].append(DAY_2)
+    stages = [StageConfig("Day 1"), StageConfig("Day 2", token=token, section=2)]
+    config = _config(stages=stages, publish_section=publish_section)
+    publish(config, site, build(config, site))
+    assert site.uploads == [
+        {"token": "cup", "section": publish_section, "label": "", "live": True}
+    ]
