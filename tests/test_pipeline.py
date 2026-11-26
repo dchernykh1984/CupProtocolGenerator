@@ -333,13 +333,16 @@ def test_a_stage_in_the_section_the_cup_publishes_into_is_refused(token):
     assert site.uploads == []
 
 
-@pytest.mark.parametrize(("token", "publish_section"), [("", 3), ("other", 2)])
+@pytest.mark.parametrize(
+    ("token", "section", "publish_section"),
+    [("", 2, 3), ("", 3, 2), ("other", 2, 2)],  # below it, above it, another event
+)
 def test_a_stage_in_another_section_or_of_another_event_is_published_as_before(
-    token, publish_section
+    token, section, publish_section
 ):
     site = FakeSite()
-    site.listed[249].append(DAY_2)
-    stages = [StageConfig("Day 1"), StageConfig("Day 2", token=token, section=2)]
+    site.listed[249].append({**DAY_2, "section": section})
+    stages = [StageConfig("Day 1"), StageConfig("Day 2", token=token, section=section)]
     config = _config(stages=stages, publish_section=publish_section)
     publish(config, site, build(config, site))
     assert site.uploads == [
