@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.5.1...v0.5.2) (2026-11-26)
+
+
+### Bug Fixes
+
+* **pipeline:** Build refuses a publish section that a stage on the cup's own event reads ([d9f1cf4](https://github.com/dchernykh1984/CupProtocolGenerator/commit/d9f1cf4b044028d9f7cfce6ce693797eb4d62e52))
+
 ## [0.5.1](https://github.com/dchernykh1984/CupProtocolGenerator/compare/v0.5.0...v0.5.1) (2026-11-25)
 
 
